@@ -13,12 +13,16 @@ module Diffa
 
       def show_grid
         session.visit('/')
-        File.open('page.html', 'w') do |f| f.write session.html; end
         session.should have_content("Diffa participant Grid")
       end
 
       def screenshot
         session.driver.render('root.png', :full => true)
+      end
+
+
+      def grid
+        session.somethingihaventfiguredoutyet
       end
 
       private
