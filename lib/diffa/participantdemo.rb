@@ -4,7 +4,7 @@ module Diffa
   class ParticipantDemo < Sinatra::Base
 
     get '/' do
-      'Diffa participant Grid'
+      redirect '/index.html'
     end
   end
 end

@@ -1,6 +1,8 @@
 require 'capybara'
 require 'capybara/dsl'
 
+require 'pp'
+
 module Diffa
   module Test
     class AppDriver
@@ -22,7 +24,14 @@ module Diffa
 
 
       def grid
-        session.somethingihaventfiguredoutyet
+        session.within('#myGrid') do
+          rows = session.all('.slick-row')
+          rows.map do |row|
+            row.all('.slick-cell').map do |elt|
+              elt.text
+            end
+          end
+        end
       end
 
       private

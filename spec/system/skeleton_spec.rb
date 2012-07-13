@@ -20,8 +20,7 @@ describe "Application skeleton", :js => true do
 
 
   it "shows sample data" do
-    pending "Need to spike out slick-grid"
     driver.show_grid
-    driver.grid.should include(id: "sample-id0", version: "sample-version0")
+    driver.grid.should include(["sample-id0", "sample-version0"])
   end
 end
