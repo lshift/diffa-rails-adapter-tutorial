@@ -1,0 +1,3 @@
+[submodule "lib/diffa/public/vendor/slickgrid"]
+	path = lib/diffa/public/vendor/slickgrid
+	url = git://github.com/mleibman/SlickGrid.git
