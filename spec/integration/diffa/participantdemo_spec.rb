@@ -11,8 +11,8 @@ describe Diffa::ParticipantDemoApp do
 
   let (:client) { Rack::Test::Session.new(app) }
 
+  let (:data) { [ {"id" => "dummy id", "version" => "dummy version"} ] }
   describe "Saving grid state" do
-    let (:data) { [ {"id" => "dummy id", "version" => "dummy version"} ] }
     let (:response) { client.post "/", JSON.dump(data) }
 
     it "respond with 2xx status" do
@@ -22,6 +22,30 @@ describe Diffa::ParticipantDemoApp do
     it "should parse submitted JSON, and pass through to app" do
       data_base.should_receive(:update).with(data)
       response
+    end
+  end
+
+
+  describe "Performing entity scans" do 
+    let (:data_base) { mock("Data source") }
+    let (:get_response) { client.get "/scan" }
+    let (:parsed_response) { JSON.parse(get_response.body) }
+
+    before do
+      data_base.stub(:query).with().and_return(data)
+    end
+
+    it "respond with 2xx status" do
+      get_response.status.should == 200
+    end
+
+    it "should query the data source" do
+      data_base.should_receive(:query).with().and_return(data)
+      get_response
+    end
+
+    it "should respond with query result" do
+      parsed_response.should == data
     end
   end
 end

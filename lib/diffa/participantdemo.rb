@@ -23,6 +23,11 @@ module Diffa
       @base.update(data)
       nil
     end
+
+
+    get '/scan' do
+      JSON.dump(@base.query)
+    end
   end
   
   class ParticipantDemo
