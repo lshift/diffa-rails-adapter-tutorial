@@ -22,8 +22,13 @@ module Diffa
         session.driver.render('root.png', :full => true)
       end
 
+      def save_to_server
+        session.click_button('save')
+        session.find('#status').find('.done')
+      end
 
       def grid
+        # pp :window_data => session.driver.evaluate_script('Diffa.data');
         session.within('#myGrid') do
           rows = session.all('.slick-row')
           rows.map do |row|
@@ -32,6 +37,16 @@ module Diffa
             end
           end
         end
+      end
+
+
+      def add_entity(row)
+        session.click_button('addRow')
+        last_row = session.all('.slick-row').last
+        last_row_cells = last_row.all('.slick-cell').map { |e| e.text.strip }
+#        last_row..all('.slick-cell').each do |cell|
+#          magically_edit(cell)
+#        end
       end
 
       private

@@ -1,3 +1,3 @@
 require 'diffa/participantdemo'
 
-run Diffa::ParticipantDemo
+run Diffa::ParticipantDemo.new.rackapp

@@ -13,7 +13,9 @@
 <h1>Diffa participant Grid</h1>
 
 <div id="myGrid" style="height:20em"></div>
-
+<button id="addRow">Add Row</button>
+<button id="save">Save</button>
+<span id="status"></span>
 <hr/>
 
 <script src="vendor/slickgrid/lib/jquery-1.7.min.js"></script>
@@ -34,10 +36,37 @@
     enableColumnReorder: false
   };
 
-  var seedData = [
-	{ id: 'sample-id0', version: 'sample-version0' }
-]
-  window.grid = new Slick.Grid("#myGrid", seedData, columns, options);
+  window.Diffa = window.Diffa || new Object;
+  Diffa.data = [
+	  { id: 'sample-id0', version: 'sample-version0' }
+  ];
+
+  Diffa.gridView = new Slick.Grid("#myGrid", Diffa.data, columns, options);
+
+  $(function DiffaOnLoad () {
+   $('#addRow').click(function() {
+	var num = Diffa.data.length
+	var ndata = {id: "Id" + num, version: "Version " + num }
+	Diffa.data.push(ndata);
+	Diffa.gridView.updateRowCount();
+	Diffa.gridView.render();
+	
+        $('#status').html($('<span class="waiting">In progress</span>'));
+	jQuery.ajax({
+	    type: 'POST',
+	    dataType: 'json',
+	    url: '/',
+	    contentType: "application/json",
+	    data: JSON.stringify(Diffa.data)
+	}).complete(function(event, state) {
+	    console.log("Save -> ", state);
+	}).done(function() {
+	    $('#status').html($('<span class="done">Done</span>'));
+	});
+	/* TODO: Error handling! */
+    })
+   console.log("init done");
+  });
 </script>
 </body>
 </html>
