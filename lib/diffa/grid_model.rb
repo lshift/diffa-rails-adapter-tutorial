@@ -9,5 +9,7 @@ module Diffa
     def update newval
       @data = newval
     end
+
+    def query; data; end
   end
 end
