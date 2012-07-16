@@ -12,7 +12,6 @@ Capybara.javascript_driver = :poltergeist
 describe "Application skeleton", :js => true do
   let (:app) { Diffa::ParticipantDemo.new }
   let (:driver) { Diffa::Test::AppDriver.new(app.rackapp) }
-  let (:scan_client) { Diffa::Test::ScanClient.new(app.rackapp) }
 
   it "Can add a row and save it to the server" do
     driver.show_grid
@@ -24,6 +23,8 @@ describe "Application skeleton", :js => true do
       driver.save_to_server
     }.to change { app.data.size }.by(1)
 
+    # This is nasty, and doesn't communicate what it means--we shuold move 
+    # this to a seperate UI test.
     app.data.last.should == Hash[*headers.zip(new_row).flatten]
   end
 end
