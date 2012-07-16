@@ -28,7 +28,7 @@ module Diffa
       end
 
       def grid
-        # pp :window_data => session.driver.evaluate_script('Diffa.data');
+        pp :window_data => session.driver.evaluate_script('Diffa.data');
         session.within('#myGrid') do
           rows = session.all('.slick-row')
           rows.map do |row|
@@ -43,10 +43,12 @@ module Diffa
       def add_entity(row)
         session.click_button('addRow')
         last_row = session.all('.slick-row').last
-        last_row_cells = last_row.all('.slick-cell').map { |e| e.text.strip }
-#        last_row..all('.slick-cell').each do |cell|
-#          magically_edit(cell)
-#        end
+        last_row_cells = last_row.all('.slick-cell') # .map { |e| e.text.strip }
+        last_row_cells.zip(row).each do |(cell, content)|
+          cell.click
+          cell.find('input').set(content)
+        end
+        last_row_cells[0].click
       end
 
       private

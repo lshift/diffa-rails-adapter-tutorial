@@ -2,6 +2,8 @@ require 'sinatra/base'
 require 'json'
 require 'diffa/grid_model'
 
+require 'pp'
+
 module Diffa
   class ParticipantDemoApp < Sinatra::Base
     set :raise_errors, true

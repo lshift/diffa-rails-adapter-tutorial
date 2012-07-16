@@ -13,12 +13,16 @@ describe "Application skeleton", :js => true do
   let (:app) { Diffa::ParticipantDemo.new }
   let (:driver) { Diffa::Test::AppDriver.new(app.rackapp) }
 
-  it "Can add and remove data from the database" do
+  it "Can add a row and save it to the server" do
     driver.show_grid
+    new_row = ["Some identifier", "A dummy version"]
+    headers = ["id", "version"]
+
     driver.grid.should include(["sample-id0", "sample-version0"])
     expect {
-      driver.add_entity(["id1", "version1"])
+      driver.add_entity(new_row)
       driver.save_to_server
     }.to change { app.data.size }.from(1).to(2)
+    app.data.last.should == Hash[*headers.zip(new_row).flatten]
   end
 end
