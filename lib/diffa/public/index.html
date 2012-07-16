@@ -44,13 +44,15 @@
   Diffa.gridView = new Slick.Grid("#myGrid", Diffa.data, columns, options);
 
   $(function DiffaOnLoad () {
-   $('#addRow').click(function() {
+    $('#addRow').click(function() {
 	var num = Diffa.data.length
 	var ndata = {id: "Id" + num, version: "Version " + num }
 	Diffa.data.push(ndata);
 	Diffa.gridView.updateRowCount();
 	Diffa.gridView.render();
+    });
 	
+    $('#save').click(function() {
         $('#status').html($('<span class="waiting">In progress</span>'));
 	jQuery.ajax({
 	    type: 'POST',
