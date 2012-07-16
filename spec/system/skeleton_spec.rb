@@ -20,15 +20,12 @@ describe "Application skeleton", :js => true do
     new_id = "Some identifier"
     new_version = "A dummy version"
     new_row = [new_id, new_version]
-    headers = ["id", "version"]
 
     expect {
       driver.add_entity(new_row)
       driver.save_to_server
     }.to change { scan_client.all_entities.size }.by(1)
 
-    # This is nasty, and doesn't communicate what it means--we shuold move 
-    # this to a seperate UI test.
     scan_client.last_scan.should include("id" => new_id, "version" => new_version)
   end
 end
