@@ -4,7 +4,6 @@ require 'rack/test'
 require 'json'
 
 describe Diffa::ParticipantDemoApp do
-
   let (:data_base) { stub(:data_base).as_null_object }
 
   let (:app) { Diffa::ParticipantDemoApp.new(data_base) }
@@ -27,7 +26,6 @@ describe Diffa::ParticipantDemoApp do
 
 
   describe "Performing entity scans" do 
-    let (:data_base) { mock("Data source") }
     let (:get_response) { client.get "/scan" }
     let (:parsed_response) { JSON.parse(get_response.body) }
 
