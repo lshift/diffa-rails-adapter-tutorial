@@ -35,7 +35,7 @@ describe "Application skeleton", :js => true do
     # When I reload the page
     driver.reload_grid
     # Then the grid should be the same as the old data.
-    driver.grid.should == old_data
+    Set.new(driver.grid).should == Set.new(old_data)
   end
 
 

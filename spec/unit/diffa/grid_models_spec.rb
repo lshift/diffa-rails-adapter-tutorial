@@ -12,4 +12,15 @@ describe Diffa::GridModel do
         from(initial_data).to(new_value)
     end
   end
+
+
+  describe "#query" do
+    let (:mike) { {"id" => "mike", 'version' => "b" } }
+    let (:myspace) { {"id" => "MySpace", 'version' => "a" } }
+    let (:initial_data) { [mike, myspace] }
+
+    it "returns data sorted by id in ASCII collation order" do
+      model.query.should == [myspace, mike]
+    end
+  end
 end

@@ -10,6 +10,8 @@ module Diffa
       @data = newval
     end
 
-    def query; data; end
+    def query
+      data.sort_by { |entity| entity['id'] }
+    end
   end
 end
