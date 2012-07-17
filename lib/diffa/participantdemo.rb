@@ -24,8 +24,11 @@ module Diffa
       nil
     end
 
-
     get '/scan' do
+      JSON.dump(@base.query)
+    end
+
+    get '/data' do
       JSON.dump(@base.query)
     end
   end

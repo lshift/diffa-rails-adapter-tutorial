@@ -46,4 +46,27 @@ describe Diffa::ParticipantDemoApp do
       parsed_response.should == data
     end
   end
+
+
+  describe "Retreiving the current dataset" do
+    let (:get_response)  { client.get "/data" }
+    let (:parsed_response) { JSON.parse(get_response.body) }
+
+    before do
+      data_base.stub(:query).with().and_return(data)
+    end
+
+    it "respond with 2xx status" do
+      get_response.status.should == 200
+    end
+
+    it "should query the data source" do
+      data_base.should_receive(:query).with().and_return(data)
+      get_response
+    end
+
+    it "should respond with query result" do
+      parsed_response.should == data
+    end
+  end
 end
