@@ -32,14 +32,14 @@ module Diffa
       end
 
       def grid
-        pp :window_data => session.driver.evaluate_script('Diffa.data');
-        session.within('#myGrid') do
-          session.all('.slick-row').map do |row|
-            # cell_values = row.all('.slick-cell').map(&:text)
-            pp :row => cell_values
-            Hash[*GRID_HEADINGS.zip(cell_values).flatten]
-          end
-        end
+#        session.within('#myGrid') do
+#          session.all('.slick-row').map do |row|
+#            cell_values = row.all('.slick-cell').tap { |r| pp :row_cells => r }.map(&:text)
+#            pp :row => cell_values
+#          end
+#        end
+
+        session.driver.evaluate_script('Diffa.data')
       end
 
       def add_entity(entity_hash)

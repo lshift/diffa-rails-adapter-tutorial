@@ -37,4 +37,17 @@ describe "Application skeleton", :js => true do
     # Then the grid should be the same as the old data.
     driver.grid.should == old_data
   end
+
+
+  it "allows the creation of multiple independant participants" do
+    pending "Exact method of testing not yet clear"
+    # I should be able to create multiple grids
+    upstream = driver.create_grid(:upstream, :name => "Her Upstream")
+    downstream = driver.create_grid(:downstream, name => "My Downstream")
+    upstream.grid_url.should != downstream.grid_url
+    upstream.scan_url.should != downstream.scan_url
+
+    upstream.grid_page.title.should == "Her Upstream"
+    downstream.grid_page.title.should == "My Downstream"
+  end
 end
