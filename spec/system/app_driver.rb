@@ -6,18 +6,24 @@ require 'pp'
 module Diffa
   module Test
     class AppDriver
-      GRID_HEADINGS = ["id", "version"]
-
-
-      # Yes, this is quite nasty. --CS
-      CANCEL_EDIT_JS = 'var e = jQuery.Event("keydown"); e.which = $.ui.keyCode.ENTER; $("input").trigger(e); e.which = $.ui.keyCode.ESCAPE; $("input").trigger(e);'
-      include RSpec::Matchers
 
       def initialize(app)
         @app = app
       end
 
       def reload_grid
+        GridPage.new(@app)
+      end
+    end
+
+    class GridPage
+      include RSpec::Matchers
+      GRID_HEADINGS = ["id", "version"]
+      # Yes, this is quite nasty. --CS
+      CANCEL_EDIT_JS = 'var e = jQuery.Event("keydown"); e.which = $.ui.keyCode.ENTER; $("input").trigger(e); e.which = $.ui.keyCode.ESCAPE; $("input").trigger(e);'
+
+      def initialize(app)
+        @app = app
         session.visit('/')
         session.should have_content("Diffa participant Grid")
       end
@@ -31,7 +37,7 @@ module Diffa
         session.find('#status').find('.done')
       end
 
-      def grid
+      def data
 #        session.within('#myGrid') do
 #          session.all('.slick-row').map do |row|
 #            cell_values = row.all('.slick-cell').tap { |r| pp :row_cells => r }.map(&:text)
