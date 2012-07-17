@@ -14,6 +14,16 @@ module Diffa
       def reload_grid
         GridPage.new(@app)
       end
+
+
+      def create_grid(name)
+        api.create_grid(name)
+      end
+
+
+      def api
+        @api ||= Diffa::DemoAPI.new(@app)
+      end
     end
 
     class GridPage

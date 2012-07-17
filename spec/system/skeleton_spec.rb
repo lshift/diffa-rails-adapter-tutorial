@@ -42,8 +42,9 @@ describe "Application skeleton", :js => true do
 
   it "allows the creation of multiple independant participants" do
     # I should be able to create multiple grids
-    upstream = driver.create_grid(:upstream, :name => "Her Upstream")
-    downstream = driver.create_grid(:downstream, name => "My Downstream")
+    pending
+    upstream = driver.create_grid("Her Upstream")
+    downstream = driver.create_grid("My Downstream")
 
     upstream.grid_page.title.should == "Her Upstream"
     downstream.grid_page.title.should == "My Downstream"
