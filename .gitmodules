@@ -7,3 +7,6 @@
 [submodule "lib/diffa/public/vendor/jshamcrest"]
 	path = lib/diffa/public/vendor/jshamcrest
 	url = https://github.com/danielfm/jshamcrest.git
+[submodule "lib/diffa/public/vendor/jsmockito"]
+	path = lib/diffa/public/vendor/jsmockito
+	url = https://github.com/chrisleishman/jsmockito.git
