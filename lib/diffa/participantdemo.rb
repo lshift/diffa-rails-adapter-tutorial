@@ -35,11 +35,11 @@ module Diffa
   
   class ParticipantDemo
     def apiapp
-      @apiapp ||= ParticipantDemoAPI.new(nil && grid_store)
+      @apiapp ||= ParticipantDemoAPI.new(grid_store)
     end
 
     def rackapp
-      @rackapp ||= ParticipantDemoApp.new(model, apiapp)
+      @rackapp ||= ParticipantDemoApp.new(model, nil && apiapp)
     end
 
     def model

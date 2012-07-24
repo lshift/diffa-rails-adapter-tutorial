@@ -16,7 +16,18 @@ describe "Application skeleton", :js => true do
   let (:driver) { Diffa::Test::AppDriver.new(app.rackapp) }
   let (:scan_client) { Diffa::Test::ScanClient.new(app.rackapp) }
 
+  # When I load up the page, Then I should see a {trade entry,futures risk, options risk} grid
+  describe "a grid page" do
+    let (:page) { driver.reload_grid }
+    it "Displays three grids" do
+      page.should have_grid(:trade_entry)
+      page.should have_grid(:futures_risk)
+      page.should have_grid(:options_risk)
+    end
+  end
+
   it "Can add a row and save it to the server" do
+    pending "Move Details to more focussed tests."
     grid = driver.reload_grid
     new_id = "Some identifier"
     new_version = "A dummy version"

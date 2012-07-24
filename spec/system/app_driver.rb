@@ -20,7 +20,6 @@ module Diffa
         api.create_grid(name)
       end
 
-
       def api
         @api ||= Diffa::Test::DemoAPI.new(@app)
       end
@@ -51,6 +50,18 @@ module Diffa
 
       def screenshot
         session.driver.render('root.png', :full => true)
+      end
+
+
+      def has_grid?(name)
+        # At this point in time, it's probably not worth test-driving the UI,
+        # as there's not much to be designed. That may change.
+
+        # So just work on a happy assumption.
+        session.should have_selector('#grid_%s.-rendered' % [name])
+      rescue
+        print session.html
+        raise
       end
 
       def save_to_server
