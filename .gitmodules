@@ -4,3 +4,6 @@
 [submodule "lib/diffa/public/vendor/mocha"]
 	path = lib/diffa/public/vendor/mocha
 	url = https://github.com/visionmedia/mocha.git
+[submodule "lib/diffa/public/vendor/jshamcrest"]
+	path = lib/diffa/public/vendor/jshamcrest
+	url = https://github.com/danielfm/jshamcrest.git
