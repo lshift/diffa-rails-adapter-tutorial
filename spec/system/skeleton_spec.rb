@@ -42,7 +42,9 @@ describe "Application skeleton", :js => true do
 
   it "allows the creation of multiple independant participants" do
     # I should be able to create multiple grids
-    pending
+    pending "Pending recreation for trading scenario."
+    # Delegate /management from the participant demo app to the api app.
+    # Why did I do that?
     upstream = driver.create_grid("Her Upstream")
     downstream = driver.create_grid("My Downstream")
 

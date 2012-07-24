@@ -10,8 +10,8 @@ module Diffa
     set :dump_errors, false
     set :show_exceptions, false
 
-    def initialize data
-      super()
+    def initialize(data, nextapp=nil)
+      super(nextapp)
       @base = data
     end
     get '/' do
@@ -34,8 +34,12 @@ module Diffa
   end
   
   class ParticipantDemo
+    def apiapp
+      @apiapp ||= ParticipantDemoAPI.new(nil && grid_store)
+    end
+
     def rackapp
-      @rackapp ||= ParticipantDemoApp.new(model)
+      @rackapp ||= ParticipantDemoApp.new(model, apiapp)
     end
 
     def model

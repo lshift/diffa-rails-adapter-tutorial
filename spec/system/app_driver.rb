@@ -22,7 +22,18 @@ module Diffa
 
 
       def api
-        @api ||= Diffa::DemoAPI.new(@app)
+        @api ||= Diffa::Test::DemoAPI.new(@app)
+      end
+    end
+
+    class DemoAPI 
+      def initialize(rackapp)
+        @client = Rack::Test::Session.new(rackapp)
+      end
+      
+      def create_grid(name)
+        response = @client.post("/grids", JSON.dump(name: name))
+        JSON.parse(response.body)
       end
     end
 
