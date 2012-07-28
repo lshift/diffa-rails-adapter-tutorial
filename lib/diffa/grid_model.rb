@@ -1,5 +1,5 @@
 module Diffa
-  class GridModel
+  class Grid
     attr_reader :data
 
     def initialize data

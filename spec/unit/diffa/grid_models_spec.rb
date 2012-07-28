@@ -1,8 +1,8 @@
 require 'diffa/grid_model'
 
-describe Diffa::GridModel do
+describe Diffa::Grid do
   let (:initial_data) { [] }
-  let (:model) { Diffa::GridModel.new(initial_data) }
+  let (:model) { Diffa::Grid.new(initial_data) }
 
 
   describe "#update" do

@@ -43,7 +43,7 @@ module Diffa
     end
 
     def model
-      @model ||= GridModel.new(default_data)
+      @model ||= Grid.new(default_data)
     end
 
     def data
