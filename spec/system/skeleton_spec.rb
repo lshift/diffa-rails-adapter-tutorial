@@ -12,6 +12,7 @@ require_relative 'scan_client'
 
 Capybara.javascript_driver = :poltergeist
 
+
 describe "Application skeleton", :js => true do
   let (:app) { Diffa::ParticipantDemo.new }
   let (:driver) { Diffa::Test::AppDriver.new(app.rackapp) }
@@ -21,15 +22,17 @@ describe "Application skeleton", :js => true do
   it "should allow provisioning a new grid for a user" do
     begin
       ref = driver.create_grid name: "a demo grid"
-      scan_client.all_entities(ref.scan_url).should == driver.reload_grid(ref.grid_url).data
+      scan_client.all_entities(ref.scan_url).should == driver.reload_grid(url: ref.grid_url).data
     rescue => e
       pending "WIP: " + e.to_s
+      #raise e
     end
   end
 
   # When I load up the page, Then I should see a {trade entry,futures risk, options risk} grid
   describe "a grid page" do
-    let (:page) { driver.reload_grid }
+    let (:grid) { driver.create_grid name: "FoobarMatic2000UltraDeluxe" }
+    let (:page) { driver.reload_grid(url:grid.grid_url) }
     it "Displays three grids" do
       page.should have_grid(:trade_entry)
       page.should have_grid(:futures_risk)

@@ -10,7 +10,7 @@ module Diffa
     end
 
     def rackapp
-      @rackapp ||= ParticipantDemoApp.new(model, apiapp)
+      @rackapp ||= ParticipantDemoApp.new(grid_store, apiapp)
     end
 
     def model
