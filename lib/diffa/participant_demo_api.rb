@@ -16,9 +16,9 @@ module Diffa
     post '/grids' do
       data = JSON.parse(request.body.read)
       # TODO: Filtering
-      grid = @grid_store.create(:name => data['name'])
+      grid_id = @grid_store.provision(:name => data['name'])
       status 202
-      JSON.dump({:grid_url => "/grids/%d" % [grid.id]})
+      JSON.dump({:grid_url => "/grids/%d" % [grid_id]})
     end
   end
 end

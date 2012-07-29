@@ -4,6 +4,7 @@ require 'capybara/rspec'
 require 'capybara/poltergeist'
 
 require 'diffa/participantdemo'
+require 'diffa/participant_demo_app'
 
 require_relative 'app_driver'
 require_relative 'scan_client'
@@ -15,6 +16,16 @@ describe "Application skeleton", :js => true do
   let (:app) { Diffa::ParticipantDemo.new }
   let (:driver) { Diffa::Test::AppDriver.new(app.rackapp) }
   let (:scan_client) { Diffa::Test::ScanClient.new(app.rackapp) }
+
+
+  it "should allow provisioning a new grid for a user" do
+    begin
+      ref = driver.create_grid name: "a demo grid"
+      scan_client.all_entities(ref.scan_url).should == driver.reload_grid(ref.grid_url).data
+    rescue => e
+      pending "WIP: " + e.to_s
+    end
+  end
 
   # When I load up the page, Then I should see a {trade entry,futures risk, options risk} grid
   describe "a grid page" do

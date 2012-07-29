@@ -1,5 +1,6 @@
 require 'capybara'
 require 'capybara/dsl'
+require 'ostruct'
 
 require 'pp'
 
@@ -32,7 +33,7 @@ module Diffa
       
       def create_grid(name)
         response = @client.post("/grids", JSON.dump(name: name))
-        JSON.parse(response.body)
+        OpenStruct.new(JSON.parse(response.body))
       end
     end
 

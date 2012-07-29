@@ -11,7 +11,7 @@ module Diffa
         @session = Rack::Test::Session.new(app)
       end
 
-      def all_entities
+      def all_entities(url=nil)
         resp = @session.get('/scan')
         throw "Unexpected response status on scan: %s" % [resp.status] unless resp.status == 200
         @last_scan = JSON.parse resp.body

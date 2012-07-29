@@ -1,45 +1,16 @@
-require 'sinatra/base'
-require 'json'
 require 'diffa/grid_model'
-
+require 'diffa/participant_demo_api'
+require 'diffa/grid_storage'
 require 'pp'
 
 module Diffa
-  class ParticipantDemoApp < Sinatra::Base
-    set :raise_errors, true
-    set :dump_errors, false
-    set :show_exceptions, false
-
-    def initialize(data, nextapp=nil)
-      super(nextapp)
-      @base = data
-    end
-    get '/' do
-      redirect '/index.html'
-    end
-
-    post '/' do
-      data = JSON.parse(request.body.read)
-      @base.update(data)
-      nil
-    end
-
-    get '/scan' do
-      JSON.dump(@base.query)
-    end
-
-    get '/data' do
-      JSON.dump(@base.query)
-    end
-  end
-  
   class ParticipantDemo
     def apiapp
       @apiapp ||= ParticipantDemoAPI.new(grid_store)
     end
 
     def rackapp
-      @rackapp ||= ParticipantDemoApp.new(model, nil && apiapp)
+      @rackapp ||= ParticipantDemoApp.new(model, apiapp)
     end
 
     def model
@@ -48,6 +19,10 @@ module Diffa
 
     def data
       model.data
+    end
+
+    def grid_store
+      @grid_store ||= GridStorage.new
     end
 
     def default_data
