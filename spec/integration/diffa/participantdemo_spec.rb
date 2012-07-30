@@ -4,6 +4,8 @@ require 'diffa/participant_demo_app'
 require 'rack/test'
 require 'json'
 
+# TODO: I do all of the things. Please split me up by responsibility.
+# --CS
 describe Diffa::ParticipantDemoApp do
   let (:data_base) { stub(:data_base).as_null_object }
 
@@ -14,6 +16,7 @@ describe Diffa::ParticipantDemoApp do
   let (:client) { Rack::Test::Session.new(app) }
 
   let (:data) { [ {"id" => "dummy id", "version" => "dummy version"} ] }
+
 #  describe "Saving grid state" do
 #    let (:response) { client.post "/", JSON.dump(data) }
 #
@@ -26,30 +29,34 @@ describe Diffa::ParticipantDemoApp do
 #      response
 #    end
 #  end
-#
-#  describe "Performing entity scans" do 
-#    let (:get_response) { client.get "/scan" }
-#    let (:parsed_response) { JSON.parse(get_response.body) }
-#
-#    before do
-#      data_base.stub(:query).with().and_return(data)
-#    end
-#
-#    it "respond with 2xx status" do
-#      get_response.status.should == 200
-#    end
-#
-#    it "should query the data source" do
-#      data_base.should_receive(:query).with().and_return(data)
-#      get_response
-#    end
-#
-#    it "should respond with query result" do
-#      parsed_response.should == data
-#    end
-#  end
-#
-#
+
+# TODO: 404 behavior?
+  describe "Performing entity scans" do 
+    let (:grid_id) { 31343 }
+    let (:get_trades) { client.get "/scan/%d/entered_trades" % [grid_id] }
+    let (:parsed_trades) { JSON.parse(get_trades.body) }
+    let (:grid) { OpenStruct.new(entered_trades: data) }
+    
+
+    before do
+      grid_store.stub(:fetch).with(grid_id).and_return(grid)
+    end
+
+    it "respond with 2xx status" do
+      get_trades.status.should == 200
+    end
+
+    it "looks up the grid" do
+      grid_store.should_receive(:fetch).with(grid_id).and_return(grid)
+      get_trades
+    end
+
+    it "should respond with query result" do
+      parsed_trades.should == data
+    end
+  end
+
+
 #  describe "Retreiving the current dataset" do
 #    let (:get_response)  { client.get "/data" }
 #    let (:parsed_response) { JSON.parse(get_response.body) }
