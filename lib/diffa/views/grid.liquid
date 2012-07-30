@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Diffa participant Grid</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>SlickGrid example 1: Basic grid</title>
+  <link rel="stylesheet" href="/vendor/slickgrid/slick.grid.css" type="text/css"/>
+  <link rel="stylesheet" href="/vendor/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+
+  <link rel="diffa.datasource" href="{{grid_url}}" />
+</head>
+<style>
+.slick-cell.active input { width: 100%; }
+</style>
+<body>
+<h1>Diffa participant Grid</h1>
+
+<div id="grid_trade_entry" style="height:5em"></div>
+<div id="grid_futures_risk" style="height:5em"></div>
+<div id="grid_options_risk" style="height:5em"></div>
+<button id="addRow">Add Row</button>
+<button id="save">Save</button>
+<span id="status"></span>
+<hr/>
+
+<script src="/vendor/slickgrid/lib/jquery-1.7.min.js"></script>
+<script src="/vendor/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="/vendor/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
+
+<script src="/vendor/slickgrid/slick.core.js"></script>
+<script src="/vendor/slickgrid/slick.grid.js"></script>
+<script src="/vendor/slickgrid/slick.editors.js"></script>
+<script src="/vendor/slickgrid/slick.formatters.js"></script>
+<script src="/es5-shim.js"></script>
+<script src="/underscore.js"></script>
+<script src="/murmurhash3_gc.js"></script>
+
+<script src="/grids.js"> </script>
+<script> 
+$(Diffa.BootstrapGrids);
+</script>
+</body>
+</html>
