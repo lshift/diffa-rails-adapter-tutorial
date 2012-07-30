@@ -1,0 +1,35 @@
+<h1>Listing options</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Quantity</th>
+    <th>Strike</th>
+    <th>Expiry</th>
+    <th>Direction</th>
+    <th>Entered at</th>
+    <th>Version</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @options.each do |option| %>
+  <tr>
+    <td><%= option.user_id %></td>
+    <td><%= option.quantity %></td>
+    <td><%= option.strike %></td>
+    <td><%= option.expiry %></td>
+    <td><%= option.direction %></td>
+    <td><%= option.entered_at %></td>
+    <td><%= option.version %></td>
+    <td><%= link_to 'Show', option %></td>
+    <td><%= link_to 'Edit', edit_option_path(option) %></td>
+    <td><%= link_to 'Destroy', option, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Option', new_option_path %>

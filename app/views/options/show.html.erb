@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @option.user_id %>
+</p>
+
+<p>
+  <b>Quantity:</b>
+  <%= @option.quantity %>
+</p>
+
+<p>
+  <b>Strike:</b>
+  <%= @option.strike %>
+</p>
+
+<p>
+  <b>Expiry:</b>
+  <%= @option.expiry %>
+</p>
+
+<p>
+  <b>Direction:</b>
+  <%= @option.direction %>
+</p>
+
+<p>
+  <b>Entered at:</b>
+  <%= @option.entered_at %>
+</p>
+
+<p>
+  <b>Version:</b>
+  <%= @option.version %>
+</p>
+
+
+<%= link_to 'Edit', edit_option_path(@option) %> |
+<%= link_to 'Back', options_path %>

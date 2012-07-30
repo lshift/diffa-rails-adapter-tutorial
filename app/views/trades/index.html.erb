@@ -1,0 +1,37 @@
+<h1>Listing trades</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Ttype</th>
+    <th>Quantity</th>
+    <th>Expiry</th>
+    <th>Price</th>
+    <th>Direction</th>
+    <th>Entered at</th>
+    <th>Version</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @trades.each do |trade| %>
+  <tr>
+    <td><%= trade.user_id %></td>
+    <td><%= trade.ttype %></td>
+    <td><%= trade.quantity %></td>
+    <td><%= trade.expiry %></td>
+    <td><%= trade.price %></td>
+    <td><%= trade.direction %></td>
+    <td><%= trade.entered_at %></td>
+    <td><%= trade.version %></td>
+    <td><%= link_to 'Show', trade %></td>
+    <td><%= link_to 'Edit', edit_trade_path(trade) %></td>
+    <td><%= link_to 'Destroy', trade, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Trade', new_trade_path %>

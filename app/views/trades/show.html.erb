@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<table class="trade-info">
+  <thead>
+    <th>User:</th>
+    <th>Ttype:</th>
+    <th>Quantity:</th>
+    <th>Expiry:</th>
+    <th>Price:</th>
+    <th>Direction:</th>
+    <th>Entered at:</th>
+    <th>Version:</th>
+  </thead>
+  <tbody><tr>
+      <td><%= @trade.user_id %></td>
+      <td><%= @trade.ttype %></td>
+      <td><%= @trade.quantity %></td>
+      <td><%= @trade.expiry %></td>
+      <td><%= @trade.price %></td>
+      <td><%= @trade.direction %></td>
+      <td><%= @trade.entered_at %></td>
+      <td><%= @trade.version %></td>
+  </tr></tbody>
+</div>
+
+
+<%= link_to 'Edit', edit_trade_path(@trade) %> |
+<%= link_to 'Back', trades_path %>
