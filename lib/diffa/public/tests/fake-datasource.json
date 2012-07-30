@@ -2,9 +2,9 @@
 	{"id":"O0035",
 	"type":"O",
 	"quantity":944,
-	"expiry":"2012-07-30T12:20:25.516Z",
+	"expiry":"2012-07-30",
 	"price":0.014065866316802622,
 	"direction":"S",
-	"entered_at":"2012-07-23T12:20:25.516Z",
+	"entered_at":"2012-07-23",
 	"version":"C818CD36"}
 ]
