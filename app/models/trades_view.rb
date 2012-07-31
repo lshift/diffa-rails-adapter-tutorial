@@ -1,5 +1,9 @@
 class TradesView < ActiveRecord::Base
-  set_table_name "trades_view"
-  set_primary_key "id"
+  self.table_name = 'trades_view'
+  self.primary_key = 'id'
+
+  def as_json(options = {})
+    super(options).merge(attributes: {})
+  end
 end
 
