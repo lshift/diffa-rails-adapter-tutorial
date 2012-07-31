@@ -4,7 +4,7 @@ function urlTemplate(tmpl) {
     return function template() { 
         var attrs = this.attributes;
         return tmpl.replace(/:([([a-zA-Z0-9]*)/g, function(_whole, name) {
-            return attrs[name];
+            return attrs[name] || '';
         });
     }
 }
@@ -12,6 +12,7 @@ function urlTemplate(tmpl) {
 
 Diffa.Trade = Backbone.Model.extend({
     validate: function validate(attributes) {
+        console.log('validate', attributes);
         if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
         if (attributes.price <= 0) { return "invalid price: " + attributes.price; };
     },
@@ -22,7 +23,14 @@ Diffa.Trade = Backbone.Model.extend({
             return json;
         }
     },
-    url: urlTemplate("/grid/trades/:id")
+    url: urlTemplate("/grid/trades/:id"),
+    defaults: { 
+        ttype: 'O',
+        quantity: 1,
+        price: 0.0001,
+        entered_at: new Date(),
+        expiry: new Date(),
+    }
 });
 
 Diffa.Trade.prototype.__properties = ['id', 'type', 'quantity', 'expiry', 'price', 'direction',
@@ -116,13 +124,25 @@ Diffa.BootstrapGrids = function() {
         },
 
         showError: function showError(model, error, _options) {
-            $('<div/>').hide().addClass('error').text(error).appendTo(this.el).slideDown().
+            $('<div/>').hide().addClass('error').text(error.toString()).appendTo(this.el).slideDown().
                 delay(1000).slideUp(function () {
                     $(this).remove();
                 });
-    
         }
-        
+    });
+
+    Diffa.Views.Control = Backbone.View.extend({
+        markup: '<button/>',
+        render: function () {
+            $(this.el).html(this.markup).find('button').text('Add Row');
+        },
+        initialize: function initialize(options) {
+            this.render();
+            this.$('button').click(this.addRow.bind(this));
+        },
+        addRow: function addRow() { 
+            this.collection.create();
+        }
     });
 
     Diffa.Models = Diffa.Models || {};
@@ -143,6 +163,10 @@ Diffa.BootstrapGrids = function() {
     });
     Diffa.errorView = new Diffa.Views.TradeErrors({
         el: $('#trade_errors'),
+        collection: Diffa.tradesCollection
+    });
+    Diffa.control = new Diffa.Views.Control({
+        el: $('#controls'),
         collection: Diffa.tradesCollection
     });
 };
