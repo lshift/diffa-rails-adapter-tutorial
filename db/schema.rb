@@ -11,30 +11,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120730172340) do
+ActiveRecord::Schema.define(:version => 20120731123631) do
 
   create_table "futures", :force => true do |t|
     t.integer  "user_id"
     t.integer  "quantity"
     t.date     "expiry"
-    t.decimal  "price"
+    t.decimal  "price",      :precision => 10, :scale => 0
     t.string   "direction"
     t.date     "entered_at"
     t.string   "version"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "options", :force => true do |t|
     t.integer  "user_id"
     t.integer  "quantity"
-    t.decimal  "strike"
+    t.decimal  "strike",     :precision => 10, :scale => 0
     t.date     "expiry"
     t.string   "direction"
     t.date     "entered_at"
     t.string   "version"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "trades", :force => true do |t|
@@ -42,12 +42,23 @@ ActiveRecord::Schema.define(:version => 20120730172340) do
     t.string   "ttype"
     t.integer  "quantity"
     t.date     "expiry"
-    t.decimal  "price"
+    t.decimal  "price",      :precision => 10, :scale => 0
     t.string   "direction"
     t.date     "entered_at"
-    t.string   "version"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "trades_view", :id => false, :force => true do |t|
+    t.integer "id",                                                      :default => 0, :null => false
+    t.string  "ttype"
+    t.integer "quantity"
+    t.date    "expiry"
+    t.decimal "price",                    :precision => 10, :scale => 0
+    t.string  "direction"
+    t.date    "entered_at"
+    t.string  "version",    :limit => 32
+    t.integer "user"
   end
 
   create_table "users", :force => true do |t|

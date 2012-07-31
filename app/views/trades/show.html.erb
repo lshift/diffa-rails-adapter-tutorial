@@ -1,27 +1,39 @@
 <p id="notice"><%= notice %></p>
 
-<table class="trade-info">
-  <thead>
-    <th>User:</th>
-    <th>Ttype:</th>
-    <th>Quantity:</th>
-    <th>Expiry:</th>
-    <th>Price:</th>
-    <th>Direction:</th>
-    <th>Entered at:</th>
-    <th>Version:</th>
-  </thead>
-  <tbody><tr>
-      <td><%= @trade.user_id %></td>
-      <td><%= @trade.ttype %></td>
-      <td><%= @trade.quantity %></td>
-      <td><%= @trade.expiry %></td>
-      <td><%= @trade.price %></td>
-      <td><%= @trade.direction %></td>
-      <td><%= @trade.entered_at %></td>
-      <td><%= @trade.version %></td>
-  </tr></tbody>
-</div>
+<p>
+  <b>User:</b>
+  <%= @trade.user %>
+</p>
+
+<p>
+  <b>Ttype:</b>
+  <%= @trade.ttype %>
+</p>
+
+<p>
+  <b>Quantity:</b>
+  <%= @trade.quantity %>
+</p>
+
+<p>
+  <b>Expiry:</b>
+  <%= @trade.expiry %>
+</p>
+
+<p>
+  <b>Price:</b>
+  <%= @trade.price %>
+</p>
+
+<p>
+  <b>Direction:</b>
+  <%= @trade.direction %>
+</p>
+
+<p>
+  <b>Entered at:</b>
+  <%= @trade.entered_at %>
+</p>
 
 
 <%= link_to 'Edit', edit_trade_path(@trade) %> |
