@@ -10,18 +10,6 @@ class FuturesController < ApplicationController
     end
   end
 
-  def grid
-    user = params[:user_id]
-    @futures = Future.where(:user_id => user)
-    render json: @futures
-  end
-
-  def scan
-    user = params[:user_id]
-    @futures = Future.where(:user_id => user)
-    render json: @futures.to_json(:only => [:id, :version])
-  end
-
   # GET /futures/1
   # GET /futures/1.json
   def show

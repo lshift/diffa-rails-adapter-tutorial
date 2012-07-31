@@ -10,20 +10,6 @@ class TradesController < ApplicationController
     end
   end
 
-  # GET /users/:user_id/trades/scan
-  def scan
-    user = params[:user_id]
-    @trades = TradesView.where(:user => user)
-    render json: @trades.to_json(:only => [:id, :version])
-  end
-
-  # GET /users/:user_id/trades/grid
-  def grid
-    user = params[:user_id]
-    @trades = TradesView.where(:user => user)
-    render json: @trades
-  end
-
   # GET /trades/1
   # GET /trades/1.json
   def show
