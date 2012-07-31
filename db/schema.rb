@@ -50,15 +50,16 @@ ActiveRecord::Schema.define(:version => 20120731123631) do
   end
 
   create_table "trades_view", :id => false, :force => true do |t|
-    t.integer "id",                                                      :default => 0, :null => false
-    t.string  "ttype"
-    t.integer "quantity"
-    t.date    "expiry"
-    t.decimal "price",                    :precision => 10, :scale => 0
-    t.string  "direction"
-    t.date    "entered_at"
-    t.string  "version",    :limit => 32
-    t.integer "user"
+    t.integer  "id",                                                       :default => 0, :null => false
+    t.string   "ttype"
+    t.integer  "quantity"
+    t.date     "expiry"
+    t.decimal  "price",                     :precision => 10, :scale => 0
+    t.string   "direction"
+    t.date     "entered_at"
+    t.string   "version",     :limit => 32
+    t.integer  "user"
+    t.datetime "lastUpdated",                                                             :null => false
   end
 
   create_table "users", :force => true do |t|
