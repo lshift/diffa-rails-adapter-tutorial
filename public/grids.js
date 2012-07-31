@@ -14,7 +14,7 @@ Diffa.Trade = Backbone.Model.extend({
     validate: function validate(attributes) {
         console.log('validate', attributes);
         if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
-        if (attributes.price <= 0) { return "invalid price: " + attributes.price; };
+        if (attributes.price < 0) { return "invalid price: " + attributes.price; };
     },
     parse: function(json) {
         if (json) { 
@@ -36,6 +36,12 @@ Diffa.Trade = Backbone.Model.extend({
 Diffa.Future = Diffa.Trade.extend({
     url: urlTemplate("/grid/futures/:id"),
 });
+
+Diffa.Option = Diffa.Trade.extend({
+    url: urlTemplate("/grid/options/:id"),
+});
+
+
 
 Diffa.Trade.prototype.__properties = ['id', 'type', 'quantity', 'expiry', 'price', 'direction',
                       'entered_at', 'version'];
@@ -84,8 +90,10 @@ Diffa.BootstrapGrids = function() {
     var optionsRiskColumns = [
         {id: "id", name: "Id", field: "id"},
         {id: "version", name: "Version", field: "version"},
-        {id: "quantity", name: "Quantity", field: "quantity"},
-        {id: "strike", name: "Strike", field: "price"},
+        {id: "quantity", name: "Quantity", field: "quantity", 
+            editor: Slickback.NumberCellEditor},
+        {id: "strike", name: "Strike", field: "price",
+            editor: Slickback.NumberCellEditor, precision: 2},
         {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
              formatter: Diffa.GridView.DateFormatter},
         {id: "direction", name: "Call/Put", field: "direction"},
@@ -126,6 +134,10 @@ Diffa.BootstrapGrids = function() {
 
     Diffa.Views.FuturesGrid = Diffa.Views.TradesGrid.extend({
         columns: futuresRiskColumns
+    });
+
+    Diffa.Views.OptionsGrid = Diffa.Views.TradesGrid.extend({
+        columns: optionsRiskColumns
     });
 
 
@@ -190,6 +202,11 @@ Diffa.BootstrapGrids = function() {
     Diffa.futuresGrid = new GridComponent(
         $('link[rel="diffa.data.futures"]').attr('href'), $('#futures'), 
         Diffa.Future, Diffa.Views.FuturesGrid
+    );
+
+    Diffa.futuresGrid = new GridComponent(
+        $('link[rel="diffa.data.options"]').attr('href'), $('#options'), 
+        Diffa.Option, Diffa.Views.OptionsGrid
     );
         
 };
