@@ -1,5 +1,9 @@
 AdapterDemo::Application.routes.draw do
-  resources :users
+  resources :users do
+    member do
+      get :grids
+    end
+  end
 
   scope "/grid" do
     resources :futures, :options, :trades

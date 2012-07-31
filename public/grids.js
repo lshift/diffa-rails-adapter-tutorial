@@ -1,5 +1,15 @@
 window.Diffa = window.Diffa || new Object;
 
+function urlTemplate(tmpl) { 
+    return function template() { 
+        var attrs = this.attributes;
+        return tmpl.replace(/:([([a-zA-Z0-9]*)/g, function(_whole, name) {
+            return attrs[name];
+        });
+    }
+}
+
+
 Diffa.Trade = Backbone.Model.extend({
     validate: function validate() {
         if (!/^[FO]/.test(this.attributes.ttype)) { return "invalid trade type: " + this.attributes.ttype; };
@@ -11,7 +21,8 @@ Diffa.Trade = Backbone.Model.extend({
         json.expiry = new Date(json.expiry);
         json.entered_at = new Date(json.entered_at);
         return json;
-    }
+    },
+    url: urlTemplate("/grid/trades/:id")
 });
 
 Diffa.Trade.prototype.__properties = ['id', 'type', 'quantity', 'expiry', 'price', 'direction',

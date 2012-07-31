@@ -8,8 +8,10 @@
   <title>SlickGrid example 1: Basic grid</title>
   <link rel="stylesheet" href="/vendor/slickgrid/slick.grid.css" type="text/css"/>
   <link rel="stylesheet" href="/vendor/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
-
-  <link rel="diffa.datasource" href="{{grid_url}}" />
+ 
+  <link rel='diffa.data.trades' href="/grid/trades.json" />
+  <link rel='diffa.data.options' href="/grid/options.json" />
+  <link rel='diffa.data.futures' href="/grid/futures.json" />
 </head>
 <style>
 .slick-cell.active input { width: 100%; }
@@ -35,7 +37,8 @@
 <script src="/vendor/slickgrid/slick.formatters.js"></script>
 <script src="/es5-shim.js"></script>
 <script src="/underscore.js"></script>
-<script src="/murmurhash3_gc.js"></script>
+<script src="/backbone.js"></script>
+<script src="/slickback.full.js"></script>
 
 <script src="/grids.js"> </script>
 <script> 
