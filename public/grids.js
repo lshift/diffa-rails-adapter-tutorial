@@ -160,46 +160,36 @@ Diffa.BootstrapGrids = function() {
     Diffa.Models = Diffa.Models || {};
 
 // ---------------------
-    Diffa.Models.TradesCollection = Slickback.Collection.extend({
-        model: Diffa.Trade,
-        url: $('link[rel="diffa.data.trades"]').attr('href'),
-    });
+    function GridComponent(url, baseElt, modelType, gridViewType) {
+        this.CollectionType = Slickback.Collection.extend({
+            model: modelType,
+            url: url,
+        });
 
-    Diffa.tradesCollection = new Diffa.Models.TradesCollection()
+        this.collection = new this.CollectionType();
 
-    Diffa.tradeEntryView = new Diffa.Views.TradesGrid({
-        el: $("#trades .entry-grid"),
-        collection: Diffa.tradesCollection,
-    });
-    Diffa.errorView = new Diffa.Views.TradeErrors({
-        el: $('#trades .errors'),
-        collection: Diffa.tradesCollection
-    });
-    Diffa.control = new Diffa.Views.Control({
-        el: $('#trades .controls'),
-        collection: Diffa.tradesCollection
-    });
+        this.tradeEntryView = new gridViewType({
+            el: baseElt.find(".entry-grid"),
+            collection: this.collection,
+        });
+        this.errorView = new Diffa.Views.TradeErrors({
+            el: baseElt.find(".errors"),
+            collection: this.collection
+        });
+        this.control = new Diffa.Views.Control({
+            el: baseElt.find(".controls"),
+            collection: this.collection
+        });
+    };
 
-// --------------------
-   Diffa.Models.FuturesCollection = Slickback.Collection.extend({
-        model: Diffa.Future,
-        url: $('link[rel="diffa.data.futures"]').attr('href'),
-    });
+    Diffa.tradesGrid = new GridComponent(
+        $('link[rel="diffa.data.trades"]').attr('href'), $('#trades'), 
+        Diffa.Trade, Diffa.Views.TradesGrid
+    );
 
-    Diffa.futuresCollection = new Diffa.Models.FuturesCollection()
-
-    Diffa.futureEntryView = new Diffa.Views.FuturesGrid({
-        el: $("#futures .entry-grid"),
-        collection: Diffa.futuresCollection,
-    });
-
-    Diffa.futuresErrorView = new Diffa.Views.TradeErrors({
-        el: $('#futures .errors'),
-        collection: Diffa.futuresCollection
-    });
-    Diffa.futureControl = new Diffa.Views.Control({
-        el: $('#futures .controls'),
-        collection: Diffa.futuresCollection
-    });
-    
+    Diffa.futuresGrid = new GridComponent(
+        $('link[rel="diffa.data.futures"]').attr('href'), $('#futures'), 
+        Diffa.Future, Diffa.Views.FuturesGrid
+    );
+        
 };
