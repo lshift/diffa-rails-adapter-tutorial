@@ -11,9 +11,9 @@ function urlTemplate(tmpl) {
 
 
 Diffa.Trade = Backbone.Model.extend({
-    validate: function validate() {
-        if (!/^[FO]/.test(this.attributes.ttype)) { return "invalid trade type: " + this.attributes.ttype; };
-        if (this.attributes.price <= 0) { return "invalid price: " + this.attributes.price; };
+    validate: function validate(attributes) {
+        if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
+        if (attributes.price <= 0) { return "invalid price: " + attributes.price; };
     },
     parse: function(json) {
         console.log("parse", json);
@@ -82,7 +82,6 @@ Diffa.BootstrapGrids = function() {
     Diffa.Views = Diffa.Views || {};
     Diffa.Views.TradesGrid = Backbone.View.extend({
         initialize: function initialize(initOptions) {
-
             var gridOptions = _.extend({},{
                 editable:         true,
                 formatterFactory: Slickback.BackboneModelFormatterFactory
@@ -110,6 +109,22 @@ Diffa.BootstrapGrids = function() {
         }
     });
 
+
+    Diffa.Views.TradeErrors = Backbone.View.extend({
+        initialize: function initialize(options) {
+            this.collection.on('error', this.showError.bind(this));
+        },
+
+        showError: function showError(model, error, _options) {
+            $('<div/>').hide().addClass('error').text(error).appendTo(this.el).slideDown().
+                delay(1000).slideUp(function () {
+                    $(this).remove();
+                });
+    
+        }
+        
+    });
+
     Diffa.Models = Diffa.Models || {};
     Diffa.Models.TradesCollection = Slickback.Collection.extend({
         model: Diffa.Trade,
@@ -124,6 +139,10 @@ Diffa.BootstrapGrids = function() {
 
     Diffa.tradeEntryView = new Diffa.Views.TradesGrid({
         el: $("#grid_trade_entry"),
+        collection: Diffa.tradesCollection
+    });
+    Diffa.errorView = new Diffa.Views.TradeErrors({
+        el: $('#trade_errors'),
         collection: Diffa.tradesCollection
     });
 };
