@@ -1,4 +1,14 @@
 class TradesController < ApplicationController
+  def propagate
+    t = TradesView.where(:user => params[:user_id]).find(params[:trade_id])
+    future = Future.new(version: t.version, user_id: t.user,
+                        quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
+                        price: t.price, direction: t.direction)
+    future.id = t.id
+    future.save
+    render json: future
+  end
+
   def grid
     user = params[:user_id]
     trades = TradesView.where(:user => user)
@@ -8,7 +18,7 @@ class TradesController < ApplicationController
   def scan
     user = params[:user_id]
     trades = TradesView.where(:user => user)
-    render json: trades.to_json(:only => [:id, :version])
+    render json: trades.to_json(only: [:id, :version, :lastUpdated])
   end
 
   # GET /trades
