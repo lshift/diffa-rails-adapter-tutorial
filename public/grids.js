@@ -33,6 +33,10 @@ Diffa.Trade = Backbone.Model.extend({
     }
 });
 
+Diffa.Future = Diffa.Trade.extend({
+    url: urlTemplate("/grid/futures/:id"),
+});
+
 Diffa.Trade.prototype.__properties = ['id', 'type', 'quantity', 'expiry', 'price', 'direction',
                       'entered_at', 'version'];
 
@@ -55,7 +59,7 @@ Diffa.BootstrapGrids = function() {
         {id: "quantity", name: "Qty.", field: "quantity", width: 60, 
             editor: Slickback.NumberCellEditor},
         {id: "price", name: "Price", field: "price", width: 80, 
-            editor: Slickback.NumberCellEditor},
+            editor: Slickback.NumberCellEditor, precision: 2},
         {id: "direction", name: "Buy/Sell", field: "direction", width: 30},
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
             formatter: Diffa.GridView.DateFormatter},
@@ -66,10 +70,12 @@ Diffa.BootstrapGrids = function() {
     var futuresRiskColumns = [
         {id: "id", name: "Id", field: "id"},
         {id: "version", name: "Version", field: "version"},
-        {id: "quantity", name: "Quantity", field: "quantity"},
+        {id: "quantity", name: "Quantity", field: "quantity", 
+            editor: Slickback.NumberCellEditor},
         {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
              formatter: Diffa.GridView.DateFormatter},
-        {id: "price", name: "Price", field: "price"},
+        {id: "price", name: "Price", field: "price",
+            editor: Slickback.NumberCellEditor, precision: 2},
         {id: "direction", name: "Buy/Sell", field: "direction"},
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
              formatter: Diffa.GridView.DateFormatter},
@@ -89,6 +95,7 @@ Diffa.BootstrapGrids = function() {
 
     Diffa.Views = Diffa.Views || {};
     Diffa.Views.TradesGrid = Backbone.View.extend({
+        columns: tradeEntryColumns,
         initialize: function initialize(initOptions) {
             var gridOptions = _.extend({},{
                 editable:         true,
@@ -97,7 +104,7 @@ Diffa.BootstrapGrids = function() {
 
             var collection = this.collection;
 
-            var grid = new Slick.Grid(this.el,collection, tradeEntryColumns, gridOptions);
+            var grid = new Slick.Grid(this.el,collection, this.columns, gridOptions);
             collection.bind('change',function(model,attributes) {
                 console.log("Changed", model.changedAttributes());
                 model.save();
@@ -117,10 +124,15 @@ Diffa.BootstrapGrids = function() {
         }
     });
 
+    Diffa.Views.FuturesGrid = Diffa.Views.TradesGrid.extend({
+        columns: futuresRiskColumns
+    });
+
 
     Diffa.Views.TradeErrors = Backbone.View.extend({
         initialize: function initialize(options) {
             this.collection.on('error', this.showError.bind(this));
+            console.log("Render errors in", this.el);
         },
 
         showError: function showError(model, error, _options) {
@@ -146,6 +158,8 @@ Diffa.BootstrapGrids = function() {
     });
 
     Diffa.Models = Diffa.Models || {};
+
+// ---------------------
     Diffa.Models.TradesCollection = Slickback.Collection.extend({
         model: Diffa.Trade,
         url: $('link[rel="diffa.data.trades"]').attr('href'),
@@ -153,20 +167,39 @@ Diffa.BootstrapGrids = function() {
 
     Diffa.tradesCollection = new Diffa.Models.TradesCollection()
 
-//    Diffa.tradeEntryView = new Diffa.GridView($("#grid_trade_entry"), dataSource, tradeEntryColumns, options);
-//    Diffa.futuresRiskGrid = new Diffa.GridView($("#grid_futures_risk"), dataSource, futuresRiskColumns, options);
-//    Diffa.optionsRiskGrid = new Diffa.GridView($("#grid_options_risk"), dataSource, optionsRiskColumns, options);
-
     Diffa.tradeEntryView = new Diffa.Views.TradesGrid({
-        el: $("#grid_trade_entry"),
-        collection: Diffa.tradesCollection
+        el: $("#trades .entry-grid"),
+        collection: Diffa.tradesCollection,
     });
     Diffa.errorView = new Diffa.Views.TradeErrors({
-        el: $('#trade_errors'),
+        el: $('#trades .errors'),
         collection: Diffa.tradesCollection
     });
     Diffa.control = new Diffa.Views.Control({
-        el: $('#controls'),
+        el: $('#trades .controls'),
         collection: Diffa.tradesCollection
     });
+
+// --------------------
+   Diffa.Models.FuturesCollection = Slickback.Collection.extend({
+        model: Diffa.Future,
+        url: $('link[rel="diffa.data.futures"]').attr('href'),
+    });
+
+    Diffa.futuresCollection = new Diffa.Models.FuturesCollection()
+
+    Diffa.futureEntryView = new Diffa.Views.FuturesGrid({
+        el: $("#futures .entry-grid"),
+        collection: Diffa.futuresCollection,
+    });
+
+    Diffa.futuresErrorView = new Diffa.Views.TradeErrors({
+        el: $('#futures .errors'),
+        collection: Diffa.futuresCollection
+    });
+    Diffa.futureControl = new Diffa.Views.Control({
+        el: $('#futures .controls'),
+        collection: Diffa.futuresCollection
+    });
+    
 };

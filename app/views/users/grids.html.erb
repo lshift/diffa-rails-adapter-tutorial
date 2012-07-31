@@ -5,7 +5,6 @@
 <head>
   <title>Diffa participant Grid</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <title>SlickGrid example 1: Basic grid</title>
   <link rel="stylesheet" href="/vendor/slickgrid/slick.grid.css" type="text/css"/>
   <link rel="stylesheet" href="/vendor/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
  
@@ -19,12 +18,22 @@
 <body>
 <h1>Diffa participant Grid</h1>
 
-<div id="grid_trade_entry" style="height:20em"></div>
-<!-- <div id="grid_futures_risk" style="height:5em"></div>
-<div id="grid_options_risk" style="height:5em"></div> -->
-<div id='controls'/>
-<div id="trade_errors"></div>
+<div class=component id=trades>
+<div class="entry-grid" style="height:20em">grid</div>
+<div class='controls'>controls</div>
+<div class="errors"></div>
+</div>
 <hr/>
+
+<div class=component id=futures>
+<div class="entry-grid" style="height:20em">grid</div>
+<div class='controls'>controls</div>
+
+<div class="errors"></div>
+
+</div>
+<hr/>
+
 
 <script src="/vendor/slickgrid/lib/jquery-1.7.min.js"></script>
 <script src="/vendor/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
