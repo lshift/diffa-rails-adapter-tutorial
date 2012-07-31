@@ -16,11 +16,11 @@ Diffa.Trade = Backbone.Model.extend({
         if (attributes.price <= 0) { return "invalid price: " + attributes.price; };
     },
     parse: function(json) {
-        console.log("parse", json);
-        // TODO: Validation
-        json.expiry = new Date(json.expiry);
-        json.entered_at = new Date(json.entered_at);
-        return json;
+        if (json) { 
+            json.expiry = new Date(json.expiry);
+            json.entered_at = new Date(json.entered_at);
+            return json;
+        }
     },
     url: urlTemplate("/grid/trades/:id")
 });
