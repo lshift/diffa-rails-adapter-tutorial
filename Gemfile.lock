@@ -55,7 +55,6 @@ GEM
     faye-websocket (0.4.6)
       eventmachine (>= 0.12.0)
     ffi (1.1.2)
-    hex_string (1.0.0)
     hike (1.2.1)
     http_parser.rb (0.5.3)
     i18n (0.6.0)
@@ -157,7 +156,6 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
-  hex_string (= 1.0.0)
   jquery-rails
   liquid (~> 2.3.0)
   mysql2
