@@ -9,6 +9,13 @@ AdapterDemo::Application.routes.draw do
     resources :futures, :options, :trades
   end
 
+  get "/users/:user_id/trades/grid" => "trades#grid"
+  get "/users/:user_id/futures/grid" => "futures#grid"
+  get "/users/:user_id/options/grid" => "options#grid"
+
+  get "/users/:user_id/trades/scan" => "trades#scan"
+  get "/users/:user_id/risks/scan" => "futures#scan"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

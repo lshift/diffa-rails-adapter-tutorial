@@ -1,4 +1,16 @@
 class TradesController < ApplicationController
+  def grid
+    user = params[:user_id]
+    trades = TradesView.where(:user => user)
+    render json: trades
+  end
+
+  def scan
+    user = params[:user_id]
+    trades = TradesView.where(:user => user)
+    render json: trades.to_json(:only => [:id, :version])
+  end
+
   # GET /trades
   # GET /trades.json
   def index
