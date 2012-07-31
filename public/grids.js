@@ -12,7 +12,6 @@ function urlTemplate(tmpl) {
 
 Diffa.Trade = Backbone.Model.extend({
     validate: function validate(attributes) {
-        console.log('validate', attributes);
         if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
         if (attributes.price < 0) { return "invalid price: " + attributes.price; };
     },
@@ -114,7 +113,6 @@ Diffa.BootstrapGrids = function() {
 
             var grid = new Slick.Grid(this.el,collection, this.columns, gridOptions);
             collection.bind('change',function(model,attributes) {
-                console.log("Changed", model.changedAttributes());
                 model.save();
             });
 
