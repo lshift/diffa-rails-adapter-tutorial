@@ -1,9 +1,8 @@
 class TradesController < ApplicationController
   # GET /trades
-  # GET /grid/trades
   # GET /trades.json
   def index
-    @trades = Trade.all
+    @trades = TradesView.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,7 +13,7 @@ class TradesController < ApplicationController
   # GET /trades/1
   # GET /trades/1.json
   def show
-    @trade = Trade.find(params[:id])
+    @trade = TradesView.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

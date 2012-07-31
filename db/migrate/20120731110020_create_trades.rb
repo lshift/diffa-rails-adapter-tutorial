@@ -8,7 +8,6 @@ class CreateTrades < ActiveRecord::Migration
       t.decimal :price
       t.string :direction
       t.date :entered_at
-      t.string :version
 
       t.timestamps
     end
