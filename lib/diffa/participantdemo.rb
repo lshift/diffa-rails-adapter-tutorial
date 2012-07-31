@@ -1,5 +1,6 @@
 require 'diffa/grid_model'
 require 'diffa/participant_demo_api'
+require 'diffa/participant_demo_app'
 require 'diffa/grid_storage'
 require 'pp'
 

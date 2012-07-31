@@ -1,12 +1,3 @@
-[submodule "lib/diffa/public/vendor/slickgrid"]
-	path = lib/diffa/public/vendor/slickgrid
+[submodule "public/vendor/slickgrid"]
+	path = public/vendor/slickgrid
 	url = git://github.com/mleibman/SlickGrid.git
-[submodule "lib/diffa/public/vendor/mocha"]
-	path = lib/diffa/public/vendor/mocha
-	url = https://github.com/visionmedia/mocha.git
-[submodule "lib/diffa/public/vendor/jshamcrest"]
-	path = lib/diffa/public/vendor/jshamcrest
-	url = https://github.com/danielfm/jshamcrest.git
-[submodule "lib/diffa/public/vendor/jsmockito"]
-	path = lib/diffa/public/vendor/jsmockito
-	url = https://github.com/chrisleishman/jsmockito.git

@@ -1,16 +1,35 @@
 window.Diffa = window.Diffa || new Object;
 
+function urlTemplate(tmpl) { 
+    return function template() { 
+        var attrs = this.attributes;
+        return tmpl.replace(/:([([a-zA-Z0-9]*)/g, function(_whole, name) {
+            return attrs[name] || '';
+        });
+    }
+}
+
+
 Diffa.Trade = Backbone.Model.extend({
-    validate: function validate() {
-        if (!/^[FO]/.test(this.attributes.ttype)) { return "invalid trade type: " + this.attributes.ttype; };
-        if (this.attributes.price <= 0) { return "invalid price: " + this.attributes.price; };
+    validate: function validate(attributes) {
+        console.log('validate', attributes);
+        if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
+        if (attributes.price <= 0) { return "invalid price: " + attributes.price; };
     },
     parse: function(json) {
-        console.log("parse", json);
-        // TODO: Validation
-        json.expiry = new Date(json.expiry);
-        json.entered_at = new Date(json.entered_at);
-        return json;
+        if (json) { 
+            json.expiry = new Date(json.expiry);
+            json.entered_at = new Date(json.entered_at);
+            return json;
+        }
+    },
+    url: urlTemplate("/grid/trades/:id"),
+    defaults: { 
+        ttype: 'O',
+        quantity: 1,
+        price: 0.0001,
+        entered_at: new Date(),
+        expiry: new Date(),
     }
 });
 
@@ -32,9 +51,11 @@ Diffa.BootstrapGrids = function() {
     var tradeEntryColumns = [
         {id: "id", name: "Id", field: "id", width:80},
         {id: "version", name: "Version", field: "version"},
-        {id: "type", name: "Type", field: "type", width: 30},
-        {id: "quantity", name: "Qty.", field: "quantity", width: 60},
-        {id: "price", name: "Price", field: "price", width: 80},
+        {id: "ttype", name: "Type", field: "ttype", width: 30},
+        {id: "quantity", name: "Qty.", field: "quantity", width: 60, 
+            editor: Slickback.NumberCellEditor},
+        {id: "price", name: "Price", field: "price", width: 80, 
+            editor: Slickback.NumberCellEditor},
         {id: "direction", name: "Buy/Sell", field: "direction", width: 30},
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
             formatter: Diffa.GridView.DateFormatter},
@@ -66,25 +87,19 @@ Diffa.BootstrapGrids = function() {
              formatter: Diffa.GridView.DateFormatter},
     ]; 
 
-    var options = {
-        enableCellNavigation: true,
-        enableColumnReorder: false,
-        editable: false,
-    };
-
     Diffa.Views = Diffa.Views || {};
     Diffa.Views.TradesGrid = Backbone.View.extend({
         initialize: function initialize(initOptions) {
-
             var gridOptions = _.extend({},{
                 editable:         true,
                 formatterFactory: Slickback.BackboneModelFormatterFactory
-            },initOptions.grid);
+            }, initOptions.grid);
 
             var collection = this.collection;
 
-            var grid = new Slick.Grid(this.el,collection, tradeEntryColumns,gridOptions);
+            var grid = new Slick.Grid(this.el,collection, tradeEntryColumns, gridOptions);
             collection.bind('change',function(model,attributes) {
+                console.log("Changed", model.changedAttributes());
                 model.save();
             });
 
@@ -102,6 +117,34 @@ Diffa.BootstrapGrids = function() {
         }
     });
 
+
+    Diffa.Views.TradeErrors = Backbone.View.extend({
+        initialize: function initialize(options) {
+            this.collection.on('error', this.showError.bind(this));
+        },
+
+        showError: function showError(model, error, _options) {
+            $('<div/>').hide().addClass('error').text(error.toString()).appendTo(this.el).slideDown().
+                delay(1000).slideUp(function () {
+                    $(this).remove();
+                });
+        }
+    });
+
+    Diffa.Views.Control = Backbone.View.extend({
+        markup: '<button/>',
+        render: function () {
+            $(this.el).html(this.markup).find('button').text('Add Row');
+        },
+        initialize: function initialize(options) {
+            this.render();
+            this.$('button').click(this.addRow.bind(this));
+        },
+        addRow: function addRow() { 
+            this.collection.create();
+        }
+    });
+
     Diffa.Models = Diffa.Models || {};
     Diffa.Models.TradesCollection = Slickback.Collection.extend({
         model: Diffa.Trade,
@@ -116,6 +159,14 @@ Diffa.BootstrapGrids = function() {
 
     Diffa.tradeEntryView = new Diffa.Views.TradesGrid({
         el: $("#grid_trade_entry"),
+        collection: Diffa.tradesCollection
+    });
+    Diffa.errorView = new Diffa.Views.TradeErrors({
+        el: $('#trade_errors'),
+        collection: Diffa.tradesCollection
+    });
+    Diffa.control = new Diffa.Views.Control({
+        el: $('#controls'),
         collection: Diffa.tradesCollection
     });
 };
