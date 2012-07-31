@@ -144,7 +144,6 @@ Diffa.BootstrapGrids = function() {
     Diffa.Views.TradeErrors = Backbone.View.extend({
         initialize: function initialize(options) {
             this.collection.on('error', this.showError.bind(this));
-            console.log("Render errors in", this.el);
         },
 
         showError: function showError(model, error, _options) {
@@ -171,7 +170,6 @@ Diffa.BootstrapGrids = function() {
 
     Diffa.Models = Diffa.Models || {};
 
-// ---------------------
     function GridComponent(url, baseElt, modelType, gridViewType) {
         this.CollectionType = Slickback.Collection.extend({
             model: modelType,
