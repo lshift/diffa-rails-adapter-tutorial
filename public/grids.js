@@ -101,8 +101,7 @@ Diffa.BootstrapGrids = function() {
     ]; 
 
     Diffa.Views = Diffa.Views || {};
-    Diffa.Views.TradesGrid = Backbone.View.extend({
-        columns: tradeEntryColumns,
+    Diffa.Views.AutoSaveGrid = Backbone.View.extend({
         initialize: function initialize(initOptions) {
             var gridOptions = _.extend({},{
                 editable:         true,
@@ -129,12 +128,15 @@ Diffa.BootstrapGrids = function() {
             collection.fetch();
         }
     });
+    Diffa.Views.TradesGrid = Diffa.Views.AutoSaveGrid.extend({
+        columns: tradeEntryColumns,
+    });
 
-    Diffa.Views.FuturesGrid = Diffa.Views.TradesGrid.extend({
+    Diffa.Views.FuturesGrid = Diffa.Views.AutoSaveGrid.extend({
         columns: futuresRiskColumns
     });
 
-    Diffa.Views.OptionsGrid = Diffa.Views.TradesGrid.extend({
+    Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
         columns: optionsRiskColumns
     });
 
