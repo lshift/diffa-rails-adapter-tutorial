@@ -17,6 +17,7 @@ AdapterDemo::Application.routes.draw do
   get "/users/:user_id/risks/scan" => "futures#scan"
 
   get "/users/:user_id/trades/:trade_id/push" => "trades#propagate"
+  post "/users/:user_id/trades/:trade_id/push" => "trades#propagate"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
