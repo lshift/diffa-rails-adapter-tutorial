@@ -14,6 +14,10 @@ Diffa.Trade = Backbone.Model.extend({
     validate: function validate(attributes) {
         if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
         if (attributes.price < 0) { return "invalid price: " + attributes.price; };
+        if (attributes.expiry < attributes.entered_at) { 
+            return "Expiry date " + Diffa.dateToString(attributes.expiry) + 
+                    " must be after entry date " + Diffa.dateToString(attributes.entered_at);
+        }
     },
     parse: function(json) {
         if (json) { 
