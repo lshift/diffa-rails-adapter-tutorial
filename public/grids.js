@@ -119,13 +119,13 @@ Diffa.BootstrapGrids = function() {
         {id: "quantity", name: "Quantity", field: "quantity", 
             editor: Slickback.NumberCellEditor},
         {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
+             formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
         {id: "price", name: "Price", field: "price",
             editor: Slickback.NumberCellEditor, precision: 2},
         {id: "direction", name: "Buy/Sell", field: "direction",
             editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
+             formatter: Diffa.GridView.DateFormatter},
     ]; 
             
     var optionsRiskColumns = [
