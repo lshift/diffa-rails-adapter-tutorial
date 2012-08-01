@@ -24,10 +24,10 @@ class TradesControllerTest < ActionController::TestCase
     assert_redirected_to trade_path(assigns(:trade))
   end
 
-  test "should show trade" do
-    get :show, id: @trade
-    assert_response :success
-  end
+#  test "should show trade" do
+#    get :show, id: @trade
+#    assert_response :success
+#  end
 
   test "should get edit" do
     get :edit, id: @trade

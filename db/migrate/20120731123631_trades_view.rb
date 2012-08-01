@@ -8,8 +8,8 @@ class TradesView < ActiveRecord::Migration
       'price',
       'direction',
       'entered_at']
-    projection = common.dup.append('version').append('user')
-    cols = common.dup.append('md5(%s)' % common.join('||')).append('user_id')
+    projection = common.dup.append('version').append('user').append('lastUpdated')
+    cols = common.dup.append('md5(concat(%s))' % common.join(',')).append('user_id').append('updated_at')
     execute 'create view trades_view (%s) as (select %s from trades)' % [
       projection.join(','),  cols.join(',')
     ]
