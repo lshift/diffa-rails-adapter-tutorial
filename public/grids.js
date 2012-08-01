@@ -49,10 +49,44 @@ Diffa.Trade.prototype.toString = function() {
     return "<Diffa.Trade " + JSON.stringify(this) + ">";
 }
 
-Diffa.GridView = {}
+Diffa.DateEditor = function(args) {
+    this.container    = args.container;
+    this.column       = args.column;
+    this.defaultValue = null;
+    this.$input       = this.createTextInputElement();
+//     this.picker       = this.$input.glDatePicker({
+//         position: 'static', showAlways: true,
+//         onChange: this.whenChanged.bind(this)
+//     });
+}
+
+_.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
+    serializeValue: function() {
+        var parsed = new Date(this.$input.val());
+        console.log("Serialize: ", this.$input.val(), parsed);
+        // return this.currval || this.$input.val();
+        return parsed;
+    },
+
+    validate: function() {
+        var column = this.column;
+        return column.validator ?  column.validator(this.$input.val()) : { valid: true, msg: null };
+    },
+    whenChanged: function(target, value) {
+        var serialized = Diffa.dateToString(value);
+        console.log("whenChanged", target, value, serialized);
+        this.$input.val(serialized);
+        this.currval = value;
+    }
+});
+
+Diffa.dateToString = function dateToString(date) {
+    return [date.getFullYear(), date.getMonth() +1, date.getDate()].join("/");
+}
+Diffa.GridView = {};
 Diffa.GridView.DateFormatter = function DateFormatter(row, cell, value, columnDef, dataContext) {
-    value = dataContext.get(columnDef.field);
-    return [value.getFullYear(), value.getMonth(), value.getDay()].join("/");
+    var value = dataContext.get(columnDef.field);
+    return Diffa.dateToString(value);
 }
 
 Diffa.BootstrapGrids = function() {
@@ -71,7 +105,8 @@ Diffa.BootstrapGrids = function() {
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
             formatter: Diffa.GridView.DateFormatter},
         {id: "contractDate", name: "Contract Date", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
+             formatter: Diffa.GridView.DateFormatter,
+             editor: Diffa.DateEditor},
     ];    
 
     var futuresRiskColumns = [
@@ -86,7 +121,7 @@ Diffa.BootstrapGrids = function() {
         {id: "direction", name: "Buy/Sell", field: "direction",
             editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
+             formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
     ]; 
             
     var optionsRiskColumns = [
