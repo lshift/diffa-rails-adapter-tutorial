@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120731123631) do
+ActiveRecord::Schema.define(:version => 20120801161154) do
 
   create_table "futures", :force => true do |t|
     t.integer  "user_id"
@@ -47,6 +47,24 @@ ActiveRecord::Schema.define(:version => 20120731123631) do
     t.date     "entered_at"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "trades_expiry_daily", :id => false, :force => true do |t|
+    t.integer "user"
+    t.string  "expiry",  :limit => 10
+    t.string  "version", :limit => 32
+  end
+
+  create_table "trades_expiry_monthly", :id => false, :force => true do |t|
+    t.integer "user"
+    t.string  "expiry",  :limit => 7
+    t.string  "version", :limit => 32
+  end
+
+  create_table "trades_expiry_yearly", :id => false, :force => true do |t|
+    t.integer "user"
+    t.string  "expiry",  :limit => 4
+    t.string  "version", :limit => 32
   end
 
   create_table "trades_view", :id => false, :force => true do |t|

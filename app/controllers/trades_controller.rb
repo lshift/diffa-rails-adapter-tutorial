@@ -1,3 +1,5 @@
+require "diffa/date_aggregation"
+
 class TradesController < ApplicationController
   def propagate
     t = TradesView.where(:user => params[:user_id]).find(params[:trade_id])
@@ -17,8 +19,15 @@ class TradesController < ApplicationController
 
   def scan
     user = params[:user_id]
-    trades = TradesView.where(:user => user)
-    render json: trades.to_json(only: [:id, :version, :lastUpdated])
+    params = request.query_parameters.reject { |param, val| param == "authToken" }
+
+    aggregation = Diffa::DateAggregation.new(user, 'expiry', params, {
+      yearly: TradesExpiryYearly,
+      monthly: TradesExpiryMonthly,
+      daily: TradesExpiryDaily,
+      individual: TradesView,
+    })
+    render json: aggregation.scan
   end
 
   # GET /trades
