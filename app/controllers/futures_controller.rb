@@ -1,14 +1,14 @@
 class FuturesController < ApplicationController
   def grid
     user = params[:user_id]
-    risks = Future.where(:user_id => user)
+    risks = Future.where(user_id: user)
     render json: risks
   end
 
   def scan
     user = params[:user_id]
-    risks = Future.where(:user_id => user)
-    render json: risks.to_json(:only => [:id, :version])
+    risks = Future.where(user_id: user)
+    render json: risks.to_json(only: [:id, :version])
   end
 
   # GET /futures
