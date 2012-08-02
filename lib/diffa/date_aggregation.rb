@@ -7,8 +7,8 @@ module Diffa
       @constraints = add_constraints(attr_name, query_params, @constraints)
       @aggregate_views = view_map
 
-      entity_format = [:id, :version, :lastUpdated]
-      aggregate_format = [:version, :attributes]
+      entity_format = [:id, :attributes, :version, :lastUpdated]
+      aggregate_format = [:attributes, :version]
       @response_formats = {
         yearly: aggregate_format,
         monthly: aggregate_format,
