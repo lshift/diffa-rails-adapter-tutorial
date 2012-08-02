@@ -12,9 +12,12 @@ function urlTemplate(tmpl) {
 
 Diffa.Trade = Backbone.Model.extend({
     validate: function validate(attributes) {
-        console.log('validate', attributes);
         if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
-        if (attributes.price <= 0) { return "invalid price: " + attributes.price; };
+        if (attributes.price < 0) { return "invalid price: " + attributes.price; };
+        if (attributes.expiry < attributes.entered_at) { 
+            return "Expiry date " + Diffa.dateToString(attributes.expiry) + 
+                    " must be after entry date " + Diffa.dateToString(attributes.entered_at);
+        }
     },
     parse: function(json) {
         if (json) { 
@@ -33,6 +36,16 @@ Diffa.Trade = Backbone.Model.extend({
     }
 });
 
+Diffa.Future = Diffa.Trade.extend({
+    url: urlTemplate("/grid/futures/:id"),
+});
+
+Diffa.Option = Diffa.Trade.extend({
+    url: urlTemplate("/grid/options/:id"),
+});
+
+
+
 Diffa.Trade.prototype.__properties = ['id', 'type', 'quantity', 'expiry', 'price', 'direction',
                       'entered_at', 'version'];
 
@@ -40,10 +53,44 @@ Diffa.Trade.prototype.toString = function() {
     return "<Diffa.Trade " + JSON.stringify(this) + ">";
 }
 
-Diffa.GridView = {}
+Diffa.DateEditor = function(args) {
+    this.container    = args.container;
+    this.column       = args.column;
+    this.defaultValue = null;
+    this.$input       = this.createTextInputElement();
+//     this.picker       = this.$input.glDatePicker({
+//         position: 'static', showAlways: true,
+//         onChange: this.whenChanged.bind(this)
+//     });
+}
+
+_.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
+    serializeValue: function() {
+        var parsed = new Date(this.$input.val());
+        console.log("Serialize: ", this.$input.val(), parsed);
+        // return this.currval || this.$input.val();
+        return parsed;
+    },
+
+    validate: function() {
+        var column = this.column;
+        return column.validator ?  column.validator(this.$input.val()) : { valid: true, msg: null };
+    },
+    whenChanged: function(target, value) {
+        var serialized = Diffa.dateToString(value);
+        console.log("whenChanged", target, value, serialized);
+        this.$input.val(serialized);
+        this.currval = value;
+    }
+});
+
+Diffa.dateToString = function dateToString(date) {
+    return [date.getFullYear(), date.getMonth() +1, date.getDate()].join("/");
+}
+Diffa.GridView = {};
 Diffa.GridView.DateFormatter = function DateFormatter(row, cell, value, columnDef, dataContext) {
-    value = dataContext.get(columnDef.field);
-    return [value.getFullYear(), value.getMonth(), value.getDay()].join("/");
+    var value = dataContext.get(columnDef.field);
+    return Diffa.dateToString(value);
 }
 
 Diffa.BootstrapGrids = function() {
@@ -51,26 +98,32 @@ Diffa.BootstrapGrids = function() {
     var tradeEntryColumns = [
         {id: "id", name: "Id", field: "id", width:80},
         {id: "version", name: "Version", field: "version"},
-        {id: "ttype", name: "Type", field: "ttype", width: 30},
+        {id: "ttype", name: "Type", field: "ttype", width: 30,
+            editor: Slickback.DropdownCellEditor, choices: ['F', 'O'] },
         {id: "quantity", name: "Qty.", field: "quantity", width: 60, 
             editor: Slickback.NumberCellEditor},
         {id: "price", name: "Price", field: "price", width: 80, 
-            editor: Slickback.NumberCellEditor},
-        {id: "direction", name: "Buy/Sell", field: "direction", width: 30},
+            editor: Slickback.NumberCellEditor, precision: 2},
+        {id: "direction", name: "Buy/Sell", field: "direction", width: 30,
+            editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
             formatter: Diffa.GridView.DateFormatter},
         {id: "contractDate", name: "Contract Date", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
+             formatter: Diffa.GridView.DateFormatter,
+             editor: Diffa.DateEditor},
     ];    
 
     var futuresRiskColumns = [
         {id: "id", name: "Id", field: "id"},
         {id: "version", name: "Version", field: "version"},
-        {id: "quantity", name: "Quantity", field: "quantity"},
+        {id: "quantity", name: "Quantity", field: "quantity", 
+            editor: Slickback.NumberCellEditor},
         {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
-        {id: "price", name: "Price", field: "price"},
-        {id: "direction", name: "Buy/Sell", field: "direction"},
+             formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
+        {id: "price", name: "Price", field: "price",
+            editor: Slickback.NumberCellEditor, precision: 2},
+        {id: "direction", name: "Buy/Sell", field: "direction",
+            editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
              formatter: Diffa.GridView.DateFormatter},
     ]; 
@@ -78,17 +131,21 @@ Diffa.BootstrapGrids = function() {
     var optionsRiskColumns = [
         {id: "id", name: "Id", field: "id"},
         {id: "version", name: "Version", field: "version"},
-        {id: "quantity", name: "Quantity", field: "quantity"},
-        {id: "strike", name: "Strike", field: "price"},
+        {id: "quantity", name: "Quantity", field: "quantity", 
+            editor: Slickback.NumberCellEditor},
+        {id: "strike", name: "Strike", field: "price",
+            editor: Slickback.NumberCellEditor, precision: 2},
         {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
-        {id: "direction", name: "Call/Put", field: "direction"},
+             formatter: Diffa.GridView.DateFormatter,
+             editor: Diffa.DateEditor},
+        {id: "direction", name: "Call/Put", field: "direction",
+            editor: Slickback.DropdownCellEditor, choices: ['C', 'P'] },
         {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
              formatter: Diffa.GridView.DateFormatter},
     ]; 
 
     Diffa.Views = Diffa.Views || {};
-    Diffa.Views.TradesGrid = Backbone.View.extend({
+    Diffa.Views.AutoSaveGrid = Backbone.View.extend({
         initialize: function initialize(initOptions) {
             var gridOptions = _.extend({},{
                 editable:         true,
@@ -97,9 +154,8 @@ Diffa.BootstrapGrids = function() {
 
             var collection = this.collection;
 
-            var grid = new Slick.Grid(this.el,collection, tradeEntryColumns, gridOptions);
+            var grid = new Slick.Grid(this.el,collection, this.columns, gridOptions);
             collection.bind('change',function(model,attributes) {
-                console.log("Changed", model.changedAttributes());
                 model.save();
             });
 
@@ -115,6 +171,17 @@ Diffa.BootstrapGrids = function() {
 
             collection.fetch();
         }
+    });
+    Diffa.Views.TradesGrid = Diffa.Views.AutoSaveGrid.extend({
+        columns: tradeEntryColumns,
+    });
+
+    Diffa.Views.FuturesGrid = Diffa.Views.AutoSaveGrid.extend({
+        columns: futuresRiskColumns
+    });
+
+    Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
+        columns: optionsRiskColumns
     });
 
 
@@ -146,27 +213,42 @@ Diffa.BootstrapGrids = function() {
     });
 
     Diffa.Models = Diffa.Models || {};
-    Diffa.Models.TradesCollection = Slickback.Collection.extend({
-        model: Diffa.Trade,
-        url: $('link[rel="diffa.data.trades"]').attr('href'),
-    });
 
-    Diffa.tradesCollection = new Diffa.Models.TradesCollection()
+    function GridComponent(url, baseElt, modelType, gridViewType) {
+        this.CollectionType = Slickback.Collection.extend({
+            model: modelType,
+            url: url,
+        });
 
-//    Diffa.tradeEntryView = new Diffa.GridView($("#grid_trade_entry"), dataSource, tradeEntryColumns, options);
-//    Diffa.futuresRiskGrid = new Diffa.GridView($("#grid_futures_risk"), dataSource, futuresRiskColumns, options);
-//    Diffa.optionsRiskGrid = new Diffa.GridView($("#grid_options_risk"), dataSource, optionsRiskColumns, options);
+        this.collection = new this.CollectionType();
 
-    Diffa.tradeEntryView = new Diffa.Views.TradesGrid({
-        el: $("#grid_trade_entry"),
-        collection: Diffa.tradesCollection
-    });
-    Diffa.errorView = new Diffa.Views.TradeErrors({
-        el: $('#trade_errors'),
-        collection: Diffa.tradesCollection
-    });
-    Diffa.control = new Diffa.Views.Control({
-        el: $('#controls'),
-        collection: Diffa.tradesCollection
-    });
+        this.tradeEntryView = new gridViewType({
+            el: baseElt.find(".entry-grid"),
+            collection: this.collection,
+        });
+        this.errorView = new Diffa.Views.TradeErrors({
+            el: baseElt.find(".errors"),
+            collection: this.collection
+        });
+        this.control = new Diffa.Views.Control({
+            el: baseElt.find(".controls"),
+            collection: this.collection
+        });
+    };
+
+    Diffa.tradesGrid = new GridComponent(
+        $('link[rel="diffa.data.trades"]').attr('href'), $('#trades'), 
+        Diffa.Trade, Diffa.Views.TradesGrid
+    );
+
+    Diffa.futuresGrid = new GridComponent(
+        $('link[rel="diffa.data.futures"]').attr('href'), $('#futures'), 
+        Diffa.Future, Diffa.Views.FuturesGrid
+    );
+
+    Diffa.futuresGrid = new GridComponent(
+        $('link[rel="diffa.data.options"]').attr('href'), $('#options'), 
+        Diffa.Option, Diffa.Views.OptionsGrid
+    );
+        
 };
