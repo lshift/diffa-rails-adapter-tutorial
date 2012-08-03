@@ -1,13 +1,9 @@
 AdapterDemo::Application.routes.draw do
-  resources :users do
-    member do
-      get :grids
-    end
-  end
-
   scope "/grid" do
     resources :futures, :options, :trades
   end
+
+  post "/users" => "users#create"
 
   get "/users/:user_id/trades/grid" => "trades#grid"
   get "/users/:user_id/futures/grid" => "futures#grid"
