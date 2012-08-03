@@ -1,8 +1,8 @@
 class FuturesController < ApplicationController
   def grid
     user = params[:user_id]
-    risks = Future.where(user_id: user)
-    render json: risks
+    futures = Future.where(user_id: user)
+    render json: futures
   end
 
   def scan
@@ -17,7 +17,6 @@ class FuturesController < ApplicationController
     @futures = Future.all
 
     respond_to do |format|
-      format.html # index.html.erb
       format.json { render json: @futures }
     end
   end
@@ -28,7 +27,6 @@ class FuturesController < ApplicationController
     @future = Future.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
       format.json { render json: @future }
     end
   end
@@ -39,7 +37,6 @@ class FuturesController < ApplicationController
     @future = Future.new
 
     respond_to do |format|
-      format.html # new.html.erb
       format.json { render json: @future }
     end
   end
@@ -56,10 +53,8 @@ class FuturesController < ApplicationController
 
     respond_to do |format|
       if @future.save
-        format.html { redirect_to @future, notice: 'Future was successfully created.' }
-        format.json { render json: @future, status: :created, location: @future }
+        format.json { render json: @future, status: :created }
       else
-        format.html { render action: "new" }
         format.json { render json: @future.errors, status: :unprocessable_entity }
       end
     end
@@ -72,10 +67,8 @@ class FuturesController < ApplicationController
 
     respond_to do |format|
       if @future.update_attributes(params[:future])
-        format.html { redirect_to @future, notice: 'Future was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
         format.json { render json: @future.errors, status: :unprocessable_entity }
       end
     end
@@ -88,7 +81,6 @@ class FuturesController < ApplicationController
     @future.destroy
 
     respond_to do |format|
-      format.html { redirect_to futures_url }
       format.json { head :no_content }
     end
   end

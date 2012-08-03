@@ -1,11 +1,16 @@
 class OptionsController < ApplicationController
+  def grid
+    user = params[:user_id]
+    options = Option.where(user_id: user)
+    render json: options
+  end
+
   # GET /options
   # GET /options.json
   def index
     @options = Option.all
 
     respond_to do |format|
-      format.html # index.html.erb
       format.json { render json: @options }
     end
   end
@@ -16,7 +21,6 @@ class OptionsController < ApplicationController
     @option = Option.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
       format.json { render json: @option }
     end
   end
@@ -27,7 +31,6 @@ class OptionsController < ApplicationController
     @option = Option.new
 
     respond_to do |format|
-      format.html # new.html.erb
       format.json { render json: @option }
     end
   end
@@ -44,10 +47,8 @@ class OptionsController < ApplicationController
 
     respond_to do |format|
       if @option.save
-        format.html { redirect_to @option, notice: 'Option was successfully created.' }
-        format.json { render json: @option, status: :created, location: @option }
+        format.json { render json: @option, status: :created }
       else
-        format.html { render action: "new" }
         format.json { render json: @option.errors, status: :unprocessable_entity }
       end
     end
@@ -60,10 +61,8 @@ class OptionsController < ApplicationController
 
     respond_to do |format|
       if @option.update_attributes(params[:option])
-        format.html { redirect_to @option, notice: 'Option was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
         format.json { render json: @option.errors, status: :unprocessable_entity }
       end
     end
@@ -76,7 +75,6 @@ class OptionsController < ApplicationController
     @option.destroy
 
     respond_to do |format|
-      format.html { redirect_to options_url }
       format.json { head :no_content }
     end
   end
