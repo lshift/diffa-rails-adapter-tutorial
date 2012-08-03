@@ -1,0 +1,6 @@
+Before running the rails app, set the following environment variable:
+DEMO_API_AUTH_TOKEN
+
+Example (bash)
+export DEMO_API_AUTH_TOKEN=23j4w9s9dc9sdf23rnwkjre
+
