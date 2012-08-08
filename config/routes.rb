@@ -1,15 +1,19 @@
 AdapterDemo::Application.routes.draw do
   post "/users" => "users#create"
 
-  ['trades','futures','options'].each do |thing|
-    get "/users/:user_id/#{thing}" => "#{thing}#grid"
-    post "/users/:user_id/#{thing}" => "#{thing}#new"
-    put "/users/:user_id/#{thing}/:id" => "#{thing}#update"
-    delete "/users/:user_id/#{thing}/:id" => "#{thing}#destroy"
+  resources :users do
+    member do
+      get 'trades/scan' => "trades#scan"
+      get 'risks/scan' => "risks#scan"
+    end
+
+    resources :options 
+    resources :trades 
+    resources :futures 
   end
 
-  get "/users/:user_id/trades/scan" => "trades#scan"
-  get "/users/:user_id/risks/scan" => "futures#scan"
+  #get "/users/:user_id/trades/scan" => "trades#scan"
+  #get "/users/:user_id/risks/scan" => "futures#scan"
 
   get "/users/:user_id/trades/:trade_id/push" => "trades#propagate"
   post "/users/:user_id/trades/:trade_id/push" => "trades#propagate"

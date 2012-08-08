@@ -26,7 +26,7 @@ Diffa.Trade = Backbone.Model.extend({
             return json;
         }
     },
-    url: urlTemplate("/grid/trades/:id"),
+    // url: urlTemplate("/grid/trades/:id"),
     defaults: { 
         ttype: 'O',
         quantity: 1,
@@ -37,11 +37,11 @@ Diffa.Trade = Backbone.Model.extend({
 });
 
 Diffa.Future = Diffa.Trade.extend({
-    url: urlTemplate("/grid/futures/:id"),
+    // url: urlTemplate("/grid/futures/:id"),
 });
 
 Diffa.Option = Diffa.Trade.extend({
-    url: urlTemplate("/grid/options/:id"),
+    // url: urlTemplate("/grid/options/:id"),
 });
 
 

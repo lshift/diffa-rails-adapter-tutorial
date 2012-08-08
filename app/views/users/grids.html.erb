@@ -1,3 +1,4 @@
+<% pp params %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,9 +9,9 @@
   <link rel="stylesheet" href="/vendor/slickgrid/slick.grid.css" type="text/css"/>
   <link rel="stylesheet" href="/vendor/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
  
-  <link rel='diffa.data.trades' href="/grid/trades.json" />
-  <link rel='diffa.data.options' href="/grid/options.json" />
-  <link rel='diffa.data.futures' href="/grid/futures.json" />
+  <link rel='diffa.data.trades' href="<%= user_trades_path @user %>" />
+  <link rel='diffa.data.options' href="<%= user_options_path @user %>" />
+  <link rel='diffa.data.futures' href="<%= user_futures_path @user %>" />
 </head>
 <style>
 .slick-cell.active input { width: 100%; }

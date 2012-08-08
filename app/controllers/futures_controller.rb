@@ -13,70 +13,59 @@ class FuturesController < ApplicationController
 
   # GET /futures
   # GET /futures.json
-  def index
+  def index *_
     @futures = Future.all
 
-    respond_to do |format|
-      format.json { render json: @futures }
-    end
+    render json: @futures
   end
 
   # GET /futures/1
   # GET /futures/1.json
-  def show
+  def show *_
     @future = Future.find(params[:id])
 
-    respond_to do |format|
-      format.json { render json: @future }
-    end
+    render json: @future
   end
 
   # GET /futures/new
   # GET /futures/new.json
-  def new
+  def new *_
     @future = Future.new
-
-    respond_to do |format|
-      format.json { render json: @future }
-    end
+    render json: @future
   end
 
   # GET /futures/1/edit
-  def edit
+  def edit *_
     @future = Future.find(params[:id])
   end
 
   # POST /futures
   # POST /futures.json
-  def create
+  def create *_
     @future = Future.new(params[:future])
 
-    respond_to do |format|
-      if @future.save
-        format.json { render json: @future, status: :created }
-      else
-        format.json { render json: @future.errors, status: :unprocessable_entity }
-      end
+    if @future.save
+      render json: @future, status: :created
+    else
+      render json: @future.errors, status: :unprocessable_entity
     end
   end
 
   # PUT /futures/1
   # PUT /futures/1.json
-  def update
+  def update *_
     @future = Future.find(params[:id])
 
-    respond_to do |format|
-      if @future.update_attributes(params[:future])
-        format.json { head :no_content }
-      else
-        format.json { render json: @future.errors, status: :unprocessable_entity }
-      end
+    if @future.update_attributes(params[:future])
+      head :no_content
+    else
+      render json: @future.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /futures/1
   # DELETE /futures/1.json
-  def destroy
+  def destroy *_
     @future = Future.find(params[:id])
     @future.destroy
 

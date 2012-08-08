@@ -2,6 +2,8 @@ require 'demo_environment'
 require 'diffa/token_generator'
 
 class UsersController < ApplicationController
+
+
   # POST /users
   # POST /users.json
   def create
@@ -18,6 +20,10 @@ class UsersController < ApplicationController
     else
       render text: "You are not permitted to create this resource", status: :unauthorized
     end
+  end
+
+  def grids *args
+    @user = User.find(params[:id])
   end
 
   private
@@ -86,5 +92,5 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
-end
 
+end

@@ -7,17 +7,15 @@ class OptionsController < ApplicationController
 
   # GET /options
   # GET /options.json
-  def index
+  def index *_
     @options = Option.all
 
-    respond_to do |format|
-      format.json { render json: @options }
-    end
+    render json: @options
   end
 
   # GET /options/1
   # GET /options/1.json
-  def show
+  def show *_
     @option = Option.find(params[:id])
 
     respond_to do |format|
@@ -42,7 +40,7 @@ class OptionsController < ApplicationController
 
   # POST /options
   # POST /options.json
-  def create
+  def create *_
     @option = Option.new(params[:option])
 
     respond_to do |format|
@@ -56,7 +54,7 @@ class OptionsController < ApplicationController
 
   # PUT /options/1
   # PUT /options/1.json
-  def update
+  def update *_
     @option = Option.find(params[:id])
 
     respond_to do |format|
@@ -70,12 +68,10 @@ class OptionsController < ApplicationController
 
   # DELETE /options/1
   # DELETE /options/1.json
-  def destroy
+  def destroy *_
     @option = Option.find(params[:id])
     @option.destroy
 
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    format.json { head :no_content }
   end
 end
