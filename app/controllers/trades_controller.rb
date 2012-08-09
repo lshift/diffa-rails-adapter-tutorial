@@ -34,7 +34,7 @@ class TradesController < ApplicationController
   # GET /trades
   # GET /trades.json
   def index *_
-    @trades = TradesView.all
+    @trades = TradesView.where(:user => params[:user_id])
 
     render json: @trades
   end

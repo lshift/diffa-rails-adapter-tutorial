@@ -14,7 +14,7 @@ class FuturesController < ApplicationController
   # GET /futures
   # GET /futures.json
   def index *_
-    @futures = Future.all
+    @futures = Future.where(:user_id => params[:user_id])
 
     render json: @futures
   end

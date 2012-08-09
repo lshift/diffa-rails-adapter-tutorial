@@ -8,7 +8,7 @@ class OptionsController < ApplicationController
   # GET /options
   # GET /options.json
   def index *_
-    @options = Option.all
+    @options = Option.where(:user_id => params[:user_id])
 
     render json: @options
   end
