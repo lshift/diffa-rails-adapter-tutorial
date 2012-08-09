@@ -4,7 +4,7 @@ AdapterDemo::Application.routes.draw do
   resources :users do
     member do
       get 'trades/scan' => "trades#scan"
-      get 'risks/scan' => "futures#scan"
+      get 'risks/scan' => "risks#scan"
     end
 
     resources :options 

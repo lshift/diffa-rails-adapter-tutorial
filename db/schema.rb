@@ -11,52 +11,83 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801161147) do
+ActiveRecord::Schema.define(:version => 20120809145212) do
 
   create_table "futures", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",                                   :default => 1, :null => false
     t.integer  "quantity"
     t.date     "expiry"
     t.decimal  "price",      :precision => 10, :scale => 0
     t.string   "direction"
     t.date     "entered_at"
     t.string   "version"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
   end
 
   create_table "options", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",                                   :default => 1, :null => false
     t.integer  "quantity"
     t.decimal  "strike",     :precision => 10, :scale => 0
     t.date     "expiry"
     t.string   "direction"
     t.date     "entered_at"
     t.string   "version"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
+  end
+
+  create_table "risks_expiry_daily", :id => false, :force => true do |t|
+    t.integer "user",                  :default => 0, :null => false
+    t.string  "expiry",  :limit => 10
+    t.string  "version", :limit => 32
+  end
+
+  create_table "risks_expiry_monthly", :id => false, :force => true do |t|
+    t.integer "user",                  :default => 0, :null => false
+    t.string  "expiry",  :limit => 7
+    t.string  "version", :limit => 32
+  end
+
+  create_table "risks_expiry_yearly", :id => false, :force => true do |t|
+    t.integer "user",                  :default => 0, :null => false
+    t.string  "expiry",  :limit => 4
+    t.string  "version", :limit => 32
+  end
+
+  create_table "risks_view", :id => false, :force => true do |t|
+    t.string  "id",      :limit => 11, :default => "", :null => false
+    t.date    "expiry"
+    t.string  "version"
+    t.integer "user",                  :default => 0,  :null => false
   end
 
   create_table "trades", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",                                   :default => 1, :null => false
     t.string   "ttype"
     t.integer  "quantity"
     t.date     "expiry"
     t.decimal  "price",      :precision => 10, :scale => 0
     t.string   "direction"
     t.date     "entered_at"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
+  end
+
+  create_table "trades_expiry_daily", :id => false, :force => true do |t|
+    t.integer "user",                  :default => 1, :null => false
+    t.string  "expiry",  :limit => 10
+    t.string  "version", :limit => 32
   end
 
   create_table "trades_expiry_monthly", :id => false, :force => true do |t|
-    t.integer "user"
+    t.integer "user",                  :default => 1, :null => false
     t.string  "expiry",  :limit => 7
     t.string  "version", :limit => 32
   end
 
   create_table "trades_expiry_yearly", :id => false, :force => true do |t|
-    t.integer "user"
+    t.integer "user",                  :default => 1, :null => false
     t.string  "expiry",  :limit => 4
     t.string  "version", :limit => 32
   end
@@ -70,7 +101,7 @@ ActiveRecord::Schema.define(:version => 20120801161147) do
     t.string   "direction"
     t.date     "entered_at"
     t.string   "version",     :limit => 32
-    t.integer  "user"
+    t.integer  "user",                                                     :default => 1, :null => false
     t.datetime "lastUpdated",                                                             :null => false
   end
 

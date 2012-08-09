@@ -18,7 +18,8 @@ class TradesController < ApplicationController
   end
 
   def scan
-    user = params[:user_id]
+    user = params[:id]
+    pp user: user, params: params
     params = request.query_parameters.reject { |param, val| param == "authToken" }
 
     aggregation = Diffa::DateAggregation.new(user, 'expiry', params, {
