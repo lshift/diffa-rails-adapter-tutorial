@@ -3,7 +3,7 @@ class TradesView < ActiveRecord::Base
   self.primary_key = 'id'
 
   def as_json(options = {})
-    super(options) 
+    super(options).merge(attributes: {})
   end
 end
 
