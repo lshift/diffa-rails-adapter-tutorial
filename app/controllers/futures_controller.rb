@@ -43,6 +43,7 @@ class FuturesController < ApplicationController
   # POST /futures.json
   def create *_
     @future = Future.new(params[:future])
+    @future.user_id = params[:user_id]
 
     if @future.save
       render json: @future, status: :created

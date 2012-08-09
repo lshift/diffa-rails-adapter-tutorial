@@ -65,6 +65,7 @@ class TradesController < ApplicationController
   def create *args
     @user = User.find(params[:user_id])
     @trade = Trade.new(params[:trade])
+    @trade.user_id = @user.id
 
     if @trade.save
       render json: @trade, status: :created, location: user_trade_path(@user, @trade)

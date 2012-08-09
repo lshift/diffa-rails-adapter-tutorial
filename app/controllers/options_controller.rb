@@ -42,6 +42,7 @@ class OptionsController < ApplicationController
   # POST /options.json
   def create *_
     @option = Option.new(params[:option])
+    @option.user_id = params[:user_id]
 
     respond_to do |format|
       if @option.save

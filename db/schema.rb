@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120801161154) do
+ActiveRecord::Schema.define(:version => 20120801161147) do
 
   create_table "futures", :force => true do |t|
     t.integer  "user_id"
@@ -49,12 +49,6 @@ ActiveRecord::Schema.define(:version => 20120801161154) do
     t.datetime "updated_at",                                :null => false
   end
 
-  create_table "trades_expiry_daily", :id => false, :force => true do |t|
-    t.integer "user"
-    t.string  "expiry",  :limit => 10
-    t.string  "version", :limit => 32
-  end
-
   create_table "trades_expiry_monthly", :id => false, :force => true do |t|
     t.integer "user"
     t.string  "expiry",  :limit => 7
@@ -81,9 +75,9 @@ ActiveRecord::Schema.define(:version => 20120801161154) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "auth_token", :default => "", :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
 end
