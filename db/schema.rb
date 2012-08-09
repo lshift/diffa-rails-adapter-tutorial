@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120809145212) do
+ActiveRecord::Schema.define(:version => 20120809174919) do
 
   create_table "futures", :force => true do |t|
     t.integer  "user_id",                                   :default => 1, :null => false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20120809145212) do
     t.string   "version"
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false
+    t.integer  "trade_id",                                  :default => 0, :null => false
   end
 
   create_table "options", :force => true do |t|
@@ -35,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20120809145212) do
     t.string   "version"
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false
+    t.integer  "trade_id",                                  :default => 0, :null => false
   end
 
   create_table "risks_expiry_daily", :id => false, :force => true do |t|
