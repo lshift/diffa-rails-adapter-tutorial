@@ -1,13 +1,18 @@
 require "diffa/date_aggregation"
 
 class TradesController < ApplicationController
+
   def propagate
     t = TradesView.where(:user => params[:user_id]).find(params[:trade_id])
-    future = Future.new(version: t.version, user_id: t.user,
-                        quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
+    future = Future.find_by_trade_id(t.id) || Future.new
+    future.update_attributes(quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
                         price: t.price, direction: t.direction)
-    future.id = t.id
-    future.save
+
+    future.trade_id = t.id
+    future.version = t.version
+    future.user_id = t.user
+    future.version = t.version
+    future.save!
     render json: future
   end
 
