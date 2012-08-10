@@ -21,7 +21,7 @@ class Future < ActiveRecord::Base
 
   # TODO: Upstream versions?
   def assign_version
-    self.version = Digest::MD5.hexdigest(self.version) if changed? and not version_changed?
+    self.version = Digest::MD5.hexdigest(self.version || '') if changed? and not version_changed?
   end
 
   def as_json(options = {})
