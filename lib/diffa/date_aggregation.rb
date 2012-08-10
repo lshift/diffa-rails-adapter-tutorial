@@ -31,7 +31,7 @@ module Diffa
       g = @granularity.to_sym
       where_text = @constraints[:text]
       where_vars = @constraints[:vars]
-      entities= @aggregate_views[g].where(where_text, *where_vars).order(:id)
+      entities= @aggregate_views[g].where(where_text, *where_vars)
       entities.map { |e| FixedWidthIdFormat.new(e) }.to_json(only: @response_formats[g])
     end
 
