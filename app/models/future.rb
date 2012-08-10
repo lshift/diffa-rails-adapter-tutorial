@@ -27,4 +27,20 @@ class Future < ActiveRecord::Base
   def as_json(options = {})
     super(options).merge(attributes: {})
   end
+
+
+  def self.create_or_update_from_trade(t)
+    instrument = find_by_trade_id(t.id) || new
+    
+    instrument.update_attributes(quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
+                        price: t.price, direction: t.direction)
+
+    instrument.trade_id = t.id
+    instrument.version = t.version
+    instrument.user_id = t.user
+    instrument.version = t.version
+
+    instrument.save!
+  end
+
 end

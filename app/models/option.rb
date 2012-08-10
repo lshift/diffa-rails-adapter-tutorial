@@ -22,4 +22,19 @@ class Option < ActiveRecord::Base
   end
 
   validates :trade_id, uniqueness: { :scope => :user_id }, presence: true
+
+
+  def self.create_or_update_from_trade(t)
+    instrument = find_by_trade_id(t.id) || new
+    
+    instrument.update_attributes(quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
+                        strike: t.price, direction: t.direction)
+
+    instrument.trade_id = t.id
+    instrument.version = t.version
+    instrument.user_id = t.user
+    instrument.version = t.version
+
+    instrument.save!
+  end
 end
