@@ -3,6 +3,21 @@ class Future < ActiveRecord::Base
 
   validates :trade_id, uniqueness: { :scope => :user_id }, presence: true
 
+
+  before_validation :assign_trade_id
+
+  def assign_trade_id
+    pp attributes: attributes
+    return unless self.trade_id.nil? or trade_id == 0
+    futures = self.class.arel_table
+    q = futures.project(futures[:trade_id].maximum).
+      where(futures[:user_id].eq(user_id)).
+      group(futures[:user_id])
+    last_id, = connection.execute(q.to_sql).first
+    self.trade_id = (last_id || 0) + 1
+    pp trade_id: trade_id, last_id: last_id
+  end
+
   def as_json(options = {})
     super(options).merge(attributes: {})
   end
