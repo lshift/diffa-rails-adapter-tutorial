@@ -5,7 +5,7 @@ class Future < ActiveRecord::Base
 
 
   before_validation :assign_trade_id
-  before_update :assign_version
+  before_save :assign_version
 
   def assign_trade_id
     pp attributes: attributes
