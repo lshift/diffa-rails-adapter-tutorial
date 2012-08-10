@@ -5,6 +5,7 @@ class Future < ActiveRecord::Base
 
 
   before_validation :assign_trade_id
+  before_update :assign_version
 
   def assign_trade_id
     pp attributes: attributes
@@ -16,6 +17,11 @@ class Future < ActiveRecord::Base
     last_id, = connection.execute(q.to_sql).first
     self.trade_id = (last_id || 0) + 1
     pp trade_id: trade_id, last_id: last_id
+  end
+
+  # TODO: Upstream versions?
+  def assign_version
+    self.version = Digest::MD5.hexdigest [quantity, expiry, price, direction, entered_at].join('#')
   end
 
   def as_json(options = {})

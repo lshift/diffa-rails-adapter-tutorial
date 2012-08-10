@@ -2,6 +2,7 @@ class Option < ActiveRecord::Base
   attr_accessible :quantity, :strike, :expiry, :direction, :entered_at
 
   before_validation :assign_trade_id
+  before_save :assign_version
 
   def assign_trade_id
     pp attributes: attributes
@@ -15,6 +16,10 @@ class Option < ActiveRecord::Base
     pp trade_id: trade_id, last_id: last_id
   end
 
+  # TODO: Upstream versions?
+  def assign_version
+    self.version = Digest::MD5.hexdigest [quantity, expiry, strike, direction, entered_at].join('#')
+  end
 
   validates :trade_id, uniqueness: { :scope => :user_id }, presence: true
 end
