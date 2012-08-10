@@ -68,7 +68,8 @@ class TradesController < ApplicationController
     @trade.user_id = @user.id
 
     if @trade.save
-      render json: @trade, status: :created, location: user_trade_path(@user, @trade)
+      @tradeViewRow = TradesView.find(@trade.id)
+      render json: @tradeViewRow, location: user_trade_path(@user, @trade)
     else
       render action: "new"
     end
@@ -82,7 +83,8 @@ class TradesController < ApplicationController
     @trade = Trade.find(params[:id])
 
     if @trade.update_attributes(params[:trade])
-      head :no_content
+      @tradeViewRow = TradesView.find(@trade.id)
+      render json: @tradeViewRow
     else
       render json: @trade.errors, status: :unprocessable_entity
     end

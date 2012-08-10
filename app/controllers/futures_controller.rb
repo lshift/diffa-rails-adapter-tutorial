@@ -46,7 +46,7 @@ class FuturesController < ApplicationController
     @future.user_id = params[:user_id]
 
     if @future.save
-      render json: @future, status: :created
+      render json: @future
     else
       render json: @future.errors, status: :unprocessable_entity
     end
@@ -58,7 +58,7 @@ class FuturesController < ApplicationController
     @future = Future.find(params[:id])
 
     if @future.update_attributes(params[:future])
-      head :no_content
+      render json: @future
     else
       render json: @future.errors, status: :unprocessable_entity
     end

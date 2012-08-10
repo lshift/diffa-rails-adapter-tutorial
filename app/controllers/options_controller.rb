@@ -46,7 +46,7 @@ class OptionsController < ApplicationController
 
     respond_to do |format|
       if @option.save
-        format.json { render json: @option, status: :created }
+        format.json { render json: @option }
       else
         format.json { render json: @option.errors, status: :unprocessable_entity }
       end
@@ -60,7 +60,7 @@ class OptionsController < ApplicationController
 
     respond_to do |format|
       if @option.update_attributes(params[:option])
-        format.json { head :no_content }
+        format.json { render json: @option }
       else
         format.json { render json: @option.errors, status: :unprocessable_entity }
       end
