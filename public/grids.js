@@ -34,6 +34,15 @@ Diffa.Instrument = Backbone.Model.extend({
         entered_at: new Date(),
         expiry: new Date(),
     },
+
+    save: function save(key, value, options) {
+        var model = this;
+        var promise = Diffa.Instrument.__super__.save.call(this, key, value, options);
+        promise.then(function(response) { 
+            if (response) model.set(response);
+        });
+    }
+
 });
 
 Diffa.Trade = Diffa.Instrument.extend({
