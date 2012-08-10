@@ -114,7 +114,7 @@ Diffa.BootstrapGrids = function() {
     ];    
 
     var futuresRiskColumns = [
-        {id: "id", name: "Id", field: "id"},
+        {id: "id", name: "Id", field: "trade_id"},
         {id: "version", name: "Version", field: "version"},
         {id: "quantity", name: "Quantity", field: "quantity", 
             editor: Slickback.NumberCellEditor},
@@ -129,7 +129,7 @@ Diffa.BootstrapGrids = function() {
     ]; 
             
     var optionsRiskColumns = [
-        {id: "id", name: "Id", field: "id"},
+        {id: "id", name: "Id", field: "trade_id"},
         {id: "version", name: "Version", field: "version"},
         {id: "quantity", name: "Quantity", field: "quantity", 
             editor: Slickback.NumberCellEditor},
