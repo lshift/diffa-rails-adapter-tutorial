@@ -19,7 +19,7 @@ class TradesController < ApplicationController
   end
 
   def scan
-    user = params[:id]
+    user = params[:user_id]
     pp user: user, params: params
     params = request.query_parameters.reject { |param, val| param == "authToken" }
 
