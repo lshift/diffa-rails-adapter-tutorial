@@ -2,8 +2,16 @@ require "diffa/date_aggregation"
 
 class TradesController < ApplicationController
 
+  def owned_trades_view
+    TradesView.where(:user => params[:user_id])
+  end
+
+  def owned_trades
+    Trade.where(:user_id => params[:user_id])
+  end
+
   def propagate
-    t = TradesView.where(:user => params[:user_id]).find(params[:trade_id])
+    t = owned_trades_view.find(params[:trade_id])
     klass = { 'O' => Option, 'F' => Future }.fetch(t.ttype)
 
     instrument = klass.create_or_update_from_trade(t)
@@ -33,7 +41,7 @@ class TradesController < ApplicationController
   # GET /trades
   # GET /trades.json
   def index *_
-    @trades = TradesView.where(:user => params[:user_id])
+    @trades = owned_trades_view
 
     render json: @trades
   end
@@ -41,7 +49,7 @@ class TradesController < ApplicationController
   # GET /trades/1
   # GET /trades/1.json
   def show
-    @trade = TradesView.find(params[:id])
+    @trade = owned_trades_view.find(params[:id])
 
     # using render: @trade assumes that there is a route named trade_path,
     render json: @trade
@@ -57,7 +65,7 @@ class TradesController < ApplicationController
 
   # GET /trades/1/edit
   def edit
-    @trade = Trade.find(params[:id])
+    @trade = owned_trades.find(params[:id])
   end
 
   # POST /trades
@@ -80,7 +88,7 @@ class TradesController < ApplicationController
   def update*args
     pp args: args
 
-    @trade = Trade.find(params[:id])
+    @trade = owned_trades.find(params[:id])
 
     if @trade.update_attributes(params[:trade])
       @tradeViewRow = TradesView.find(@trade.id)
@@ -95,7 +103,7 @@ class TradesController < ApplicationController
   def destroy*args
     pp args: args
 
-    @trade = Trade.find(params[:id])
+    @trade = owned_trades.find(params[:id])
     @trade.destroy
 
     head :no_content

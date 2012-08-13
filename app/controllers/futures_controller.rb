@@ -11,10 +11,14 @@ class FuturesController < ApplicationController
     render json: risks.to_json(only: [:id, :version])
   end
 
+  def users_futures
+    Future.where(:user_id => params[:user_id])
+  end
+
   # GET /futures
   # GET /futures.json
   def index *_
-    @futures = Future.where(:user_id => params[:user_id])
+    @futures = users_futures
 
     render json: @futures
   end
@@ -22,7 +26,7 @@ class FuturesController < ApplicationController
   # GET /futures/1
   # GET /futures/1.json
   def show *_
-    @future = Future.find(params[:id])
+    @future = users_futures.find(params[:id])
 
     render json: @future
   end
@@ -36,7 +40,7 @@ class FuturesController < ApplicationController
 
   # GET /futures/1/edit
   def edit *_
-    @future = Future.find(params[:id])
+    @future = users_futures.find(params[:id])
   end
 
   # POST /futures
@@ -55,7 +59,7 @@ class FuturesController < ApplicationController
   # PUT /futures/1
   # PUT /futures/1.json
   def update *_
-    @future = Future.find(params[:id])
+    @future = users_futures.find(params[:id])
 
     if @future.update_attributes(params[:future])
       render json: @future
@@ -67,7 +71,7 @@ class FuturesController < ApplicationController
   # DELETE /futures/1
   # DELETE /futures/1.json
   def destroy *_
-    @future = Future.find(params[:id])
+    @future = users_futures.find(params[:id])
     @future.destroy
 
     respond_to do |format|
