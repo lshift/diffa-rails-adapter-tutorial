@@ -2,14 +2,16 @@ AdapterDemo::Application.routes.draw do
   post "/users" => "users#create"
 
   resources :users do
-    member do
-      get 'trades/scan' => "trades#scan"
-      get 'risks/scan' => "risks#scan"
+    resources :options 
+    resources :futures 
+
+    resources :trades do 
+      collection do get 'scan'; end
     end
 
-    resources :options 
-    resources :trades 
-    resources :futures 
+    resources :risks do
+      collection do get 'scan'; end
+    end
   end
 
   #get "/users/:user_id/trades/scan" => "trades#scan"
