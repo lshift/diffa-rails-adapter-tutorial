@@ -114,7 +114,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('Push').wrap('<div/>').parent().html();
 }
 
-Diffa.BootstrapGrids = function() {
+Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl) {
     var dateWidth = 120;
     var tradeEntryColumns = [
         {id: "id", name: "Id", field: "id", width:80},
@@ -262,7 +262,6 @@ Diffa.BootstrapGrids = function() {
         options.url += "?authToken=" + encodeURIComponent(Diffa.authToken);
     });
 
-    bigbus.on('all', function() { console.log('all of the things', arguments); });
     function GridComponent(url, baseElt, modelType, gridViewType) {
         this.CollectionType = Slickback.Collection.extend({
             model: modelType,
@@ -275,32 +274,37 @@ Diffa.BootstrapGrids = function() {
         
 
         this.tradeEntryView = new gridViewType({
-            el: baseElt.find(".entry-grid"),
+            el: $('<div/>').css('height', '20em').appendTo(baseElt), // .find(".entry-grid"),
             collection: this.collection,
             bigbus: bigbus,
         });
         this.errorView = new Diffa.Views.TradeErrors({
-            el: baseElt.find(".errors"),
+            el: $('<div/>').appendTo(baseElt), 
             collection: this.collection
         });
         this.control = new Diffa.Views.Control({
-            el: baseElt.find(".controls"),
+            el: $('<div/>').appendTo(baseElt),
             collection: this.collection
         });
     };
 
+    var urls = { 
+        trades: baseUrl + '/trades', 
+        futures: baseUrl + '/futures',
+        options: baseUrl + '/options',
+    };
+
     Diffa.tradesGrid = new GridComponent(
-        $('link[rel="diffa.data.trades"]').attr('href'), $('#trades'), 
+        urls.trades, $('#trades'), 
         Diffa.Trade, Diffa.Views.TradesGrid
     );
 
     Diffa.futuresGrid = new GridComponent(
-        $('link[rel="diffa.data.futures"]').attr('href'), $('#futures'), 
+        urls.futures, $('#futures'), 
         Diffa.Future, Diffa.Views.FuturesGrid
     );
-
     Diffa.futuresGrid = new GridComponent(
-        $('link[rel="diffa.data.options"]').attr('href'), $('#options'), 
+        urls.options, $('#options'), 
         Diffa.Option, Diffa.Views.OptionsGrid
     );
         

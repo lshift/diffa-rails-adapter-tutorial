@@ -12,6 +12,7 @@
   <link rel='diffa.data.trades' href="<%= user_trades_path @user %>" />
   <link rel='diffa.data.options' href="<%= user_options_path @user %>" />
   <link rel='diffa.data.futures' href="<%= user_futures_path @user %>" />
+  <link rel='diffa.data.base' href="<%= user_path @user %>" />
 
 
   <meta name='diffa.authToken' content='<%= @user.auth_token %>' />
@@ -24,34 +25,18 @@
 
 <h3>Trade Entry</h3>
 <div class=component id=trades>
-<div class="entry-grid" style="height:20em">grid</div>
-<div class='controls'>controls</div>
-<div class="errors"></div>
 </div>
 <hr/>
 
 <h3>Futures risk system</h3>
 <div class=component id=futures>
-<div class="entry-grid" style="height:20em">grid</div>
-<div class='controls'>controls</div>
-
-<div class="errors"></div>
-
 </div>
 <hr/>
 
 <h3>Options risk system</h3>
 <div class=component id=options>
-<div class="entry-grid" style="height:20em">grid</div>
-<div class='controls'>controls</div>
-
-<div class="errors"></div>
-
 </div>
 <hr/>
-
-
-
 
 <script src="/vendor/slickgrid/lib/jquery-1.7.min.js"></script>
 <script src="/vendor/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
@@ -68,7 +53,10 @@
 
 <script src="/grids.js"> </script>
 <script> 
-$(Diffa.BootstrapGrids);
+$(function() { 
+	var baseUrl = $('link[rel="diffa.data.base"]').attr('href');
+	Diffa.BootstrapGrids(baseUrl);
+});
 </script>
 </body>
 </html>
