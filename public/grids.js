@@ -256,6 +256,12 @@ Diffa.BootstrapGrids = function() {
     Diffa.Models = Diffa.Models || {};
     var bigbus = _.clone(Backbone.Events);
 
+
+    Diffa.authToken = $('meta[name="diffa.authToken"]').attr('content');
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR) { 
+        options.url += "?authToken=" + encodeURIComponent(Diffa.authToken);
+    });
+
     bigbus.on('all', function() { console.log('all of the things', arguments); });
     function GridComponent(url, baseElt, modelType, gridViewType) {
         this.CollectionType = Slickback.Collection.extend({

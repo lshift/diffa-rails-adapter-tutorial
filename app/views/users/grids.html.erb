@@ -12,6 +12,9 @@
   <link rel='diffa.data.trades' href="<%= user_trades_path @user %>" />
   <link rel='diffa.data.options' href="<%= user_options_path @user %>" />
   <link rel='diffa.data.futures' href="<%= user_futures_path @user %>" />
+
+
+  <meta name='diffa.authToken' content='<%= @user.auth_token %>' />
 </head>
 <style>
 .slick-cell.active input { width: 100%; }
