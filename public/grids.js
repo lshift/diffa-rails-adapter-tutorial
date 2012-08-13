@@ -156,7 +156,7 @@ Diffa.BootstrapGrids = function() {
         {id: "version", name: "Version", field: "version"},
         {id: "quantity", name: "Quantity", field: "quantity", 
             editor: Slickback.NumberCellEditor},
-        {id: "strike", name: "Strike", field: "price",
+        {id: "strike", name: "Strike", field: "strike",
             editor: Slickback.NumberCellEditor, precision: 2},
         {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
              formatter: Diffa.GridView.DateFormatter,
