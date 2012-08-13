@@ -9,5 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree .
+ *= require_dir .
+ *= require ./../javascripts/vendor/slickgrid/slick.grid.css
+ *= require ./../javascripts/vendor/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css
 */
