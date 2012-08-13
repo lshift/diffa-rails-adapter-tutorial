@@ -114,59 +114,6 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('Push').wrap('<div/>').parent().html();
 }
 
-Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl) {
-    var dateWidth = 120;
-    var tradeEntryColumns = [
-        {id: "id", name: "Id", field: "id", width:80},
-        {id: "version", name: "Version", field: "version"},
-        {id: "ttype", name: "Type", field: "ttype", width: 30,
-            editor: Slickback.DropdownCellEditor, choices: ['F', 'O'] },
-        {id: "quantity", name: "Qty.", field: "quantity", width: 60, 
-            editor: Slickback.NumberCellEditor},
-        {id: "price", name: "Price", field: "price", width: 80, 
-            editor: Slickback.NumberCellEditor, precision: 2},
-        {id: "direction", name: "Buy/Sell", field: "direction", width: 30,
-            editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
-        {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
-            formatter: Diffa.GridView.DateFormatter},
-        {id: "contractDate", name: "Contract Date", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter,
-             editor: Diffa.DateEditor},
-        {id: "propagate", name: "Push to Downstream", field: "trade_id", width: dateWidth,
-             formatter: Diffa.GridView.ButtonFormatter}
-    ];    
-
-    var futuresRiskColumns = [
-        {id: "id", name: "Id", field: "trade_id"},
-        {id: "version", name: "Version", field: "version"},
-        {id: "quantity", name: "Quantity", field: "quantity", 
-            editor: Slickback.NumberCellEditor},
-        {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
-        {id: "price", name: "Price", field: "price",
-            editor: Slickback.NumberCellEditor, precision: 2},
-        {id: "direction", name: "Buy/Sell", field: "direction",
-            editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
-        {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
-    ]; 
-            
-    var optionsRiskColumns = [
-        {id: "id", name: "Id", field: "trade_id"},
-        {id: "version", name: "Version", field: "version"},
-        {id: "quantity", name: "Quantity", field: "quantity", 
-            editor: Slickback.NumberCellEditor},
-        {id: "strike", name: "Strike", field: "strike",
-            editor: Slickback.NumberCellEditor, precision: 2},
-        {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter,
-             editor: Diffa.DateEditor},
-        {id: "direction", name: "Call/Put", field: "direction",
-            editor: Slickback.DropdownCellEditor, choices: ['C', 'P'] },
-        {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
-             formatter: Diffa.GridView.DateFormatter},
-    ]; 
-
     Diffa.Views = Diffa.Views || {};
     Diffa.Views.AutoSaveGrid = Backbone.View.extend({
         initialize: function initialize(initOptions) {
@@ -195,8 +142,30 @@ Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl) {
             collection.fetch();
         }
     });
+
+
+    var dateWidth = 120;
     Diffa.Views.TradesGrid = Diffa.Views.AutoSaveGrid.extend({
-        columns: tradeEntryColumns,
+        columns: [
+            {id: "id", name: "Id", field: "id", width:80},
+            {id: "version", name: "Version", field: "version"},
+            {id: "ttype", name: "Type", field: "ttype", width: 30,
+                editor: Slickback.DropdownCellEditor, choices: ['F', 'O'] },
+            {id: "quantity", name: "Qty.", field: "quantity", width: 60, 
+                editor: Slickback.NumberCellEditor},
+            {id: "price", name: "Price", field: "price", width: 80, 
+                editor: Slickback.NumberCellEditor, precision: 2},
+            {id: "direction", name: "Buy/Sell", field: "direction", width: 30,
+                editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
+            {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
+                formatter: Diffa.GridView.DateFormatter},
+            {id: "contractDate", name: "Contract Date", field: "expiry", width: dateWidth,
+                 formatter: Diffa.GridView.DateFormatter,
+                 editor: Diffa.DateEditor},
+            {id: "propagate", name: "Push to Downstream", field: "trade_id", width: dateWidth,
+                 formatter: Diffa.GridView.ButtonFormatter}
+        ],
+
         initialize: function initialize(initOptions) { 
             Diffa.Views.TradesGrid.__super__.initialize.call(this, initOptions);
             _.bindAll(this, 'propagateButtonPressed');
@@ -218,11 +187,38 @@ Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl) {
     });
 
     Diffa.Views.FuturesGrid = Diffa.Views.AutoSaveGrid.extend({
-        columns: futuresRiskColumns
+        columns: [
+            {id: "id", name: "Id", field: "trade_id"},
+            {id: "version", name: "Version", field: "version"},
+            {id: "quantity", name: "Quantity", field: "quantity", 
+                editor: Slickback.NumberCellEditor},
+            {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
+                 formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
+            {id: "price", name: "Price", field: "price",
+                editor: Slickback.NumberCellEditor, precision: 2},
+            {id: "direction", name: "Buy/Sell", field: "direction",
+                editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
+            {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
+                 formatter: Diffa.GridView.DateFormatter},
+        ]
     });
 
     Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
-        columns: optionsRiskColumns
+            columns: [
+            {id: "id", name: "Id", field: "trade_id"},
+            {id: "version", name: "Version", field: "version"},
+            {id: "quantity", name: "Quantity", field: "quantity", 
+                editor: Slickback.NumberCellEditor},
+            {id: "strike", name: "Strike", field: "strike",
+                editor: Slickback.NumberCellEditor, precision: 2},
+            {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
+                 formatter: Diffa.GridView.DateFormatter,
+                 editor: Diffa.DateEditor},
+            {id: "direction", name: "Call/Put", field: "direction",
+                editor: Slickback.DropdownCellEditor, choices: ['C', 'P'] },
+            {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
+                 formatter: Diffa.GridView.DateFormatter},
+        ]
     });
 
 
@@ -256,13 +252,12 @@ Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl) {
     Diffa.Models = Diffa.Models || {};
     var bigbus = _.clone(Backbone.Events);
 
-
     Diffa.authToken = $('meta[name="diffa.authToken"]').attr('content');
     $.ajaxPrefilter(function(options, originalOptions, jqXHR) { 
         options.url += "?authToken=" + encodeURIComponent(Diffa.authToken);
     });
 
-    function GridComponent(url, baseElt, modelType, gridViewType) {
+    function GridComponent(url, baseElt, modelType, gridViewType, bigbus) {
         this.CollectionType = Slickback.Collection.extend({
             model: modelType,
             url: url,
@@ -288,24 +283,26 @@ Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl) {
         });
     };
 
-    var urls = { 
-        trades: baseUrl + '/trades', 
-        futures: baseUrl + '/futures',
-        options: baseUrl + '/options',
+    Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl, baseElt) {
+        var urls = { 
+            trades: baseUrl + '/trades', 
+            futures: baseUrl + '/futures',
+            options: baseUrl + '/options',
+        };
+
+        Diffa.tradesGrid = new (function() { 
+            GridComponent.call(this,
+            urls.trades, $('.trades'), 
+            Diffa.Trade, Diffa.Views.TradesGrid, bigbus
+        ) });
+
+        Diffa.futuresGrid = new GridComponent(
+            urls.futures, $('.futures'), 
+            Diffa.Future, Diffa.Views.FuturesGrid, bigbus
+        );
+        Diffa.futuresGrid = new GridComponent(
+            urls.options, $('.options'), 
+            Diffa.Option, Diffa.Views.OptionsGrid, bigbus
+        );
+            
     };
-
-    Diffa.tradesGrid = new GridComponent(
-        urls.trades, $('#trades'), 
-        Diffa.Trade, Diffa.Views.TradesGrid
-    );
-
-    Diffa.futuresGrid = new GridComponent(
-        urls.futures, $('#futures'), 
-        Diffa.Future, Diffa.Views.FuturesGrid
-    );
-    Diffa.futuresGrid = new GridComponent(
-        urls.options, $('#options'), 
-        Diffa.Option, Diffa.Views.OptionsGrid
-    );
-        
-};

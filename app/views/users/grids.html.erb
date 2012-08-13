@@ -24,17 +24,17 @@
 <h1>Diffa participant Grid</h1>
 
 <h3>Trade Entry</h3>
-<div class=component id=trades>
+<div class="component trades">
 </div>
 <hr/>
 
 <h3>Futures risk system</h3>
-<div class=component id=futures>
+<div class="component futures">
 </div>
 <hr/>
 
 <h3>Options risk system</h3>
-<div class=component id=options>
+<div class="component options">
 </div>
 <hr/>
 
@@ -55,7 +55,7 @@
 <script> 
 $(function() { 
 	var baseUrl = $('link[rel="diffa.data.base"]').attr('href');
-	Diffa.BootstrapGrids(baseUrl);
+	Diffa.BootstrapGrids(baseUrl, $(document));
 });
 </script>
 </body>
