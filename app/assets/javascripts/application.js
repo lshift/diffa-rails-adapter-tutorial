@@ -12,4 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+//= require es5-shim.js
+//= require underscore.js
+//= require backbone.js
+
+//= require ./vendor/slickgrid/lib/jquery.event.drag-2.0.min.js
+//= require_directory ./vendor/slickgrid
+
+//= require slickback.full.js
+
+//= require_directory .

@@ -119,7 +119,8 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
         initialize: function initialize(initOptions) {
             var gridOptions = _.extend({},{
                 editable:         true,
-                formatterFactory: Slickback.BackboneModelFormatterFactory
+                formatterFactory: Slickback.BackboneModelFormatterFactory,
+                enableColumnReorder: false,
             }, initOptions.grid);
 
             var collection = this.collection;
@@ -252,9 +253,9 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Models = Diffa.Models || {};
     var bigbus = _.clone(Backbone.Events);
 
-    Diffa.authToken = $('meta[name="diffa.authToken"]').attr('content');
     $.ajaxPrefilter(function(options, originalOptions, jqXHR) { 
-        options.url += "?authToken=" + encodeURIComponent(Diffa.authToken);
+        var authToken = $('meta[name="diffa.authToken"]').attr('content');
+        options.url += "?authToken=" + encodeURIComponent(authToken);
     });
 
     function GridComponent(url, baseElt, modelType, gridViewType, bigbus) {

@@ -1,3 +1,6 @@
 [submodule "public/vendor/slickgrid"]
 	path = public/vendor/slickgrid
 	url = git://github.com/mleibman/SlickGrid.git
+[submodule "app/assets/javascripts/vendor/slickgrid"]
+	path = app/assets/javascripts/vendor/slickgrid
+	url = git://github.com/mleibman/SlickGrid.git
