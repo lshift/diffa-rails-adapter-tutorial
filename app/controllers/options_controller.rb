@@ -1,4 +1,7 @@
 class OptionsController < ApplicationController
+
+  include UserAuthTokenVerifier
+
   def grid
     user = params[:user_id]
     options = Option.where(user_id: user)

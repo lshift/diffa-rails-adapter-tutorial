@@ -2,7 +2,7 @@ require "diffa/date_aggregation"
 
 class TradesController < ApplicationController
 
-  before_filter :verify_auth_token
+  include UserAuthTokenVerifier
 
   def propagate
     t = owned_trades_view.find(params[:trade_id])
@@ -110,17 +110,5 @@ class TradesController < ApplicationController
 
   def owned_trades
     Trade.where(:user_id => params[:user_id])
-  end
-
-
-  def verify_auth_token
-    unless current_user.correct_token? params[:authToken]
-      render status: :unauthorized, text: "Unauthorized"
-    end
-  end
-
-
-  def current_user
-    User.find(params[:user_id]).tap { |u| pp user: u }
   end
 end

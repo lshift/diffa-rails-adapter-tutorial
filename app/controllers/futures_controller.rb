@@ -1,4 +1,9 @@
 class FuturesController < ApplicationController
+
+
+  # before_filter UserAuthTokenVerifier
+  include UserAuthTokenVerifier
+
   def grid
     user = params[:user_id]
     futures = Future.where(user_id: user)
@@ -78,4 +83,7 @@ class FuturesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private 
+
 end
