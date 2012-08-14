@@ -50,7 +50,6 @@ Diffa.Trade = Diffa.Instrument.extend({
         var rpcEndpoint = this.url() + '/push';
         return $.ajax({url: rpcEndpoint, type: 'POST', dataType: 'json', headers: { 'X-authToken': Diffa.authToken } }).
             pipe(function(futureJson, state, xhr) {
-                console.log(futureJson);
                 return new Diffa.Future(futureJson);
         });
     }
@@ -84,7 +83,6 @@ Diffa.DateEditor = function(args) {
 _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
     serializeValue: function() {
         var parsed = new Date(this.$input.val());
-        console.log("Serialize: ", this.$input.val(), parsed);
         // return this.currval || this.$input.val();
         return parsed;
     },
@@ -95,7 +93,6 @@ _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
     },
     whenChanged: function(target, value) {
         var serialized = Diffa.dateToString(value);
-        console.log("whenChanged", target, value, serialized);
         this.$input.val(serialized);
         this.currval = value;
     }
@@ -176,7 +173,6 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
         },
         propagateButtonPressed: function propagateButtonPressed(evt) {
             var id = $(evt.target).attr('id');
-            console.log("pressed", evt.target, id);
             if (!id) return;
             var m = id.match(/^tradepusher-(.+)$/);
             if (!m) return;
