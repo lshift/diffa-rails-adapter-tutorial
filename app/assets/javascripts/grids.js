@@ -257,7 +257,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     var oldSync = Backbone.sync;
     Backbone.sync = function sync (method, model, options) {
         options = _.extend({headers: { 'X-authToken': Diffa.authToken } }, options);
-        oldSync(method, model, options);
+        return oldSync(method, model, options);
     };
 
     function GridComponent(url, baseElt, modelType, gridViewType, bigbus) {
