@@ -48,7 +48,7 @@ Diffa.Instrument = Backbone.Model.extend({
 Diffa.Trade = Diffa.Instrument.extend({
     pushDownstream: function () {
         var rpcEndpoint = this.url() + '/push';
-        return $.post(rpcEndpoint, null).
+        return $.ajax({url: rpcEndpoint, type: 'POST', dataType: 'json', headers: { 'X-authToken': Diffa.authToken } }).
             pipe(function(futureJson, state, xhr) {
                 console.log(futureJson);
                 return new Diffa.Future(futureJson);
@@ -253,10 +253,12 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Models = Diffa.Models || {};
     var bigbus = _.clone(Backbone.Events);
 
-    $.ajaxPrefilter(function(options, originalOptions, jqXHR) { 
-        var authToken = $('meta[name="diffa.authToken"]').attr('content');
-        options.url += "?authToken=" + encodeURIComponent(authToken);
-    });
+    Diffa.authToken = $('meta[name="diffa.authToken"]').attr('content');
+    var oldSync = Backbone.sync;
+    Backbone.sync = function sync (method, model, options) {
+        options = _.extend({headers: { 'X-authToken': Diffa.authToken } }, options);
+        oldSync(method, model, options);
+    };
 
     function GridComponent(url, baseElt, modelType, gridViewType, bigbus) {
         this.CollectionType = Slickback.Collection.extend({
