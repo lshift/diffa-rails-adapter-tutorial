@@ -261,6 +261,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             model: modelType,
             url: url,
         });
+        var height = baseElt.css('height') || '20em';
 
         var collection = new this.CollectionType();
         bigbus.on('refreshallthethings', function() { collection.fetch() ; })
@@ -268,7 +269,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
         
 
         this.tradeEntryView = new gridViewType({
-            el: $('<div/>').css('height', '20em').appendTo(baseElt), // .find(".entry-grid"),
+            el: $('<div/>').css('height', height).appendTo(baseElt), // .find(".entry-grid"),
             collection: this.collection,
             bigbus: bigbus,
         });
