@@ -59,7 +59,7 @@ module AdapterDemo
     config.middleware.use Rack::Cors do
       allow do
         origins 'localhost:3000', '127.0.0.1:3000' if Rails.env.development? or Rails.env.test?
-        origins "https://diffa.io", "http://diffa-loadtest.herokuapp.com" if Rails.env.production?
+        origins "https://diffa.io", "https://diffa-loadtest.herokuapp.com" if Rails.env.production?
         resource '*', :headers => :any, :methods => [:get, :post, :put] 
       end
     end
