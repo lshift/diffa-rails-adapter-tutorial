@@ -24,6 +24,7 @@ class UsersController < ApplicationController
 
   def grids *args
     @user = User.find(params[:id])
+    render status: :unauthorized, text: "Unauthorized" unless @user.correct_token?(params[:authToken])
   end
 
   private
