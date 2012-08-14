@@ -1,7 +1,8 @@
 module UserAuthTokenVerifier
   def verify_user_auth_token 
     current_user = User.find(params[:user_id]).tap { |u| pp user: u }
-    unless current_user.correct_token? params[:authToken]
+    token = params[:authToken] || request.env['HTTP_X_AUTHTOKEN']
+    unless current_user.correct_token? token
       render status: :unauthorized, text: "Unauthorized"
     end
   end
