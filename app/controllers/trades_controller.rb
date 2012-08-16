@@ -1,14 +1,15 @@
 require "diffa/date_aggregation"
 
 class TradesController < ApplicationController
+
+  include UserAuthTokenVerifier
+
   def propagate
-    t = TradesView.where(:user => params[:user_id]).find(params[:trade_id])
-    future = Future.new(version: t.version, user_id: t.user,
-                        quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
-                        price: t.price, direction: t.direction)
-    future.id = t.id
-    future.save
-    render json: future
+    t = owned_trades_view.find(params[:trade_id])
+    klass = { 'O' => Option, 'F' => Future }.fetch(t.ttype)
+
+    instrument = klass.create_or_update_from_trade(t)
+    render json: instrument
   end
 
   def grid
@@ -19,6 +20,7 @@ class TradesController < ApplicationController
 
   def scan
     user = params[:user_id]
+    pp user: user, params: params
     params = request.query_parameters.reject { |param, val| param == "authToken" }
 
     aggregation = Diffa::DateAggregation.new(user, 'expiry', params, {
@@ -32,24 +34,19 @@ class TradesController < ApplicationController
 
   # GET /trades
   # GET /trades.json
-  def index
-    @trades = TradesView.all
+  def index *_
+    @trades = owned_trades_view
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @trades }
-    end
+    render json: @trades
   end
 
   # GET /trades/1
   # GET /trades/1.json
   def show
-    @trade = TradesView.find(params[:id])
+    @trade = owned_trades_view.find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @trade }
-    end
+    # using render: @trade assumes that there is a route named trade_path,
+    render json: @trade
   end
 
   # GET /trades/new
@@ -57,58 +54,61 @@ class TradesController < ApplicationController
   def new
     @trade = Trade.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @trade }
-    end
+    render json: @trade
   end
 
   # GET /trades/1/edit
   def edit
-    @trade = Trade.find(params[:id])
+    @trade = owned_trades.find(params[:id])
   end
 
   # POST /trades
   # POST /trades.json
-  def create
+  def create *args
+    @user = User.find(params[:user_id])
     @trade = Trade.new(params[:trade])
+    @trade.user_id = @user.id
 
-    respond_to do |format|
-      if @trade.save
-        format.html { redirect_to @trade, notice: 'Trade was successfully created.' }
-        format.json { render json: @trade, status: :created, location: @trade }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @trade.errors, status: :unprocessable_entity }
-      end
+    if @trade.save
+      @tradeViewRow = TradesView.find(@trade.id)
+      render json: @tradeViewRow, location: user_trade_path(@user, @trade)
+    else
+      render action: "new"
     end
   end
 
   # PUT /trades/1
   # PUT /trades/1.json
-  def update
-    @trade = Trade.find(params[:id])
+  def update*args
+    pp args: args
 
-    respond_to do |format|
-      if @trade.update_attributes(params[:trade])
-        format.html { redirect_to @trade, notice: 'Trade was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @trade.errors, status: :unprocessable_entity }
-      end
+    @trade = owned_trades.find(params[:id])
+
+    if @trade.update_attributes(params[:trade])
+      @tradeViewRow = TradesView.find(@trade.id)
+      render json: @tradeViewRow
+    else
+      render json: @trade.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /trades/1
   # DELETE /trades/1.json
-  def destroy
-    @trade = Trade.find(params[:id])
+  def destroy*args
+    pp args: args
+
+    @trade = owned_trades.find(params[:id])
     @trade.destroy
 
-    respond_to do |format|
-      format.html { redirect_to trades_url }
-      format.json { head :no_content }
-    end
+    head :no_content
+  end
+
+  private
+  def owned_trades_view
+    TradesView.where(:user => params[:user_id])
+  end
+
+  def owned_trades
+    Trade.where(:user_id => params[:user_id])
   end
 end

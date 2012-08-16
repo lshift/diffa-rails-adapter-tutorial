@@ -1,4 +1,7 @@
 class OptionsController < ApplicationController
+
+  include UserAuthTokenVerifier
+
   def grid
     user = params[:user_id]
     options = Option.where(user_id: user)
@@ -7,18 +10,20 @@ class OptionsController < ApplicationController
 
   # GET /options
   # GET /options.json
-  def index
-    @options = Option.all
 
-    respond_to do |format|
-      format.json { render json: @options }
-    end
+  def users_options
+    Option.where(:user_id => params[:user_id])
+  end
+  def index *_
+    @options = users_options
+
+    render json: @options
   end
 
   # GET /options/1
   # GET /options/1.json
-  def show
-    @option = Option.find(params[:id])
+  def show *_
+    @option = users_options.find(params[:id])
 
     respond_to do |format|
       format.json { render json: @option }
@@ -37,17 +42,18 @@ class OptionsController < ApplicationController
 
   # GET /options/1/edit
   def edit
-    @option = Option.find(params[:id])
+    @option = users_options.find(params[:id])
   end
 
   # POST /options
   # POST /options.json
-  def create
+  def create *_
     @option = Option.new(params[:option])
+    @option.user_id = params[:user_id]
 
     respond_to do |format|
       if @option.save
-        format.json { render json: @option, status: :created }
+        format.json { render json: @option }
       else
         format.json { render json: @option.errors, status: :unprocessable_entity }
       end
@@ -56,12 +62,12 @@ class OptionsController < ApplicationController
 
   # PUT /options/1
   # PUT /options/1.json
-  def update
-    @option = Option.find(params[:id])
+  def update *_
+    @option = users_options.find(params[:id])
 
     respond_to do |format|
       if @option.update_attributes(params[:option])
-        format.json { head :no_content }
+        format.json { render json: @option }
       else
         format.json { render json: @option.errors, status: :unprocessable_entity }
       end
@@ -70,12 +76,10 @@ class OptionsController < ApplicationController
 
   # DELETE /options/1
   # DELETE /options/1.json
-  def destroy
-    @option = Option.find(params[:id])
+  def destroy *_
+    @option = users_options.find(params[:id])
     @option.destroy
 
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    format.json { head :no_content }
   end
 end

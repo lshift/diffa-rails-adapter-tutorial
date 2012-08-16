@@ -7,6 +7,7 @@ gem 'poltergeist', '~>0.6.0'
 gem 'liquid', '~>2.3.0'
 gem 'rails', '3.2.1'
 gem 'therubyracer', '0.10.1'
+gem 'rack-cors', :require => 'rack/cors'
 
 group :test, :development do
   gem 'sqlite3'
@@ -25,7 +26,7 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'
 
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier', '>= 1.2.7'
 end
 
 gem 'jquery-rails'

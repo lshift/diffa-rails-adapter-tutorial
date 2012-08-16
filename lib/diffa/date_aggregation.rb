@@ -1,3 +1,4 @@
+require 'delegate'
 module Diffa
   class DateAggregation
     def initialize(user, attr_name, query_params, view_map)
@@ -17,11 +18,21 @@ module Diffa
       }
     end
 
+    class FixedWidthIdFormat < SimpleDelegator
+      def id_formatted; "%08d" % [id]; end
+
+      def as_json options={}
+        super(options).merge('id' => id_formatted)
+      end
+
+    end
+
     def scan
       g = @granularity.to_sym
       where_text = @constraints[:text]
       where_vars = @constraints[:vars]
-      @aggregate_views[g].where(where_text, *where_vars).to_json(only: @response_formats[g])
+      entities= @aggregate_views[g].where(where_text, *where_vars)
+      entities.map { |e| FixedWidthIdFormat.new(e) }.to_json(only: @response_formats[g])
     end
 
     def add_constraints(attr_name, params, constraints)

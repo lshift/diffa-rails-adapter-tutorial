@@ -1,16 +1,17 @@
+<% pp params %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>Diffa participant Grid</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="stylesheet" href="/vendor/slickgrid/slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="/vendor/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
- 
-  <link rel='diffa.data.trades' href="/grid/trades.json" />
-  <link rel='diffa.data.options' href="/grid/options.json" />
-  <link rel='diffa.data.futures' href="/grid/futures.json" />
+  <link rel='diffa.data.trades' href="<%= user_trades_path @user %>" />
+  <link rel='diffa.data.options' href="<%= user_options_path @user %>" />
+  <link rel='diffa.data.futures' href="<%= user_futures_path @user %>" />
+  <link rel='diffa.data.base' href="<%= user_path @user %>" />
+
+
+  <meta name='diffa.authToken' content='<%= @user.auth_token %>' />
 </head>
 <style>
 .slick-cell.active input { width: 100%; }
@@ -19,52 +20,25 @@
 <h1>Diffa participant Grid</h1>
 
 <h3>Trade Entry</h3>
-<div class=component id=trades>
-<div class="entry-grid" style="height:20em">grid</div>
-<div class='controls'>controls</div>
-<div class="errors"></div>
+<div class="component trades">
 </div>
 <hr/>
 
 <h3>Futures risk system</h3>
-<div class=component id=futures>
-<div class="entry-grid" style="height:20em">grid</div>
-<div class='controls'>controls</div>
-
-<div class="errors"></div>
-
+<div class="component futures">
 </div>
 <hr/>
 
 <h3>Options risk system</h3>
-<div class=component id=options>
-<div class="entry-grid" style="height:20em">grid</div>
-<div class='controls'>controls</div>
-
-<div class="errors"></div>
-
+<div class="component options">
 </div>
 <hr/>
 
-
-
-
-<script src="/vendor/slickgrid/lib/jquery-1.7.min.js"></script>
-<script src="/vendor/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="/vendor/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
-
-<script src="/vendor/slickgrid/slick.core.js"></script>
-<script src="/vendor/slickgrid/slick.grid.js"></script>
-<script src="/vendor/slickgrid/slick.editors.js"></script>
-<script src="/vendor/slickgrid/slick.formatters.js"></script>
-<script src="/es5-shim.js"></script>
-<script src="/underscore.js"></script>
-<script src="/backbone.js"></script>
-<script src="/slickback.full.js"></script>
-
-<script src="/grids.js"> </script>
 <script> 
-$(Diffa.BootstrapGrids);
+$(function() { 
+	var baseUrl = $('link[rel="diffa.data.base"]').attr('href');
+	Diffa.BootstrapGrids(baseUrl, $(document));
+});
 </script>
 </body>
 </html>

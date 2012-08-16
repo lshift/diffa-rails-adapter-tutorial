@@ -10,6 +10,15 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require jquery
-//= require jquery_ujs
-//= require_tree .
+//_ require jquery
+//_ require jquery_ujs
+//= require es5-shim.js
+//= require underscore.js
+//= require backbone.js
+
+//= require ./vendor/slickgrid/lib/jquery.event.drag-2.0.min.js
+//= require_directory ./vendor/slickgrid
+
+//= require slickback.full.js
+
+//= require_directory .
