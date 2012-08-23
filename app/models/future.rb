@@ -1,5 +1,5 @@
 class Future < ActiveRecord::Base
-  attr_accessible :quantity, :expiry, :price, :direction, :entered_at
+  attr_accessible :quantity, :trade_id, :user_id, :trade_date, :lots, :entry_price, :quote, :year, :month
 
   validates :trade_id, uniqueness: { :scope => :user_id }, presence: true
 
@@ -32,8 +32,9 @@ class Future < ActiveRecord::Base
   def self.create_or_update_from_trade(t)
     instrument = find_by_trade_id(t.id) || new
     
-    instrument.update_attributes(quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
-                        price: t.price, direction: t.direction)
+    instrument.update_attributes(trade_date: t.trade_date, lots: t.lots,
+                                 entry_price: t.entry_price, quote: t.quote,
+                                 year: t.year, month: t.month)
 
     instrument.trade_id = t.id
     instrument.version = t.version
