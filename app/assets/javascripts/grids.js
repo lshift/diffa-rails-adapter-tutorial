@@ -128,7 +128,6 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             });
 
             grid.onMouseEnter.subscribe(this.cellMouseOver.bind(this));
-            grid.onMouseLeave.subscribe(this.cellMouseLeave.bind(this));
 
             collection.onRowCountChanged.subscribe(function() {
                 grid.updateRowCount();
@@ -145,11 +144,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
         cellMouseOver: function(e, args) {
             var cell = args.grid.getCellFromEvent(e);
             var entity = this.collection.at(cell.row);
-            console.log("Got", entity);
-            $(e.target).tooltip({title: this.toolTipFor(entity), trigger: 'manual', html:true}).tooltip('show');
-        },
-        cellMouseLeave: function(e) {
-            $(e.target).tooltip('hide');
+            $(e.target).tooltip({title: this.toolTipFor(entity), trigger: 'hover', html:true}).tooltip('show');
         },
         toolTipFor: function(entity) {
             var dl = $('<div/>');
