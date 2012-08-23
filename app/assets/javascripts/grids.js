@@ -159,9 +159,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 $('<span/>').text(value).appendTo(dl);
                 $('<br/>').appendTo(dl);
             });
-            var html = $('<div/>').append(dl).html();
-            console.log(html);
-            return html;
+            return $('<div/>').append(dl).html();
         }
     });
 
@@ -170,17 +168,10 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Views.TradesGrid = Diffa.Views.AutoSaveGrid.extend({
         columns: [
             {id: "id", name: "Id", field: "id", width:80},
-            {id: "version", name: "Version", field: "version"},
-            {id: "ttype", name: "Type", field: "ttype", width: 30,
-                editor: Slickback.DropdownCellEditor, choices: ['F', 'O'] },
             {id: "quantity", name: "Qty.", field: "quantity", width: 60, 
                 editor: Slickback.NumberCellEditor},
             {id: "price", name: "Price", field: "price", width: 80, 
                 editor: Slickback.NumberCellEditor, precision: 2},
-            {id: "direction", name: "Buy/Sell", field: "direction", width: 30,
-                editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
-            {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
-                formatter: Diffa.GridView.DateFormatter},
             {id: "contractDate", name: "Contract Date", field: "expiry", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
@@ -210,15 +201,12 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Views.FuturesGrid = Diffa.Views.AutoSaveGrid.extend({
         columns: [
             {id: "id", name: "Id", field: "trade_id"},
-            {id: "version", name: "Version", field: "version"},
             {id: "quantity", name: "Quantity", field: "quantity", 
                 editor: Slickback.NumberCellEditor},
             {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
             {id: "price", name: "Price", field: "price",
                 editor: Slickback.NumberCellEditor, precision: 2},
-            {id: "direction", name: "Buy/Sell", field: "direction",
-                editor: Slickback.DropdownCellEditor, choices: ['B', 'S'] },
             {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter},
         ]
@@ -227,7 +215,6 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
             columns: [
             {id: "id", name: "Id", field: "trade_id"},
-            {id: "version", name: "Version", field: "version"},
             {id: "quantity", name: "Quantity", field: "quantity", 
                 editor: Slickback.NumberCellEditor},
             {id: "strike", name: "Strike", field: "strike",
@@ -235,10 +222,6 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
-            {id: "direction", name: "Call/Put", field: "direction",
-                editor: Slickback.DropdownCellEditor, choices: ['C', 'P'] },
-            {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
-                 formatter: Diffa.GridView.DateFormatter},
         ]
     });
 
