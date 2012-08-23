@@ -187,7 +187,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 bus.trigger('refreshallthethings');
             });
         },
-        toolTipTemplate: _.template("<dl>" +
+        toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
             "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
@@ -209,7 +209,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter},
         ],
-        toolTipTemplate: _.template("<dl>" +
+        toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
             // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
@@ -231,7 +231,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
         ],
-        toolTipTemplate: _.template("<dl>" +
+        toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
             // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
