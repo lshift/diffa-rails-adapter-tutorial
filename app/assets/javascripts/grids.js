@@ -152,7 +152,16 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             $(e.target).tooltip('hide');
         },
         toolTipFor: function(entity) {
-            return "id is <em>" + entity.id + "</em> <br/> <pre>" + JSON.stringify(entity, null, 2) + "</pre>";
+            var dl = $('<div/>');
+            Object.keys(entity.attributes).forEach(function(prop) { 
+                var key = prop, value = entity.get(prop);
+                $('<em/>').text(key + ':').appendTo(dl);
+                $('<span/>').text(value).appendTo(dl);
+                $('<br/>').appendTo(dl);
+            });
+            var html = $('<div/>').append(dl).html();
+            console.log(html);
+            return html;
         }
     });
 
