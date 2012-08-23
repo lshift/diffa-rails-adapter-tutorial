@@ -127,6 +127,9 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 model.save();
             });
 
+            grid.onMouseEnter.subscribe(this.cellMouseOver.bind(this));
+            grid.onMouseLeave.subscribe(this.cellMouseLeave.bind(this));
+
             collection.onRowCountChanged.subscribe(function() {
                 grid.updateRowCount();
                 grid.render();
@@ -138,6 +141,18 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             });
 
             collection.fetch();
+        },
+        cellMouseOver: function(e, args) {
+            var cell = args.grid.getCellFromEvent(e);
+            var entity = this.collection.at(cell.row);
+            console.log("Got", entity);
+            $(e.target).tooltip({title: this.toolTipFor(entity), trigger: 'manual', html:true}).tooltip('show');
+        },
+        cellMouseLeave: function(e) {
+            $(e.target).tooltip('hide');
+        },
+        toolTipFor: function(entity) {
+            return "id is <em>" + entity.id + "</em> <br/> <pre>" + JSON.stringify(entity, null, 2) + "</pre>";
         }
     });
 
