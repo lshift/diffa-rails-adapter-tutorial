@@ -149,15 +149,8 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 $(e.target).data('grid.tooltip', true);
             }
         },
-        toolTipFor: function(entity) {
-            var dl = $('<div/>');
-            Object.keys(entity.attributes).forEach(function(prop) { 
-                var key = prop, value = entity.get(prop);
-                $('<em/>').text(key + ':').appendTo(dl);
-                $('<span/>').text(value).appendTo(dl);
-                $('<br/>').appendTo(dl);
-            });
-            return $('<div/>').append(dl).html();
+        toolTipFor: function(ent) { 
+            return this.toolTipTemplate(ent.attributes);
         }
     });
 
@@ -193,7 +186,15 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             this.collection.getByCid(m[1]).pushDownstream().then(function (riskything) {
                 bus.trigger('refreshallthethings');
             });
-        }
+        },
+        toolTipTemplate: _.template("<dl>" +
+            "<dt>Trade Id:</dt><dd><%= id %></dd>" +
+            "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
+            "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
+            "<dt>Entry Date:</dt><dd><%= [entered_at.getFullYear(), entered_at.getMonth(), entered_at.getDay()].join('-') %></dd>" +
+            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "</dl>"
+        )
     });
 
     Diffa.Views.FuturesGrid = Diffa.Views.AutoSaveGrid.extend({
@@ -207,7 +208,16 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 editor: Slickback.NumberCellEditor, precision: 2},
             {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter},
-        ]
+        ],
+        toolTipTemplate: _.template("<dl>" +
+            "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
+            "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
+            // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
+            "<dt>Entry Date:</dt><dd><%= [entered_at.getFullYear(), entered_at.getMonth(), entered_at.getDay()].join('-') %></dd>" +
+            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "</dl>"
+        )
+
     });
 
     Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
@@ -220,7 +230,16 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
-        ]
+        ],
+        toolTipTemplate: _.template("<dl>" +
+            "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
+            "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
+            // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
+            "<dt>Entry Date:</dt><dd><%= [entered_at.getFullYear(), entered_at.getMonth(), entered_at.getDay()].join('-') %></dd>" +
+            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "</dl>"
+        )
+
     });
 
 
