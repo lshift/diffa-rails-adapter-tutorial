@@ -142,9 +142,12 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             collection.fetch();
         },
         cellMouseOver: function(e, args) {
-            var cell = args.grid.getCellFromEvent(e);
-            var entity = this.collection.at(cell.row);
-            $(e.target).tooltip({title: this.toolTipFor(entity), trigger: 'hover', html:true}).tooltip('show');
+            if (!$(e.target).data('grid.tooltip')) { 
+                var cell = args.grid.getCellFromEvent(e);
+                var entity = this.collection.at(cell.row);
+                $(e.target).tooltip({title: this.toolTipFor(entity), trigger: 'hover', html:true}).tooltip('show');
+                $(e.target).data('grid.tooltip', true);
+            }
         },
         toolTipFor: function(entity) {
             var dl = $('<div/>');
