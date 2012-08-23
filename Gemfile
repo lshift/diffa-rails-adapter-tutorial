@@ -8,6 +8,7 @@ gem 'liquid', '~>2.3.0'
 gem 'rails', '3.2.1'
 gem 'therubyracer', '0.10.1'
 gem 'rack-cors', :require => 'rack/cors'
+gem 'foreigner'
 
 group :test, :development do
   gem 'sqlite3'

@@ -6,7 +6,7 @@ class TradesController < ApplicationController
 
   def propagate
     t = owned_trades_view.find(params[:trade_id])
-    klass = { 'O' => Option, 'F' => Future }.fetch(t.ttype)
+    klass = { 0 => Option, 1 => Future }.fetch(t.is_future)
 
     instrument = klass.create_or_update_from_trade(t)
     render json: instrument
@@ -23,10 +23,10 @@ class TradesController < ApplicationController
     pp user: user, params: params
     params = request.query_parameters.reject { |param, val| param == "authToken" }
 
-    aggregation = Diffa::DateAggregation.new(user, 'expiry', params, {
-      yearly: TradesExpiryYearly,
-      monthly: TradesExpiryMonthly,
-      daily: TradesExpiryDaily,
+    aggregation = Diffa::DateAggregation.new(user, 'entry_date', params, {
+      yearly: TradesEntryDateYearly,
+      monthly: TradesEntryDateMonthly,
+      daily: TradesEntryDateDaily,
       individual: TradesView,
     })
     render json: aggregation.scan

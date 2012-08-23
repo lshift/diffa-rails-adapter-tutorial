@@ -1,5 +1,5 @@
 class Option < ActiveRecord::Base
-  attr_accessible :quantity, :strike, :expiry, :direction, :entered_at
+  attr_accessible :quantity, :user_id, :trade_date, :lots, :premium_price, :strike_price, :exercise_right, :exercise_type, :quote, :year, :month
 
   before_validation :assign_trade_id
   before_save :assign_version
@@ -27,8 +27,11 @@ class Option < ActiveRecord::Base
   def self.create_or_update_from_trade(t)
     instrument = find_by_trade_id(t.id) || new
     
-    instrument.update_attributes(quantity: t.quantity, expiry: t.expiry, entered_at: t.entered_at,
-                        strike: t.price, direction: t.direction)
+    instrument.update_attributes(quantity: t.quantity, trade_date: t.trade_date,
+                                 strike_price: t.price, exercise_right: t.exercise_right,
+                                 lots: t.lots, premium_price: t.premium_price,
+                                 exercise_type: t.exercise_type, quote: t.quote,
+                                 year: t.year, month: t.month)
 
     instrument.trade_id = t.id
     instrument.version = t.version
