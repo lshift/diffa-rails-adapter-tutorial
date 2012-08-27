@@ -285,7 +285,13 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             model: modelType,
             url: url,
         });
-        var height = baseElt.css('height') || '20em';
+        var height = baseElt.css('height');
+        // We use parseInt as it deliberately ignores the extra units at the
+        // end, and there's no point worrying about units if all we care about
+        // is zero.
+        if (parseInt(height) == 0) { 
+            height = '20em'; 
+        }
 
         var collection = new this.CollectionType();
         bigbus.on('refreshallthethings', function() { collection.fetch() ; })
