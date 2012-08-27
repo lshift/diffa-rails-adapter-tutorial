@@ -273,9 +273,9 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Models = Diffa.Models || {};
     var bigbus = _.clone(Backbone.Events);
 
-    Diffa.authToken = $('meta[name="diffa.authToken"]').attr('content');
     var oldSync = Backbone.sync;
     Backbone.sync = function sync (method, model, options) {
+        Diffa.authToken = Diffa.authToken || $('meta[name="diffa.authToken"]').attr('content');
         options = _.extend({headers: { 'X-authToken': Diffa.authToken } }, options);
         return oldSync(method, model, options);
     };
