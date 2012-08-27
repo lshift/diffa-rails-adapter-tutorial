@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
   create_table "trades", :force => true do |t|
     t.integer  "user_id",                                        :null => false
     t.datetime "entry_date",                                     :null => false
+    t.datetime "expiry",                                         :null => false
     t.string   "contract_period",                                :null => false
     t.integer  "quantity",                                       :null => false
     t.string   "buy_sell",                                       :null => false
@@ -134,6 +135,7 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
   create_table "trades_view", :id => false, :force => true do |t|
     t.integer  "id",                                                           :default => 0,  :null => false
     t.datetime "entry_date",                                                                   :null => false
+    t.datetime "expiry",                                                                       :null => false
     t.string   "contract_period",                                                              :null => false
     t.integer  "quantity",                                                                     :null => false
     t.string   "buy_sell",                                                                     :null => false

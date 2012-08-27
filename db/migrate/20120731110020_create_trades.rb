@@ -13,6 +13,7 @@ class CreateTrades < ActiveRecord::Migration
     create_table :trades do |t|
       t.integer :user_id,         null: false
       t.datetime :entry_date,     null: false
+      t.datetime :expiry,         null: false
       t.string :contract_period,  null: false
       t.integer :quantity,        null: false
       t.string :buy_sell,         null: false

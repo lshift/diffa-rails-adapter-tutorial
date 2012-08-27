@@ -14,15 +14,18 @@ Diffa.Instrument = Backbone.Model.extend({
     validate: function validate(attributes) {
         if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
         if (attributes.price < 0) { return "invalid price: " + attributes.price; };
-        if (attributes.expiry < attributes.entered_at) { 
+        if (isNaN(attributes.expiry.getFullYear())) {
+            return "Expiry date " + attributes.expiry.toString() + " is invalid";
+        }
+        if (attributes.expiry < attributes.entry_date) { 
             return "Expiry date " + Diffa.dateToString(attributes.expiry) + 
-                    " must be after entry date " + Diffa.dateToString(attributes.entered_at);
+                    " must be after entry date " + Diffa.dateToString(attributes.entry_date);
         }
     },
     parse: function(json) {
         if (json) { 
             json.expiry = new Date(json.expiry);
-            json.entered_at = new Date(json.entered_at);
+            json.entry_date = new Date(json.entry_date);
             return json;
         }
     },
@@ -31,7 +34,7 @@ Diffa.Instrument = Backbone.Model.extend({
         ttype: 'O',
         quantity: 1,
         price: 0.0001,
-        entered_at: new Date(),
+        entry_date: new Date(),
         expiry: new Date(),
     },
 
@@ -63,7 +66,7 @@ Diffa.Option = Diffa.Instrument.extend({
 
 
 Diffa.Trade.prototype.__properties = ['id', 'type', 'quantity', 'expiry', 'price', 'direction',
-                      'entered_at', 'version'];
+                      'entry_date', 'version'];
 
 Diffa.Trade.prototype.toString = function() { 
     return "<Diffa.Trade " + JSON.stringify(this) + ">";
@@ -89,6 +92,10 @@ _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
 
     validate: function() {
         var column = this.column;
+        var date = new Date(this.$input.val());
+        if (isNaN(date.getTime())) {
+            return { valid: false, msg: "Date " + this.$input.val() + " is not a valid date" };
+        }
         return column.validator ?  column.validator(this.$input.val()) : { valid: true, msg: null };
     },
     whenChanged: function(target, value) {
@@ -123,7 +130,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             var collection = this.collection;
 
             var grid = new Slick.Grid(this.el,collection, this.columns, gridOptions);
-            collection.bind('change',function(model,attributes) {
+            collection.bind('change',function(model,options) {
                 model.save();
             });
 
@@ -191,7 +198,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             "<dt>Trade Id:</dt><dd><%= id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
             "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
-            "<dt>Entry Date:</dt><dd><%= [entered_at.getFullYear(), entered_at.getMonth(), entered_at.getDay()].join('-') %></dd>" +
+            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
             "</dl>"
         )
@@ -206,14 +213,14 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                  formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
             {id: "price", name: "Price", field: "price",
                 editor: Slickback.NumberCellEditor, precision: 2},
-            {id: "entered_at", name: "Entry Date", field: "entered_at", width: dateWidth,
+            {id: "entry_date", name: "Entry Date", field: "entry_date", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter},
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
             // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
-            "<dt>Entry Date:</dt><dd><%= [entered_at.getFullYear(), entered_at.getMonth(), entered_at.getDay()].join('-') %></dd>" +
+            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
             "</dl>"
         )
@@ -235,7 +242,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
             // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
-            "<dt>Entry Date:</dt><dd><%= [entered_at.getFullYear(), entered_at.getMonth(), entered_at.getDay()].join('-') %></dd>" +
+            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
             "</dl>"
         )
@@ -249,6 +256,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
         },
 
         showError: function showError(model, error, _options) {
+            console.log(error);
             $('<div/>').hide().addClass('error').text(error.toString()).appendTo(this.el).slideDown().
                 delay(1000).slideUp(function () {
                     $(this).remove();
