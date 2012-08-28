@@ -243,8 +243,14 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
-            "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
+            "<dt>Trade type:</dt><dd><%= is_future ? 'Future' : 'Option' %></dd>" +
+            "<dt>Premium:</dt><dd><%= premium %></dd>" +
+            "<dt>Strike:</dt><dd><%= strike %></dd>" +
+            "<dt>Buy/Sell:</dt><dd><%= {B: 'Buy', S: 'Sell'}[buy_sell] %></dd>" +
+            "<dt>Currency:</dt><dd><%= currency %></dd>" +
+            "<dt>Option type:</dt><dd><%= option_type %></dd>" +
             "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
+            "<dt>Quote:</dt><dd><%= quote %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
             "</dl>"
         )
@@ -265,6 +271,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
+            "<dt>Quote:</dt><dd><%= quote %></dd>" +
             // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
             "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
