@@ -25,14 +25,12 @@ Diffa.Instrument = Backbone.Model.extend({
     parse: function(json) {
         var contract_period = new Date(0, 0, 1, 0, 0);
         if (json) { 
-            console.log("parsing", json);
             if (json.contract_period) {
                 var contract_period_str = json.contract_period;
                 var mmyy = contract_period_str.split('/', 2).map(function(n) { return parseInt(n, 10); });
                 json.contract_period = new Date(0);
                 json.contract_period.setMonth(mmyy[0] - 1)
                 json.contract_period.setFullYear(mmyy[1]);
-                console.log("contract period", contract_period_str, mmyy, json.contract_period); 
             };
             if (json.expiry) {
                 json.expiry = new Date(json.expiry);
@@ -51,7 +49,6 @@ Diffa.Instrument = Backbone.Model.extend({
             mmyy = [json.contract_period.getMonth() + 1, json.contract_period.getFullYear()];
             json.contract_period = mmyy.join("/");
         };
-        console.log("Instrument#toJSON", json);
         return json;
     },
     // url: urlTemplate("/grid/trades/:id"),
@@ -82,15 +79,12 @@ Diffa.Trade = Diffa.Instrument.extend({
         
     },
     isFutureChanged: function isFutureChanged (model, value, opts) {
-        console.log("isFutureChanged", arguments);
         if (value) model.set({is_put: false, is_call: false });
     },
     isCallChanged: function isCallChanged (model, value, opts) {
-        console.log("isCallChanged", arguments);
         if (value) model.set({is_future: false, is_put: false });
     },
     isPutChanged: function isPutChanged (model, value, opts) {
-        console.log("isPutChanged", arguments);
         if (value) model.set({is_future: false, is_call: false });
     },
     pushDownstream: function () {
@@ -143,7 +137,6 @@ _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
         return column.validator ?  column.validator(this.$input.val()) : { valid: true, msg: null };
     },
     whenChanged: function(target, value) {
-        console.log("DateEditor#whenChanged", target, value);
         var serialized = Diffa.dateToString(value);
         this.$input.val(serialized);
         this.currval = value;
@@ -156,7 +149,6 @@ Diffa.dateToString = function dateToString(date) {
 }
 Diffa.GridView = {};
 Diffa.GridView.DateFormatter = function DateFormatter(row, cell, value, columnDef, dataContext) {
-    console.log("Get", columnDef.field, "from", dataContext.attributes);
     var value = dataContext.get(columnDef.field);
     if (!value) return;
     return Diffa.dateToString(value);
@@ -388,7 +380,6 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             bigbus: bigbus,
         });
 
-        console.log("Height set to", $(this.tradeEntryView.el).css('height'), "intended", height);
 
         this.errorView = new Diffa.Views.TradeErrors({
             el: $('<div/>').appendTo(baseElt), 
@@ -401,7 +392,6 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     };
 
     Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl, baseElt) {
-        console.log("bootstrap called");
         var urls = { 
             trades: baseUrl + '/trades', 
             futures: baseUrl + '/futures',
@@ -423,5 +413,4 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             Diffa.Option, Diffa.Views.OptionsGrid, bigbus
         );
             
-        console.log("bootstrap done");
     };
