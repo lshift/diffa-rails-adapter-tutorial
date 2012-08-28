@@ -10,6 +10,7 @@ class TradesView < ActiveRecord::Migration
       'strike',
       'price',
       'currency',
+      'symbol',
       'option_type']
     projection = common.dup.append('version').append('user').append('lastUpdated').append('is_future').append('is_call').append('is_put')
     cols = common.dup.append('md5(concat(%s))' % common.map { |col|

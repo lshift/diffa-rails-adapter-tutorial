@@ -24,6 +24,7 @@ class CreateTrades < ActiveRecord::Migration
       t.decimal :price,           null: true
       t.string :currency,         null: false
       t.string :option_type,      null: false
+      t.string :symbol,           null: false
       t.timestamps
     end
     add_foreign_key(:trades, :currencies, {
@@ -34,6 +35,11 @@ class CreateTrades < ActiveRecord::Migration
     add_foreign_key(:trades, :users, {
       name: :trade_user_fk,
       column: :user_id
+    })
+    add_foreign_key(:trades, :quote_names, {
+      name: :trade_quote_fk,
+      column: :symbol,
+      primary_key: :quote_name
     })
   end
 end

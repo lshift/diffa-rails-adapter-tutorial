@@ -107,11 +107,13 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
     t.decimal  "price",           :precision => 10, :scale => 0
     t.string   "currency",                                       :null => false
     t.string   "option_type",                                    :null => false
+    t.string   "symbol",                                         :null => false
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
   end
 
   add_index "trades", ["currency"], :name => "trade_currency_fk"
+  add_index "trades", ["symbol"], :name => "trade_quote_fk"
   add_index "trades", ["user_id"], :name => "trade_user_fk"
 
   create_table "trades_entry_date_daily", :id => false, :force => true do |t|
@@ -142,6 +144,7 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
     t.decimal  "strike",                        :precision => 10, :scale => 0
     t.decimal  "price",                         :precision => 10, :scale => 0
     t.string   "currency",                                                                     :null => false
+    t.string   "symbol",                                                                       :null => false
     t.string   "option_type",                                                                  :null => false
     t.string   "version",         :limit => 32
     t.integer  "user",                                                                         :null => false
@@ -164,6 +167,7 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
   add_foreign_key "options", "users", :name => "option_user_fk"
 
   add_foreign_key "trades", "currencies", :name => "trade_currency_fk", :column => "currency", :primary_key => "currency"
+  add_foreign_key "trades", "quote_names", :name => "trade_quote_fk", :column => "symbol", :primary_key => "quote_name"
   add_foreign_key "trades", "users", :name => "trade_user_fk"
 
 end
