@@ -139,6 +139,7 @@ Diffa.GridView = {};
 Diffa.GridView.DateFormatter = function DateFormatter(row, cell, value, columnDef, dataContext) {
     console.log("Get", columnDef.field, "from", dataContext.attributes);
     var value = dataContext.get(columnDef.field);
+    if (!value) return;
     return Diffa.dateToString(value);
 }
 
