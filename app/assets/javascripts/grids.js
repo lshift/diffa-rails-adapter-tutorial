@@ -132,7 +132,7 @@ _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
 });
 
 Diffa.dateToString = function dateToString(date) {
-    if (!date) { throw new Error("Date is undefined!") };
+    if (!date) { ("Date is undefined!") };
     return [date.getFullYear(), date.getMonth() +1, date.getDate()].join("/");
 }
 Diffa.GridView = {};
@@ -250,7 +250,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             "<dt>Currency:</dt><dd><%= currency %></dd>" +
             "<dt>Option type:</dt><dd><%= option_type %></dd>" +
             "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
-            "<dt>Quote:</dt><dd><%= quote %></dd>" +
+            "<dt>Quote:</dt><dd><%= obj.quote || 'Brent' %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
             "</dl>"
         )
