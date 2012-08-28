@@ -74,13 +74,32 @@ Diffa.Instrument = Backbone.Model.extend({
 });
 
 Diffa.Trade = Diffa.Instrument.extend({
+    initialize: function initialize(arguments) {
+        Diffa.Instrument.__super__.initialize.apply(this, arguments);
+        this.on('change:is_future', this.isFutureChanged.bind(this));
+        this.on('change:is_put', this.isPutChanged.bind(this));
+        this.on('change:is_call', this.isCallChanged.bind(this));
+        
+    },
+    isFutureChanged: function isFutureChanged (model, value, opts) {
+        console.log("isFutureChanged", arguments);
+        if (value) model.set({is_put: false, is_call: false });
+    },
+    isCallChanged: function isCallChanged (model, value, opts) {
+        console.log("isCallChanged", arguments);
+        if (value) model.set({is_future: false, is_put: false });
+    },
+    isPutChanged: function isPutChanged (model, value, opts) {
+        console.log("isPutChanged", arguments);
+        if (value) model.set({is_future: false, is_call: false });
+    },
     pushDownstream: function () {
         var rpcEndpoint = this.url() + '/push';
         return $.ajax({url: rpcEndpoint, type: 'POST', dataType: 'json', headers: { 'X-authToken': Diffa.authToken } }).
             pipe(function(futureJson, state, xhr) {
                 return new Diffa.Future(futureJson);
         });
-    }
+    },
 });
 Diffa.Future = Diffa.Instrument.extend({
 });
