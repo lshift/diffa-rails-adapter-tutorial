@@ -39,11 +39,13 @@ Diffa.Instrument = Backbone.Model.extend({
             }
             if (json.entry_date) json.entry_date = new Date(json.entry_date);
             if (json.trade_date) json.trade_date = new Date(json.trade_date);
+            if (json.is_future) json.is_future = (json.is_future == 'Y');
+            if (json.is_call) json.is_call = (json.is_call == 'Y');
+            if (json.is_put) json.is_put = (json.is_put == 'Y');
             return json;
         }
     },
     toJSON: function toJSON () {
-        console.log("toJSON", new Error().stack);
         var json = Diffa.Instrument.__super__.toJSON.call(this);
         if (json.contract_period) {
             mmyy = [json.contract_period.getMonth() + 1, json.contract_period.getFullYear()];
@@ -161,6 +163,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             });
 
             grid.onMouseEnter.subscribe(this.cellMouseOver.bind(this));
+            grid.onMouseLeave.subscribe(this.cellMouseLeave.bind(this));
 
             collection.onRowCountChanged.subscribe(function() {
                 grid.updateRowCount();
@@ -175,18 +178,28 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             collection.fetch();
         },
         cellMouseOver: function(e, args) {
+            var cell = args.grid.getCellFromEvent(e);
+            var col = this.columns[cell.cell];
+            if (col.editor) return;
+
             if (!$(e.target).data('grid.tooltip')) { 
-                var cell = args.grid.getCellFromEvent(e);
                 var entity = this.collection.at(cell.row);
                 $(e.target).tooltip({title: this.toolTipFor(entity), trigger: 'hover', html:true}).tooltip('show');
                 $(e.target).data('grid.tooltip', true);
             }
+        },
+        cellMouseLeave: function(e, args) {
+                $(e.target).tooltip('hide');
         },
         toolTipFor: function(ent) { 
             return this.toolTipTemplate(ent.attributes);
         }
     });
 
+    var booleanChoices = [ 
+        { label: "True", value: true },
+        { label: "False", value: false },
+    ];
 
     var dateWidth = 120;
     Diffa.Views.TradesGrid = Diffa.Views.AutoSaveGrid.extend({
@@ -196,6 +209,12 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 editor: Slickback.NumberCellEditor},
             {id: "price", name: "Price", field: "price", width: 80, 
                 editor: Slickback.NumberCellEditor, precision: 2},
+            {id: "is_future", name: "Future?", field: "is_future", width: 40, 
+                editor: Slickback.DropdownCellEditor, choices: booleanChoices },
+            {id: "is_call", name: "Call?", field: "is_call", width: 40, 
+                editor: Slickback.DropdownCellEditor, choices: booleanChoices},
+            {id: "is_put", name: "Put?", field: "is_put", width: 40, 
+                editor: Slickback.DropdownCellEditor, choices: booleanChoices},
             {id: "contractDate", name: "Contract Date", field: "contract_period", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
