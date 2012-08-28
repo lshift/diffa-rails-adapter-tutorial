@@ -272,12 +272,14 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             {id: "id", name: "Id", field: "trade_id"},
             {id: "quantity", name: "Quantity", field: "quantity", 
                 editor: Slickback.NumberCellEditor},
-            {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
-                 formatter: Diffa.GridView.DateFormatter, editor: Diffa.DateEditor},
             {id: "price", name: "Price", field: "price",
                 editor: Slickback.NumberCellEditor, precision: 2},
             {id: "entry_date", name: "Entry Date", field: "entry_date", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter},
+            {id: "month", name: "Expires Month", field: "month", width: dateWidth,
+                 editor: Slickback.NumberCellEditor},
+            {id: "year", name: "Year", field: "year", width: dateWidth,
+                 editor: Slickback.NumberCellEditor},
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
@@ -298,9 +300,10 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 editor: Slickback.NumberCellEditor},
             {id: "strike", name: "Strike", field: "strike_price",
                 editor: Slickback.NumberCellEditor, precision: 2},
-            {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
-                 formatter: Diffa.GridView.DateFormatter,
-                 editor: Diffa.DateEditor},
+            {id: "month", name: "Expires Month", field: "month", width: dateWidth,
+                 editor: Slickback.NumberCellEditor},
+            {id: "year", name: "Year", field: "year", width: dateWidth,
+                 editor: Slickback.NumberCellEditor},
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
