@@ -36,7 +36,7 @@ class Option < ActiveRecord::Base
     instrument.update_attributes(trade_date: t.entry_date,
                                  strike_price: t.price, exercise_right: t.is_call ? 'CALL' : 'PUT',
                                  lots: t.quantity, premium_price: t.premium,
-                                 exercise_type: 'American', quote: 'IPE Brent' || t.quote,
+                                 exercise_type: 'American', quote: t.symbol,
                                  year: yy, month: mm)
 
 

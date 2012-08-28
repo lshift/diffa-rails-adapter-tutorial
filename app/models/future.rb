@@ -39,7 +39,7 @@ class Future < ActiveRecord::Base
     mm, yy = t.contract_period.split('/', 2).map(&:to_i)
 
     instrument.update_attributes(trade_date: t.entry_date, lots: t.quantity,
-                                 entry_price: t.price, quote: 'IPE Brent' || t.quote,
+                                 entry_price: t.price, quote: t.symbol,
                                  year: yy, month: mm)
 
     instrument.save!
