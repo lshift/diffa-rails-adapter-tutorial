@@ -14,6 +14,6 @@ class Trade < ActiveRecord::Base
     self.entry_date ||= Time.now.utc
     self.contract_period ||= (self.entry_date + 2.months).strftime('%m/%Y')
     self.premium ||= self.price * (0.05 + (rand * 0.05))
-    self.symbol ||= 'NYMEX WTI'
+    self.symbol ||= QuoteName.all.sample.quote_name
   end
 end
