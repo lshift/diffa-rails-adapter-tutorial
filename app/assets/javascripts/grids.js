@@ -270,7 +270,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Views.FuturesGrid = Diffa.Views.AutoSaveGrid.extend({
         columns: [
             {id: "id", name: "Id", field: "trade_id"},
-            {id: "quantity", name: "Quantity", field: "quantity", 
+            {id: "lots", name: "Lots", field: "lots", 
                 editor: Slickback.NumberCellEditor},
             {id: "price", name: "Price", field: "price",
                 editor: Slickback.NumberCellEditor, precision: 2},
@@ -296,7 +296,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
             columns: [
             {id: "id", name: "Id", field: "trade_id"},
-            {id: "quantity", name: "Lots", field: "quantity", 
+            {id: "lots", name: "Lots", field: "los", 
                 editor: Slickback.NumberCellEditor},
             {id: "strike", name: "Strike", field: "strike_price",
                 editor: Slickback.NumberCellEditor, precision: 2},
