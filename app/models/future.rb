@@ -31,15 +31,16 @@ class Future < ActiveRecord::Base
 
   def self.create_or_update_from_trade(t)
     instrument = find_by_trade_id(t.id) || new
-    
-    instrument.update_attributes(trade_date: t.trade_date, lots: t.lots,
-                                 entry_price: t.entry_price, quote: t.quote,
-                                 year: t.year, month: t.month)
 
     instrument.trade_id = t.id
-    instrument.version = t.version
     instrument.user_id = t.user
     instrument.version = t.version
+
+    mm, yy = t.contract_period.split('/', 2).map(&:to_i)
+
+    instrument.update_attributes(trade_date: t.entry_date, lots: t.quantity,
+                                 entry_price: t.price, quote: 'IPE Brent' || t.quote,
+                                 year: yy, month: mm)
 
     instrument.save!
   end
