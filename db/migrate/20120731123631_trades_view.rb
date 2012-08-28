@@ -3,7 +3,6 @@ class TradesView < ActiveRecord::Migration
     common = [
       'id',
       'entry_date',
-      'expiry',
       'contract_period',
       'quantity',
       'buy_sell',

@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
     t.string   "version"
     t.integer  "lots",                                          :null => false
     t.decimal  "premium_price",  :precision => 10, :scale => 0, :null => false
+    t.decimal  "strike_price",   :precision => 10, :scale => 0, :null => false
     t.string   "exercise_right",                                :null => false
     t.string   "exercise_type",                                 :null => false
     t.string   "quote",                                         :null => false
@@ -95,7 +96,6 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
   create_table "trades", :force => true do |t|
     t.integer  "user_id",                                        :null => false
     t.datetime "entry_date",                                     :null => false
-    t.datetime "expiry",                                         :null => false
     t.string   "contract_period",                                :null => false
     t.integer  "quantity",                                       :null => false
     t.string   "buy_sell",                                       :null => false
@@ -135,7 +135,6 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
   create_table "trades_view", :id => false, :force => true do |t|
     t.integer  "id",                                                           :default => 0,  :null => false
     t.datetime "entry_date",                                                                   :null => false
-    t.datetime "expiry",                                                                       :null => false
     t.string   "contract_period",                                                              :null => false
     t.integer  "quantity",                                                                     :null => false
     t.string   "buy_sell",                                                                     :null => false

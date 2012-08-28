@@ -1,11 +1,10 @@
 class Trade < ActiveRecord::Base
-  attr_accessible :user_id, :entry_date, :contract_period, :quantity, :buy_sell, :is_future, :is_call, :is_put, :premium, :strike, :price, :currency, :option_type, :expiry
+  attr_accessible :user_id, :entry_date, :contract_period, :quantity, :buy_sell, :is_future, :is_call, :is_put, :premium, :strike, :price, :currency, :option_type
 
 
-  before_create :set_defaults
+  before_save :set_defaults
 
   def set_defaults
-    self.contract_period ||= '01/03'
     self.buy_sell ||= 'B'
     self.is_future ||= false
     self.is_call ||= false
@@ -13,6 +12,7 @@ class Trade < ActiveRecord::Base
     self.currency ||= 'EUR'
     self.option_type ||= 'ETO'
     self.entry_date ||= Time.now.utc
-    self.expiry ||= self.entry_date + 1.days
+    self.contract_period ||= (self.entry_date + 2.months).strftime('%m/%Y')
+    self.premium ||= self.price * (0.05 + (rand * 0.05))
   end
 end

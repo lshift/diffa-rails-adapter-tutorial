@@ -7,6 +7,7 @@ class CreateOptions < ActiveRecord::Migration
       t.string :version,          null: true
       t.integer :lots,            null: false
       t.decimal :premium_price,   null: false
+      t.decimal :strike_price,    null: false
       t.string :exercise_right,   null: false
       t.string :exercise_type,    null: false
       t.string :quote,            null: false

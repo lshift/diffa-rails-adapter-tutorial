@@ -23,8 +23,20 @@ Diffa.Instrument = Backbone.Model.extend({
         }
     },
     parse: function(json) {
+        var contract_period = new Date(0, 0, 1, 0, 0);
         if (json) { 
-            json.expiry = new Date(json.expiry);
+            console.log("parsing", json);
+            if (json.contract_period) {
+                var contract_period_str = json.contract_period;
+                var mmyy = contract_period_str.split('/', 2).map(function(n) { return parseInt(n, 10); });
+                json.contract_period = new Date(0);
+                json.contract_period.setMonth(mmyy[0] - 1)
+                json.contract_period.setFullYear(mmyy[1]);
+                console.log("contract period", contract_period_str, mmyy, json.contract_period); 
+            };
+            if (json.expiry) {
+                json.expiry = new Date(json.expiry);
+            }
             json.entry_date = new Date(json.entry_date);
             return json;
         }
@@ -99,6 +111,7 @@ _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
         return column.validator ?  column.validator(this.$input.val()) : { valid: true, msg: null };
     },
     whenChanged: function(target, value) {
+        console.log("DateEditor#whenChanged", target, value);
         var serialized = Diffa.dateToString(value);
         this.$input.val(serialized);
         this.currval = value;
@@ -106,10 +119,12 @@ _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
 });
 
 Diffa.dateToString = function dateToString(date) {
+    if (!date) { throw new Error("Date is undefined!") };
     return [date.getFullYear(), date.getMonth() +1, date.getDate()].join("/");
 }
 Diffa.GridView = {};
 Diffa.GridView.DateFormatter = function DateFormatter(row, cell, value, columnDef, dataContext) {
+    console.log("Get", columnDef.field, "from", dataContext.attributes);
     var value = dataContext.get(columnDef.field);
     return Diffa.dateToString(value);
 }
@@ -170,7 +185,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
                 editor: Slickback.NumberCellEditor},
             {id: "price", name: "Price", field: "price", width: 80, 
                 editor: Slickback.NumberCellEditor, precision: 2},
-            {id: "contractDate", name: "Contract Date", field: "expiry", width: dateWidth,
+            {id: "contractDate", name: "Contract Date", field: "contract_period", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
             {id: "propagate", name: "Push to Downstream", field: "trade_id", width: dateWidth,
@@ -311,6 +326,9 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             collection: this.collection,
             bigbus: bigbus,
         });
+
+        console.log("Height set to", $(this.tradeEntryView.el).css('height'), "intended", height);
+
         this.errorView = new Diffa.Views.TradeErrors({
             el: $('<div/>').appendTo(baseElt), 
             collection: this.collection
@@ -322,6 +340,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     };
 
     Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl, baseElt) {
+        console.log("bootstrap called");
         var urls = { 
             trades: baseUrl + '/trades', 
             futures: baseUrl + '/futures',
@@ -343,4 +362,5 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             Diffa.Option, Diffa.Views.OptionsGrid, bigbus
         );
             
+        console.log("bootstrap done");
     };

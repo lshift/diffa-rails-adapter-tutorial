@@ -27,17 +27,20 @@ class Option < ActiveRecord::Base
   def self.create_or_update_from_trade(t)
     instrument = find_by_trade_id(t.id) || new
     
-    instrument.update_attributes(quantity: t.quantity, trade_date: t.trade_date,
-                                 strike_price: t.price, exercise_right: t.exercise_right,
-                                 lots: t.lots, premium_price: t.premium_price,
-                                 exercise_type: t.exercise_type, quote: t.quote,
-                                 year: t.year, month: t.month)
-
     instrument.trade_id = t.id
-    instrument.version = t.version
     instrument.user_id = t.user
     instrument.version = t.version
 
+# TODO: Add symbol / quote field to trades.
+    mm, yy = t.contract_period.split('/', 2).map(&:to_i)
+    instrument.update_attributes(trade_date: t.entry_date,
+                                 strike_price: t.price, exercise_right: t.is_call ? 'CALL' : 'PUT',
+                                 lots: t.quantity, premium_price: t.premium,
+                                 exercise_type: 'American', quote: 'IPE Brent' || t.quote,
+                                 year: yy, month: mm)
+
+
+    pp trade_attrs: t.attributes, new_option_attrs: instrument.attributes
     instrument.save!
   end
 end

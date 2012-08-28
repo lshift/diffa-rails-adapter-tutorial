@@ -6,7 +6,7 @@ class TradesController < ApplicationController
 
   def propagate
     t = owned_trades_view.find(params[:trade_id])
-    klass = { 0 => Option, 1 => Future }.fetch(t.is_future)
+    klass = { 'N' => Option, 'Y' => Future }.fetch(t.is_future)
 
     instrument = klass.create_or_update_from_trade(t)
     render json: instrument
