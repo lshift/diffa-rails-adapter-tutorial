@@ -54,7 +54,6 @@ Diffa.Instrument = Backbone.Model.extend({
     // url: urlTemplate("/grid/trades/:id"),
     defaults: { 
         ttype: 'O',
-        quantity: 1,
         price: 0.0001,
         entry_date: new Date(),
         expiry: new Date(),
@@ -94,6 +93,7 @@ Diffa.Trade = Diffa.Instrument.extend({
                 return new Diffa.Future(futureJson);
         });
     },
+    defaults: _.extend({quantity: 1}, Diffa.Instrument.prototype.defaults)
 });
 Diffa.Future = Diffa.Instrument.extend({
 });
