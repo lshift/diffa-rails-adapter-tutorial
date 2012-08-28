@@ -37,9 +37,20 @@ Diffa.Instrument = Backbone.Model.extend({
             if (json.expiry) {
                 json.expiry = new Date(json.expiry);
             }
-            json.entry_date = new Date(json.entry_date);
+            if (json.entry_date) json.entry_date = new Date(json.entry_date);
+            if (json.trade_date) json.trade_date = new Date(json.trade_date);
             return json;
         }
+    },
+    toJSON: function toJSON () {
+        console.log("toJSON", new Error().stack);
+        var json = Diffa.Instrument.__super__.toJSON.call(this);
+        if (json.contract_period) {
+            mmyy = [json.contract_period.getMonth() + 1, json.contract_period.getFullYear()];
+            json.contract_period = mmyy.join("/");
+        };
+        console.log("Instrument#toJSON", json);
+        return json;
     },
     // url: urlTemplate("/grid/trades/:id"),
     defaults: { 
@@ -245,9 +256,9 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
     Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
             columns: [
             {id: "id", name: "Id", field: "trade_id"},
-            {id: "quantity", name: "Quantity", field: "quantity", 
+            {id: "quantity", name: "Lots", field: "quantity", 
                 editor: Slickback.NumberCellEditor},
-            {id: "strike", name: "Strike", field: "strike",
+            {id: "strike", name: "Strike", field: "strike_price",
                 editor: Slickback.NumberCellEditor, precision: 2},
             {id: "expiry", name: "Expires", field: "expiry", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
@@ -257,7 +268,11 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
             // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
-            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
+            "<dt>Entry Date:</dt><dd><%= [trade_date.getFullYear(), trade_date.getMonth(), trade_date.getDay()].join('-') %></dd>" +
+            "<dt>Premium price:</dt><dd><%= premium_price %></dd>" +
+            "<dt>Excercise Right:</dt><dd><%= exercise_right %></dd>" +
+            "<dt>Excercise Type:</dt><dd><%= exercise_type %></dd>" +
+            "<dt>Quote:</dt><dd><%= quote %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
             "</dl>"
         )
