@@ -261,7 +261,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             "<dt>Currency:</dt><dd><%= currency %></dd>" +
             "<dt>Option type:</dt><dd><%= option_type %></dd>" +
             "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
-            "<dt>Quote:</dt><dd><%= obj.quote || 'Brent' %></dd>" +
+            "<dt>Quote:</dt><dd><%= symbol %></dd>" +
             // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
             "</dl>"
         )
