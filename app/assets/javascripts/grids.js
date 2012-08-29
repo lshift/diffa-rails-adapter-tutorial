@@ -207,7 +207,7 @@ Diffa.CheckboxEditor = function CheckboxEditor(args) {
 
 
 Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, columnDef, trade) {
-    return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('Push').wrap('<div/>').parent().html();
+    return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('\u2192').wrap('<div/>').parent().html();
 }
 
 Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value, columnDef, trade) {
