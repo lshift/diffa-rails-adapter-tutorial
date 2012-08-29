@@ -357,7 +357,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
     Diffa.Views.OptionsGrid = Diffa.Views.AutoSaveGrid.extend({
             columns: [
             {id: "id", name: "Id", field: "trade_id"},
-            {id: "lots", name: "Lots", field: "los", 
+            {id: "lots", name: "Lots", field: "lots", 
                 editor: Slickback.NumberCellEditor},
             {id: "strike", name: "Strike", field: "strike_price",
                 editor: Slickback.NumberCellEditor, precision: 2},
