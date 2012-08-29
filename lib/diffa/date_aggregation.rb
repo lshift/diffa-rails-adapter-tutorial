@@ -19,7 +19,9 @@ module Diffa
     end
 
     class FixedWidthIdFormat < SimpleDelegator
-      def id_formatted; "%08d" % [id]; end
+      def id_formatted; 
+        "%08d%s" % [id, type_code]; 
+      end
 
       def as_json options={}
         super(options).merge('id' => id_formatted)
