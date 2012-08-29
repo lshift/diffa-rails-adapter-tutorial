@@ -343,7 +343,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
-            "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
+            "<dt>Version:</dt><dd><%= version.substr(0, 7) + '\u2026' %></dd>" +
             "<hr/>" +
             "<dt>Quote:</dt><dd><%= quote %></dd>" +
             // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
@@ -368,7 +368,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
-            "<dt>Version:</dt><dd><%= version.substr(0, 5) + '\u2026' %></dd>" +
+            "<dt>Version:</dt><dd><%= version.substr(0, 7) + '\u2026' %></dd>" +
             "<hr/>" +
             "<dt>Entry Date:</dt><dd><%= [trade_date.getFullYear(), trade_date.getMonth(), trade_date.getDay()].join('-') %></dd>" +
             "<dt>Premium price:</dt><dd><%= premium_price %></dd>" +
