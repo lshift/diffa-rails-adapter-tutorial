@@ -258,7 +258,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         cellMouseOver: function(e, args) {
             var cell = args.grid.getCellFromEvent(e);
             var col = this.columns[cell.cell];
-            if (col.field != 'id') return;
+            if (col.id != 'id') return;
 
             if (!$(e.target).data('grid.tooltip')) { 
                 var entity = this.collection.at(cell.row);
