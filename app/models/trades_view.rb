@@ -5,5 +5,10 @@ class TradesView < ActiveRecord::Base
   def as_json(options = {})
     super(options).merge(attributes: {})
   end
+
+
+  def type_code
+    is_future == 'Y' ? 'F' : 'O'
+  end
 end
 

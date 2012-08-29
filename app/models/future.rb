@@ -6,6 +6,7 @@ class Future < ActiveRecord::Base
 
   before_validation :assign_trade_id
   before_save :assign_version
+  before_save :add_defaults
 
   def assign_trade_id
     pp attributes: attributes
@@ -15,8 +16,13 @@ class Future < ActiveRecord::Base
       where(futures[:user_id].eq(user_id)).
       group(futures[:user_id])
     last_id, = connection.execute(q.to_sql).first
-    self.trade_id = (last_id || 0) + 1
+    self.trade_id = (last_id.to_i || 0) + 1
     pp trade_id: trade_id, last_id: last_id
+  end
+
+
+  def add_defaults
+    self.entry_price ||= 2
   end
 
   # TODO: Upstream versions?

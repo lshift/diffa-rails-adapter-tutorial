@@ -87,10 +87,11 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
   end
 
   create_table "risks_view", :id => false, :force => true do |t|
-    t.integer  "id",         :default => 0, :null => false
-    t.datetime "trade_date",                :null => false
+    t.integer  "id",                      :default => 0,  :null => false
+    t.datetime "trade_date",                              :null => false
+    t.string   "type_code",  :limit => 1, :default => "", :null => false
     t.string   "version"
-    t.integer  "user",       :default => 0, :null => false
+    t.integer  "user",                    :default => 0,  :null => false
   end
 
   create_table "trades", :force => true do |t|
