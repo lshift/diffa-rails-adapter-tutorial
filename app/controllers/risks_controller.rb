@@ -1,3 +1,5 @@
+require 'diffa/date_aggregation'
+
 class RisksController < ApplicationController
   def scan
     user = params[:user_id]
