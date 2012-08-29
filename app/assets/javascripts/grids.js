@@ -66,7 +66,7 @@ Diffa.Trade = Diffa.Instrument.extend({
     initialize: function initialize(arguments) {
         Diffa.Instrument.__super__.initialize.apply(this, arguments);
         this.on('change:is_future', this.isFutureChanged.bind(this));
-        // this.on('change:is_put', this.isPutChanged.bind(this));
+        this.on('change:is_put', this.isPutChanged.bind(this));
         this.on('change:is_call', this.isCallChanged.bind(this));
         
     },
@@ -115,6 +115,7 @@ Diffa.MonthlyContractedInstrument = {
         }
         return Diffa.Trade.__super__.validate.call(this, attributes);
     },
+
 }
 
 Diffa.Future = Diffa.Instrument.extend(_.extend({ }, Diffa.MonthlyContractedInstrument));
@@ -232,7 +233,12 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
 
             var grid = new Slick.Grid(this.el,collection, this.columns, gridOptions);
             collection.bind('change',function(model,options) {
-                model.save();
+
+                var changedProperties = Object.keys(model.changedAttributes())
+                // Do not save iff only the version has changed, because this value doesn't converge for options and futures.
+                if (! (changedProperties.length == 1 && changedProperties[0] == 'version')) {
+                    model.save();
+                }
             });
 
             grid.onMouseEnter.subscribe(this.cellMouseOver.bind(this));

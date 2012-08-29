@@ -4,6 +4,8 @@ class Option < ActiveRecord::Base
   before_validation :assign_trade_id
   before_save :assign_version
 
+  before_create :add_defaults
+
   def assign_trade_id
     pp attributes: attributes
     return unless self.trade_id.nil? or trade_id == 0
@@ -19,6 +21,20 @@ class Option < ActiveRecord::Base
   # TODO: Upstream versions?
   def assign_version
     self.version = Digest::MD5.hexdigest(self.version || '') if changed? and not version_changed?
+  end
+
+
+  def add_defaults
+    self.exercise_right ||= 'CALL'
+    self.exercise_type ||= 'American'
+    self.lots ||= 1
+    self.trade_date = Time.now.utc
+    contract_period = self.trade_date + 3.months
+    self.month ||= contract_period.month
+    self.year ||= contract_period.year
+    self.strike_price ||= rand * 100
+    self.premium_price ||= self.strike_price * (0.5 + (rand * 0.05))
+    self.quote ||= QuoteName.all.shuffle.first.quote_name
   end
 
   validates :trade_id, uniqueness: { :scope => :user_id }, presence: true

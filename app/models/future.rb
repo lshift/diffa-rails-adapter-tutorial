@@ -23,6 +23,12 @@ class Future < ActiveRecord::Base
 
   def add_defaults
     self.entry_price ||= 2
+    self.lots ||= 1
+    self.trade_date = Time.now.utc
+    contract_period = self.trade_date + 3.months
+    self.month ||= contract_period.month
+    self.year ||= contract_period.year
+    self.quote ||= QuoteName.all.shuffle.first.quote_name
   end
 
   # TODO: Upstream versions?
