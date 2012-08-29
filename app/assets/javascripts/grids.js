@@ -66,7 +66,6 @@ Diffa.Trade = Diffa.Instrument.extend({
     initialize: function initialize(arguments) {
         Diffa.Instrument.__super__.initialize.apply(this, arguments);
         this.on('change:is_future', this.isFutureChanged.bind(this));
-        this.on('change:is_put', this.isPutChanged.bind(this));
         this.on('change:is_call', this.isCallChanged.bind(this));
         
     },
