@@ -222,6 +222,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                 editable:         true,
                 formatterFactory: Slickback.BackboneModelFormatterFactory,
                 enableColumnReorder: false,
+                forceFitColumns: true
             }, initOptions.grid);
 
             var collection = this.collection;
