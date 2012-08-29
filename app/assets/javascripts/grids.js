@@ -456,7 +456,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             urls.futures, $('.futures'), 
             Diffa.Future, Diffa.Views.FuturesGrid, bigbus
         );
-        Diffa.futuresGrid = new GridComponent(
+        Diffa.optionsGrid = new GridComponent(
             urls.options, $('.options'), 
             Diffa.Option, Diffa.Views.OptionsGrid, bigbus
         );
