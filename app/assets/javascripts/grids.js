@@ -12,16 +12,10 @@ function urlTemplate(tmpl) {
 
 Diffa.Instrument = Backbone.Model.extend({
     validate: function validate(attributes) {
-        if (!/^[FO]/.test(attributes.ttype)) { return "invalid trade type: " + attributes.ttype; };
         if (attributes.price < 0) { return "invalid price: " + attributes.price; };
-        if (isNaN(attributes.expiry.getFullYear())) {
-            return "Expiry date " + attributes.expiry.toString() + " is invalid";
-        }
-        if (attributes.expiry < attributes.entry_date) { 
-            return "Expiry date " + Diffa.dateToString(attributes.expiry) + 
-                    " must be after entry date " + Diffa.dateToString(attributes.entry_date);
-        }
+        console.log("validate", attributes);
     },
+    
     parse: function(json) {
         var contract_period = new Date(0, 0, 1, 0, 0);
         if (json) { 
@@ -56,7 +50,6 @@ Diffa.Instrument = Backbone.Model.extend({
         ttype: 'O',
         price: 0.0001,
         entry_date: new Date(),
-        expiry: new Date(),
     },
 
     save: function save(key, value, options) {
@@ -73,18 +66,29 @@ Diffa.Trade = Diffa.Instrument.extend({
     initialize: function initialize(arguments) {
         Diffa.Instrument.__super__.initialize.apply(this, arguments);
         this.on('change:is_future', this.isFutureChanged.bind(this));
-        this.on('change:is_put', this.isPutChanged.bind(this));
+        // this.on('change:is_put', this.isPutChanged.bind(this));
         this.on('change:is_call', this.isCallChanged.bind(this));
         
     },
+
+    validate: function validate(attributes) {
+        if (isNaN(attributes.contract_period.getFullYear())) {
+            return "Expiry date " + attributes.contract_period.toString() + " is invalid";
+        }
+        if (attributes.contract_period < attributes.entry_date) { 
+            return "Expiry date " + Diffa.dateToString(attributes.contract_period) + 
+                    " must be after entry date " + Diffa.dateToString(attributes.entry_date);
+        }
+        return Diffa.Trade.__super__.validate.call(this, attributes);
+    },
+
     isFutureChanged: function isFutureChanged (model, value, opts) {
-        if (value) model.set({is_put: false, is_call: false });
+        console.log("Trade#isFutureChanged", model.attributes, value);
+        if (value) model.set({is_put: null, is_call: null });
     },
     isCallChanged: function isCallChanged (model, value, opts) {
+        console.log("Trade#isCallChanged", model.attributes, value);
         if (value) model.set({is_future: false, is_put: false });
-    },
-    isPutChanged: function isPutChanged (model, value, opts) {
-        if (value) model.set({is_future: false, is_call: false });
     },
     pushDownstream: function () {
         var rpcEndpoint = this.url() + '/push';
@@ -95,11 +99,23 @@ Diffa.Trade = Diffa.Instrument.extend({
     },
     defaults: _.extend({quantity: 1}, Diffa.Instrument.prototype.defaults)
 });
-Diffa.Future = Diffa.Instrument.extend({
-});
+Diffa.MonthlyContractedInstrument = {
+    validate: function validate(attributes) {
+        if (attributes.month < 1 || attributes.month > 12) {
+            return "Specified month: " + attributes.month + " isn't a valid month";
+        }
+        var contract_period = new Date(attributes.year, attributes.month - 1, 1);
+        console.log("yy", attributes.year, "mm", attributes.month, "date", contract_period, "entry", attributes.entry_date);
+        if (contract_period < attributes.entry_date) { 
+            return "Expiry date " + Diffa.dateToString(contract_period) + 
+                    " must be after entry date " + Diffa.dateToString(attributes.entry_date);
+        }
+        return Diffa.Trade.__super__.validate.call(this, attributes);
+    },
+}
 
-Diffa.Option = Diffa.Instrument.extend({
-});
+Diffa.Future = Diffa.Instrument.extend(_.extend({ }, Diffa.MonthlyContractedInstrument));
+Diffa.Option = Diffa.Instrument.extend(_.extend({ }, Diffa.MonthlyContractedInstrument));
 
 
 
