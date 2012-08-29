@@ -154,6 +154,32 @@ Diffa.GridView.DateFormatter = function DateFormatter(row, cell, value, columnDe
     return Diffa.dateToString(value);
 }
 
+
+Diffa.CheckboxEditor = function CheckboxEditor(args) {
+    this.container    = args.container;
+    this.column       = args.column;
+    this.defaultValue = null;
+    this.$input       = $('<input/>').attr('type', 'checkbox');
+    this.$input.appendTo(this.container);
+    this.$input.focus().select();
+  }
+
+  var serializeValue = function() {
+    var value     = this.unformattedInputValue();
+    console.log("Diffa.CheckboxEditor#serializeValue", value);
+    return value;
+  };
+
+  var validate = function() {
+      return { valid: true,  msg: null };
+  };
+
+  _.extend(Diffa.CheckboxEditor.prototype, Slickback.EditorMixin, {
+    serializeValue: serializeValue,
+    validate:       validate
+  });
+
+
 Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, columnDef, trade) {
     return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('Push').wrap('<div/>').parent().html();
 }
@@ -222,7 +248,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             {id: "price", name: "Price", field: "price", width: 80, 
                 editor: Slickback.NumberCellEditor, precision: 2},
             {id: "is_future", name: "Future?", field: "is_future", width: 40, 
-                editor: Slickback.DropdownCellEditor, choices: booleanChoices },
+                editor: Diffa.CheckboxEditor },
             {id: "is_call", name: "Call?", field: "is_call", width: 40, 
                 editor: Slickback.DropdownCellEditor, choices: booleanChoices},
             {id: "is_put", name: "Put?", field: "is_put", width: 40, 
