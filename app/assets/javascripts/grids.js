@@ -215,7 +215,8 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
 
 Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value, columnDef, trade) {
     var value = trade.get(columnDef.field);
-    return value ? '\u2713' : ' ';
+    // Either a unicode ballot box with check or ballot box (empty) character.
+    return value ? '\u2611' : '\u2610';
 }
 
     Diffa.Views = Diffa.Views || {};
