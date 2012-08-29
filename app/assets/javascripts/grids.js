@@ -162,12 +162,21 @@ Diffa.CheckboxEditor = function CheckboxEditor(args) {
     this.$input       = $('<input/>').attr('type', 'checkbox');
     this.$input.appendTo(this.container);
     this.$input.focus().select();
+    this.$input.val = function checkboxVal (maybeValue) {
+        return $(this).attr('checked') !== undefined;
+    }
   }
 
+  function isValueChanged() {;
+    return Slickback.EditorMixin.isValueChanged.call(this);
+  }
+    function loadValue(model) {
+        var value = model.get(this.column.field);
+        $(this.$input).attr('checked', value);
+    }
+
   var serializeValue = function() {
-    var value     = this.unformattedInputValue();
-    console.log("Diffa.CheckboxEditor#serializeValue", value);
-    return value;
+    return !!this.$input.attr('checked');
   };
 
   var validate = function() {
@@ -176,12 +185,18 @@ Diffa.CheckboxEditor = function CheckboxEditor(args) {
 
   _.extend(Diffa.CheckboxEditor.prototype, Slickback.EditorMixin, {
     serializeValue: serializeValue,
-    validate:       validate
+    validate:       validate,
+    loadValue:      loadValue
   });
 
 
 Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, columnDef, trade) {
     return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('Push').wrap('<div/>').parent().html();
+}
+
+Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value, columnDef, trade) {
+    var value = trade.get(columnDef.field);
+    return value ? '\u2713' : ' ';
 }
 
     Diffa.Views = Diffa.Views || {};
@@ -248,7 +263,7 @@ Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, colu
             {id: "price", name: "Price", field: "price", width: 80, 
                 editor: Slickback.NumberCellEditor, precision: 2},
             {id: "is_future", name: "Future?", field: "is_future", width: 40, 
-                editor: Diffa.CheckboxEditor },
+                editor: Diffa.CheckboxEditor, formatter: Diffa.GridView.CheckmarkFormatter },
             {id: "is_call", name: "Call?", field: "is_call", width: 40, 
                 editor: Slickback.DropdownCellEditor, choices: booleanChoices},
             {id: "is_put", name: "Put?", field: "is_put", width: 40, 
