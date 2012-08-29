@@ -33,6 +33,8 @@
 <hr/>
 
 <script> 
+$.fn.effect = $.fn.effect || function () { };
+
 $(function() { 
 	var baseUrl = $('link[rel="diffa.data.base"]').attr('href');
 	Diffa.BootstrapGrids(baseUrl, $(document));
