@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
 
   create_table "futures", :force => true do |t|
     t.integer  "user_id",                                    :null => false
-    t.string   "trade_id",                                   :null => false
+    t.integer  "trade_id",                                   :null => false
     t.datetime "trade_date",                                 :null => false
     t.string   "version"
     t.integer  "lots",                                       :null => false
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
 
   create_table "options", :force => true do |t|
     t.integer  "user_id",                                       :null => false
-    t.string   "trade_id",                                      :null => false
+    t.integer  "trade_id",                                      :null => false
     t.datetime "trade_date",                                    :null => false
     t.string   "version"
     t.integer  "lots",                                          :null => false
@@ -87,10 +87,10 @@ ActiveRecord::Schema.define(:version => 20120823153900) do
   end
 
   create_table "risks_view", :id => false, :force => true do |t|
-    t.string   "id",         :default => "", :null => false
-    t.datetime "trade_date",                 :null => false
+    t.integer  "id",         :default => 0, :null => false
+    t.datetime "trade_date",                :null => false
     t.string   "version"
-    t.integer  "user",       :default => 0,  :null => false
+    t.integer  "user",       :default => 0, :null => false
   end
 
   create_table "trades", :force => true do |t|

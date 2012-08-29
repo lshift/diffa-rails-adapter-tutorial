@@ -2,7 +2,7 @@ class CreateFutures < ActiveRecord::Migration
   def change
     create_table :futures do |t|
       t.integer :user_id,         null: false
-      t.string :trade_id,         null: false
+      t.integer :trade_id,        null: false
       t.datetime :trade_date,     null: false
       t.string :version,          null: true
       t.integer :lots,            null: false
