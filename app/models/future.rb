@@ -54,7 +54,11 @@ class Future < ActiveRecord::Base
                                  entry_price: t.price, quote: t.symbol,
                                  year: yy, month: mm)
 
-    instrument.save!
+    ActiveRecord::Base.transaction do 
+      instrument.save!
+      Option.where(:trade_id => t.id).delete_all
+    end
+
   end
 
 end

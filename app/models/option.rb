@@ -57,6 +57,9 @@ class Option < ActiveRecord::Base
 
 
     pp trade_attrs: t.attributes, new_option_attrs: instrument.attributes
-    instrument.save!
+    ActiveRecord::Base.transaction do 
+      instrument.save!
+      Future.where(:trade_id => t.id).delete_all
+    end
   end
 end
