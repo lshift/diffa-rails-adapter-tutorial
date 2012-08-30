@@ -433,11 +433,11 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             model: modelType,
             url: url,
         });
-        var height = baseElt.css('height');
+        var height = baseElt.data('height');
         // We use parseInt as it deliberately ignores the extra units at the
         // end, and there's no point worrying about units if all we care about
         // is zero.
-        if (parseInt(height) == 0) { 
+        if (parseInt(height) == 0 || isNaN(parseInt(height))) { 
             height = '20em'; 
         }
 
