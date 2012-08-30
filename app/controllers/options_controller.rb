@@ -25,9 +25,7 @@ class OptionsController < ApplicationController
   def show *_
     @option = users_options.find(params[:id])
 
-    respond_to do |format|
-      format.json { render json: @option }
-    end
+    render json: @option
   end
 
   # GET /options/new
@@ -35,9 +33,7 @@ class OptionsController < ApplicationController
   def new
     @option = Option.new
 
-    respond_to do |format|
-      format.json { render json: @option }
-    end
+    render json: @option
   end
 
   # GET /options/1/edit
@@ -51,12 +47,10 @@ class OptionsController < ApplicationController
     @option = Option.new(params[:option])
     @option.user_id = params[:user_id]
 
-    respond_to do |format|
-      if @option.save
-        format.json { render json: @option }
-      else
-        format.json { render json: @option.errors, status: :unprocessable_entity }
-      end
+    if @option.save
+      render json: @option
+    else
+      render json: @option.errors, status: :unprocessable_entity
     end
   end
 
@@ -65,12 +59,10 @@ class OptionsController < ApplicationController
   def update *_
     @option = users_options.find(params[:id])
 
-    respond_to do |format|
-      if @option.update_attributes(params[:option])
-        format.json { render json: @option }
-      else
-        format.json { render json: @option.errors, status: :unprocessable_entity }
-      end
+    if @option.update_attributes(params[:option])
+      render json: @option
+    else
+      render json: @option.errors, status: :unprocessable_entity
     end
   end
 
@@ -80,6 +72,6 @@ class OptionsController < ApplicationController
     @option = users_options.find(params[:id])
     @option.destroy
 
-    format.json { head :no_content }
+    head :no_content
   end
 end
