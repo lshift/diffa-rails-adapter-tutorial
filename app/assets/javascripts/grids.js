@@ -299,7 +299,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             {id: "contractDate", name: "Contract Date", field: "contract_period", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
-            {id: "propagate", name: "Push to Downstream", field: "trade_id", width: dateWidth,
+            {id: "propagate", name: "Sync", field: "trade_id", width: dateWidth,
                  formatter: Diffa.GridView.ButtonFormatter}
         ],
 
