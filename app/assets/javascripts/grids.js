@@ -448,8 +448,13 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         this.collection = collection;
         
 
+        this.control = new Diffa.Views.Control({
+            el: $('<div/>').appendTo(baseElt).addClass('add-row-button'),
+            collection: this.collection
+        });
+
         this.tradeEntryView = new gridViewType({
-            el: $('<div/>').css('height', height).appendTo(baseElt), // .find(".entry-grid"),
+            el: $('<div/>').css('height', height).addClass('grid-container').appendTo(baseElt), 
             collection: this.collection,
             bigbus: bigbus,
         });
@@ -457,10 +462,6 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
 
         this.errorView = new Diffa.Views.TradeErrors({
             el: $('<div/>').appendTo(baseElt), 
-            collection: this.collection
-        });
-        this.control = new Diffa.Views.Control({
-            el: $('<div/>').appendTo(baseElt),
             collection: this.collection
         });
     };
