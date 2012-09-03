@@ -226,7 +226,8 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                 editable:         true,
                 formatterFactory: Slickback.BackboneModelFormatterFactory,
                 enableColumnReorder: false,
-                forceFitColumns: true
+                forceFitColumns: true,
+                autoHeight: true
             }, initOptions.grid);
 
             var collection = this.collection;
@@ -435,13 +436,6 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             model: modelType,
             url: url,
         });
-        var height = baseElt.data('height');
-        // We use parseInt as it deliberately ignores the extra units at the
-        // end, and there's no point worrying about units if all we care about
-        // is zero.
-        if (parseInt(height) == 0 || isNaN(parseInt(height))) { 
-            height = '20em'; 
-        }
 
         var collection = new this.CollectionType();
         bigbus.on('refreshallthethings', function() { collection.fetch() ; })
@@ -454,7 +448,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         });
 
         this.tradeEntryView = new gridViewType({
-            el: $('<div/>').css('height', height).addClass('grid-container').appendTo(baseElt), 
+            el: $('<div/>').css('height', 'auto').addClass('grid-container').appendTo(baseElt), 
             collection: this.collection,
             bigbus: bigbus,
         });
