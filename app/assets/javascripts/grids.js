@@ -321,9 +321,9 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             {id: "contractDate", name: "Contract Date", field: "contract_period", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
-            {id: "propagate", name: "Sync", field: "trade_id", width: dateWidth/2,
+            {id: "propagate", name: "Sync", field: "trade_id", width: dateWidth/3,
                  formatter: Diffa.GridView.TradePusherRenderer},
-            {id: "delortify", name: "Del.", field: "trade_id", width: dateWidth/2,
+            {id: "delortify", name: "Delete", field: "trade_id", width: dateWidth/3,
                  formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
 
@@ -372,7 +372,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                  editor: Slickback.NumberCellEditor},
             {id: "year", name: "Year", field: "year", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
-            {id: "delortify", name: "Del.", field: "trade_id", width: dateWidth/2,
+            {id: "delortify", name: "Delete", field: "trade_id", width: dateWidth/3,
                  formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
@@ -401,7 +401,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                  editor: Slickback.NumberCellEditor},
             {id: "year", name: "Year", field: "year", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
-            {id: "delortify", name: "Del.", field: "trade_id", width: dateWidth/2,
+            {id: "delortify", name: "Delete", field: "trade_id", width: dateWidth/3,
                  formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
