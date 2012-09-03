@@ -79,9 +79,7 @@ class FuturesController < ApplicationController
     @future = users_futures.find(params[:id])
     @future.destroy
 
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    head :no_content
   end
 
   private 

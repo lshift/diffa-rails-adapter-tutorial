@@ -209,9 +209,19 @@ Diffa.CheckboxEditor = function CheckboxEditor(args) {
   });
 
 
-Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, columnDef, trade) {
-    return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('\u2192').wrap('<div/>').parent().html();
+Diffa.GridView.TradePusherRenderer = function TradePusherRenderer(row, cell, value, columnDef, trade) {
+    var wrapper = $('<div/>');
+    $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('\u2192').addClass('tradepusher').appendTo(wrapper);
+    return wrapper.html();
 }
+
+Diffa.GridView.TradeDeleterRenderer = function TradeDeleterRenderer(row, cell, value, columnDef, trade) {
+    var wrapper = $('<div/>');
+    $('<button/>').attr('id', 'delete-' + trade.cid).text('\u2327').addClass('deleter').appendTo(wrapper);
+    return wrapper.html();
+}
+
+
 
 Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value, columnDef, trade) {
     var value = trade.get(columnDef.field);
@@ -256,6 +266,9 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             });
 
             collection.fetch();
+
+            _.bindAll(this, 'deleteButtonPressed');
+            this.$el.on('click', '.deleter', this.deleteButtonPressed);
         },
         cellMouseOver: function(e, args) {
             var cell = args.grid.getCellFromEvent(e);
@@ -273,7 +286,15 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         },
         toolTipFor: function(ent) { 
             return this.toolTipTemplate(ent.attributes);
-        }
+        },
+        deleteButtonPressed: function deleteButtonPressed(evt) {
+            var id = $(evt.target).attr('id');
+            if (!id) return;
+            var m = id.match(/^delete-(.+)$/);
+            if (!m) return;
+            this.collection.getByCid(m[1]).destroy();
+        },
+
     });
 
     var booleanChoices = [ 
@@ -300,14 +321,16 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             {id: "contractDate", name: "Contract Date", field: "contract_period", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
-            {id: "propagate", name: "Sync", field: "trade_id", width: dateWidth,
-                 formatter: Diffa.GridView.ButtonFormatter}
+            {id: "propagate", name: "Sync", field: "trade_id", width: dateWidth/2,
+                 formatter: Diffa.GridView.TradePusherRenderer},
+            {id: "delortify", name: "Del.", field: "trade_id", width: dateWidth/2,
+                 formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
 
         initialize: function initialize(initOptions) { 
             Diffa.Views.TradesGrid.__super__.initialize.call(this, initOptions);
             _.bindAll(this, 'propagateButtonPressed');
-            this.$el.on('click', this.propagateButtonPressed);
+            this.$el.on('click', '.tradepusher', this.propagateButtonPressed);
             this.bigbus = initOptions.bigbus;
         
         },
@@ -349,6 +372,8 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                  editor: Slickback.NumberCellEditor},
             {id: "year", name: "Year", field: "year", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
+            {id: "delortify", name: "Del.", field: "trade_id", width: dateWidth/2,
+                 formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
@@ -376,6 +401,8 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                  editor: Slickback.NumberCellEditor},
             {id: "year", name: "Year", field: "year", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
+            {id: "delortify", name: "Del.", field: "trade_id", width: dateWidth/2,
+                 formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
