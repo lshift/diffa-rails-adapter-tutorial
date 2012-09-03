@@ -369,6 +369,8 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                 editor: Slickback.NumberCellEditor},
             {id: "strike", name: "Strike", field: "strike_price",
                 editor: Slickback.NumberCellEditor, precision: 2},
+            {id: "strike", name: "Premium", field: "premium_price",
+                editor: Slickback.NumberCellEditor, precision: 2},
             {id: "month", name: "Month", field: "month", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
             {id: "year", name: "Year", field: "year", width: dateWidth,
