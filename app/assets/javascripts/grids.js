@@ -217,7 +217,8 @@ Diffa.GridView.TradePusherRenderer = function TradePusherRenderer(row, cell, val
 
 Diffa.GridView.TradeDeleterRenderer = function TradeDeleterRenderer(row, cell, value, columnDef, trade) {
     var wrapper = $('<div/>');
-    $('<button/>').attr('id', 'delete-' + trade.cid).text('\u2327').addClass('deleter').appendTo(wrapper);
+    var button = $('<button/>').attr('id', 'delete-' + trade.cid).appendTo(wrapper);
+    var icon_cell = $('<span/>').text('\u00a0').addClass('deleter').addClass('icon-trash').addClass('icon-black').appendTo(button);
     return wrapper.html();
 }
 
