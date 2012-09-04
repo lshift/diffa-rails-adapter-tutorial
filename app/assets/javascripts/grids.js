@@ -8,7 +8,13 @@ function urlTemplate(tmpl) {
         });
     }
 }
-
+var DOWNSTREAM_VERSION_SYNC_NOTIFICATION = {
+    text: 
+        "The versions of futures and options are only calculated in the trades" +
+        "system, so if you do change the data in a risk-system, it will not match " +
+        "until you sync the trade manually.",
+    type: 'information'
+};
 
 Diffa.Instrument = Backbone.Model.extend({
     validate: function validate(attributes) {
@@ -459,7 +465,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         return oldSync(method, model, options);
     };
 
-    function GridComponent(url, baseElt, modelType, gridViewType, bigbus) {
+    function GridComponent(url, baseElt, modelType, gridViewType, bigbus, listener) {
         this.CollectionType = Slickback.Collection.extend({
             model: modelType,
             url: url,
@@ -486,6 +492,11 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             el: $('<div/>').appendTo(baseElt), 
             collection: this.collection
         });
+
+
+        if (listener) {
+            collection.on('change', listener);
+        }
     };
 
     Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl, baseElt) {
@@ -495,6 +506,16 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             options: baseUrl + '/options',
         };
 
+        function notifyUserAboutVersionSyncRequirement () {
+            // Using cookies isn't the best way to do this, but it's the easiest and commonly avaliable.
+            var cookieName = 'userNotifiedAboutVersionSyncRequirement';
+            console.log(cookieName);
+            if ($.cookie(cookieName)) return;
+            
+            noty(DOWNSTREAM_VERSION_SYNC_NOTIFICATION);
+            $.cookie(cookieName, 'truthy-value');
+        }
+
         Diffa.tradesGrid = new (function() { 
             GridComponent.call(this,
             urls.trades, $('.trades'), 
@@ -503,11 +524,13 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
 
         Diffa.futuresGrid = new GridComponent(
             urls.futures, $('.futures'), 
-            Diffa.Future, Diffa.Views.FuturesGrid, bigbus
+            Diffa.Future, Diffa.Views.FuturesGrid, bigbus,
+            notifyUserAboutVersionSyncRequirement
         );
         Diffa.optionsGrid = new GridComponent(
             urls.options, $('.options'), 
-            Diffa.Option, Diffa.Views.OptionsGrid, bigbus
+            Diffa.Option, Diffa.Views.OptionsGrid, bigbus,
+            notifyUserAboutVersionSyncRequirement
         );
             
     };
