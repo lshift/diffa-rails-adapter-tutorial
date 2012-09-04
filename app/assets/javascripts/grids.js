@@ -223,8 +223,8 @@ Diffa.GridView.TradePusherRenderer = function TradePusherRenderer(row, cell, val
 
 Diffa.GridView.TradeDeleterRenderer = function TradeDeleterRenderer(row, cell, value, columnDef, trade) {
     var wrapper = $('<div/>');
-    var button = $('<button/>').attr('id', 'delete-' + trade.cid).appendTo(wrapper);
-    var icon_cell = $('<span/>').text('\u00a0').addClass('deleter').addClass('icon-trash').addClass('icon-black').appendTo(button);
+    var button = $('<button/>').addClass('deleter').attr('id', 'delete-' + trade.cid).appendTo(wrapper);
+    var icon_cell = $('<span/>').text('\u00a0').addClass('icon-trash').addClass('icon-black').appendTo(button);
     return wrapper.html();
 }
 
@@ -295,7 +295,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             return this.toolTipTemplate(ent.attributes);
         },
         deleteButtonPressed: function deleteButtonPressed(evt) {
-            var id = $(evt.target).attr('id');
+            var id = $(evt.currentTarget).attr('id');
             if (!id) return;
             var m = id.match(/^delete-(.+)$/);
             if (!m) return;
