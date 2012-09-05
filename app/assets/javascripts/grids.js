@@ -10,7 +10,7 @@ function urlTemplate(tmpl) {
 }
 var DOWNSTREAM_VERSION_SYNC_NOTIFICATION = {
     text: 
-        "The versions of futures and options are only calculated in the trades" +
+        "The versions of futures and options are only calculated in the trades " +
         "system, so if you do change the data in a risk-system, it will not match " +
         "until you sync the trade manually.",
     type: 'information'
