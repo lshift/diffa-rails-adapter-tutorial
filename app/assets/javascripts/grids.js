@@ -444,14 +444,21 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
     Diffa.Views.Control = Backbone.View.extend({
         markup: '<button/>',
         render: function () {
-            $(this.el).html(this.markup).find('button').text('Add Row');
+            $(this.el).empty();
+            var syncButton = $(this.markup).text('Reload').addClass('reload').appendTo(this.el);
+            $('&#xa0;').appendTo(this.el);
+            var rowAddButton = $(this.markup).text('Add Row').addClass('addRow').appendTo(this.el);
         },
         initialize: function initialize(options) {
             this.render();
-            this.$('button').click(this.addRow.bind(this));
+            this.$('button.addRow').click(this.addRow.bind(this));
+            this.$('button.reload').click(this.reload.bind(this));
         },
         addRow: function addRow() { 
             this.collection.create();
+        },
+        reload: function reload() { 
+            this.collection.fetch();
         }
     });
 
