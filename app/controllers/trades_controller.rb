@@ -9,7 +9,8 @@ class TradesController < ApplicationController
     klass = { 'N' => Option, 'Y' => Future }.fetch(t.is_future)
 
     instrument = klass.create_or_update_from_trade(t)
-    render json: instrument
+    # render json: instrument
+    render text: "Trade id #{params[:trade_id]} pushed to the downstream; please rescan to let Diffa know about the change."
   end
 
   def grid
