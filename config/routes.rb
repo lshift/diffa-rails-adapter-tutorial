@@ -6,11 +6,17 @@ AdapterDemo::Application.routes.draw do
     resources :futures 
 
     resources :trades do 
-      collection do get 'scan'; end
+      collection do 
+        get 'scan'
+        get 'content'
+      end
     end
 
     resources :risks do
-      collection do get 'scan'; end
+      collection do 
+        get 'scan'
+        get 'content'
+      end
     end
   end
 
