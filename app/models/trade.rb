@@ -5,6 +5,7 @@ class Trade < ActiveRecord::Base
   before_save :set_defaults
 
   def set_defaults
+    self.price = rand * 100 if self.price.nil? or self.price.zero?
     self.buy_sell ||= 'B'
     self.is_future ||= false
     self.is_call ||= false

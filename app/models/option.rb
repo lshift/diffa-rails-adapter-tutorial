@@ -33,7 +33,7 @@ class Option < ActiveRecord::Base
     self.month ||= contract_period.month
     self.year ||= contract_period.year
     self.strike_price ||= rand * 100
-    self.premium_price ||= self.strike_price * (0.5 + (rand * 0.05))
+    self.premium_price ||= self.strike_price * (0.05 + (rand * 0.05))
     self.quote ||= QuoteName.all.shuffle.first.quote_name
   end
 

@@ -9,7 +9,8 @@ class TradesController < ApplicationController
     klass = { 'N' => Option, 'Y' => Future }.fetch(t.is_future)
 
     instrument = klass.create_or_update_from_trade(t)
-    render json: instrument
+    # render json: instrument
+    render text: "Trade id #{params[:trade_id]} pushed to the downstream; please rescan to let Diffa know about the change."
   end
 
   def grid
@@ -101,6 +102,19 @@ class TradesController < ApplicationController
     @trade.destroy
 
     head :no_content
+  end
+
+
+  def content
+    pp content: params
+    id_match =  /^0*(\d+)/.match(params[:identifier])
+
+    if id_match
+      trade = owned_trades.find(id_match[1])
+      render text: trade.attributes.map { |k, v| "#{k}=#{v}" }.join("\n")
+    else
+      render status: :not_found, text: "Item #{params[:identifier].inspect} Not found"
+    end
   end
 
   private

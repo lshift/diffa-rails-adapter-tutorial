@@ -8,7 +8,13 @@ function urlTemplate(tmpl) {
         });
     }
 }
-
+var DOWNSTREAM_VERSION_SYNC_NOTIFICATION = {
+    text: 
+        "The versions of futures and options are only calculated in the trades " +
+        "system, so if you do change the data in a risk-system, it will not match " +
+        "until you sync the trade manually.",
+    type: 'information'
+};
 
 Diffa.Instrument = Backbone.Model.extend({
     validate: function validate(attributes) {
@@ -209,9 +215,20 @@ Diffa.CheckboxEditor = function CheckboxEditor(args) {
   });
 
 
-Diffa.GridView.ButtonFormatter = function ButtonFormatter(row, cell, value, columnDef, trade) {
-    return $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('\u2192').wrap('<div/>').parent().html();
+Diffa.GridView.TradePusherRenderer = function TradePusherRenderer(row, cell, value, columnDef, trade) {
+    var wrapper = $('<div/>');
+    $('<button/>').attr('id', 'tradepusher-' + trade.cid).text('\u2192').addClass('tradepusher').appendTo(wrapper);
+    return wrapper.html();
 }
+
+Diffa.GridView.TradeDeleterRenderer = function TradeDeleterRenderer(row, cell, value, columnDef, trade) {
+    var wrapper = $('<div/>');
+    var button = $('<button/>').addClass('deleter').attr('id', 'delete-' + trade.cid).appendTo(wrapper);
+    var icon_cell = $('<span/>').text('\u00a0').addClass('icon-trash').addClass('icon-black').appendTo(button);
+    return wrapper.html();
+}
+
+
 
 Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value, columnDef, trade) {
     var value = trade.get(columnDef.field);
@@ -226,7 +243,8 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                 editable:         true,
                 formatterFactory: Slickback.BackboneModelFormatterFactory,
                 enableColumnReorder: false,
-                forceFitColumns: true
+                forceFitColumns: true,
+                autoHeight: true
             }, initOptions.grid);
 
             var collection = this.collection;
@@ -255,6 +273,9 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             });
 
             collection.fetch();
+
+            _.bindAll(this, 'deleteButtonPressed');
+            this.$el.on('click', '.deleter', this.deleteButtonPressed);
         },
         cellMouseOver: function(e, args) {
             var cell = args.grid.getCellFromEvent(e);
@@ -272,7 +293,15 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         },
         toolTipFor: function(ent) { 
             return this.toolTipTemplate(ent.attributes);
-        }
+        },
+        deleteButtonPressed: function deleteButtonPressed(evt) {
+            var id = $(evt.currentTarget).attr('id');
+            if (!id) return;
+            var m = id.match(/^delete-(.+)$/);
+            if (!m) return;
+            this.collection.getByCid(m[1]).destroy();
+        },
+
     });
 
     var booleanChoices = [ 
@@ -299,14 +328,16 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             {id: "contractDate", name: "Contract Date", field: "contract_period", width: dateWidth,
                  formatter: Diffa.GridView.DateFormatter,
                  editor: Diffa.DateEditor},
-            {id: "propagate", name: "Push to Downstream", field: "trade_id", width: dateWidth,
-                 formatter: Diffa.GridView.ButtonFormatter}
+            {id: "propagate", name: "Sync", field: "trade_id", width: dateWidth/3,
+                 formatter: Diffa.GridView.TradePusherRenderer},
+            {id: "delortify", name: "Delete", field: "trade_id", width: dateWidth/3,
+                 formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
 
         initialize: function initialize(initOptions) { 
             Diffa.Views.TradesGrid.__super__.initialize.call(this, initOptions);
             _.bindAll(this, 'propagateButtonPressed');
-            this.$el.on('click', this.propagateButtonPressed);
+            this.$el.on('click', '.tradepusher', this.propagateButtonPressed);
             this.bigbus = initOptions.bigbus;
         
         },
@@ -344,10 +375,12 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                 editor: Slickback.NumberCellEditor},
             {id: "price", name: "Price", field: "price",
                 editor: Slickback.NumberCellEditor, precision: 2},
-            {id: "month", name: "Expires Month", field: "month", width: dateWidth,
+            {id: "month", name: "Month", field: "month", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
             {id: "year", name: "Year", field: "year", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
+            {id: "delortify", name: "Delete", field: "trade_id", width: dateWidth/3,
+                 formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
@@ -369,10 +402,14 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
                 editor: Slickback.NumberCellEditor},
             {id: "strike", name: "Strike", field: "strike_price",
                 editor: Slickback.NumberCellEditor, precision: 2},
-            {id: "month", name: "Expires Month", field: "month", width: dateWidth,
+            {id: "strike", name: "Premium", field: "premium_price",
+                editor: Slickback.NumberCellEditor, precision: 2},
+            {id: "month", name: "Month", field: "month", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
             {id: "year", name: "Year", field: "year", width: dateWidth,
                  editor: Slickback.NumberCellEditor},
+            {id: "delortify", name: "Delete", field: "trade_id", width: dateWidth/3,
+                 formatter: Diffa.GridView.TradeDeleterRenderer}
         ],
         toolTipTemplate: _.template("<dl class='details-tip'>" +
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
@@ -407,14 +444,21 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
     Diffa.Views.Control = Backbone.View.extend({
         markup: '<button/>',
         render: function () {
-            $(this.el).html(this.markup).find('button').text('Add Row');
+            $(this.el).empty();
+            var syncButton = $(this.markup).text('Reload').addClass('reload').appendTo(this.el);
+            $('&#xa0;').appendTo(this.el);
+            var rowAddButton = $(this.markup).text('Add Row').addClass('addRow').appendTo(this.el);
         },
         initialize: function initialize(options) {
             this.render();
-            this.$('button').click(this.addRow.bind(this));
+            this.$('button.addRow').click(this.addRow.bind(this));
+            this.$('button.reload').click(this.reload.bind(this));
         },
         addRow: function addRow() { 
             this.collection.create();
+        },
+        reload: function reload() { 
+            this.collection.fetch();
         }
     });
 
@@ -428,26 +472,24 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
         return oldSync(method, model, options);
     };
 
-    function GridComponent(url, baseElt, modelType, gridViewType, bigbus) {
+    function GridComponent(url, baseElt, modelType, gridViewType, bigbus, listener) {
         this.CollectionType = Slickback.Collection.extend({
             model: modelType,
             url: url,
         });
-        var height = baseElt.data('height');
-        // We use parseInt as it deliberately ignores the extra units at the
-        // end, and there's no point worrying about units if all we care about
-        // is zero.
-        if (parseInt(height) == 0 || isNaN(parseInt(height))) { 
-            height = '20em'; 
-        }
 
         var collection = new this.CollectionType();
         bigbus.on('refreshallthethings', function() { collection.fetch() ; })
         this.collection = collection;
         
 
+        this.control = new Diffa.Views.Control({
+            el: $('<div/>').appendTo(baseElt).addClass('add-row-button'),
+            collection: this.collection
+        });
+
         this.tradeEntryView = new gridViewType({
-            el: $('<div/>').css('height', height).appendTo(baseElt), // .find(".entry-grid"),
+            el: $('<div/>').css('height', 'auto').addClass('grid-container').appendTo(baseElt), 
             collection: this.collection,
             bigbus: bigbus,
         });
@@ -457,10 +499,11 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             el: $('<div/>').appendTo(baseElt), 
             collection: this.collection
         });
-        this.control = new Diffa.Views.Control({
-            el: $('<div/>').appendTo(baseElt),
-            collection: this.collection
-        });
+
+
+        if (listener) {
+            collection.on('change', listener);
+        }
     };
 
     Diffa.BootstrapGrids = function Diffa_BootstrapGrids (baseUrl, baseElt) {
@@ -470,6 +513,16 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             options: baseUrl + '/options',
         };
 
+        function notifyUserAboutVersionSyncRequirement () {
+            // Using cookies isn't the best way to do this, but it's the easiest and commonly avaliable.
+            var cookieName = 'userNotifiedAboutVersionSyncRequirement';
+            console.log(cookieName);
+            if ($.cookie(cookieName)) return;
+            
+            noty(DOWNSTREAM_VERSION_SYNC_NOTIFICATION);
+            $.cookie(cookieName, 'truthy-value');
+        }
+
         Diffa.tradesGrid = new (function() { 
             GridComponent.call(this,
             urls.trades, $('.trades'), 
@@ -478,11 +531,13 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
 
         Diffa.futuresGrid = new GridComponent(
             urls.futures, $('.futures'), 
-            Diffa.Future, Diffa.Views.FuturesGrid, bigbus
+            Diffa.Future, Diffa.Views.FuturesGrid, bigbus,
+            notifyUserAboutVersionSyncRequirement
         );
         Diffa.optionsGrid = new GridComponent(
             urls.options, $('.options'), 
-            Diffa.Option, Diffa.Views.OptionsGrid, bigbus
+            Diffa.Option, Diffa.Views.OptionsGrid, bigbus,
+            notifyUserAboutVersionSyncRequirement
         );
             
     };
