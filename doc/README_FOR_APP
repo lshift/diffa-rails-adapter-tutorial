@@ -1,6 +1,0 @@
-Run "rake doc:app" to generate API documentation
-for your models, controllers, helpers, and libraries.
-
-Adapter Demo
-Demonstrate Diffa Scanning through a sample application with data that the user
-can manipulate.

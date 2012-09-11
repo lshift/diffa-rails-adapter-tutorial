@@ -1,6 +1,13 @@
-Before running the rails app, set the following environment variable:
-DEMO_API_AUTH_TOKEN
+# Before running the rails app, set the following environment variables:
 
-Example (bash)
 export DEMO_API_AUTH_TOKEN=23j4w9s9dc9sdf23rnwkjre
+export DEMO_API_LOCATION=WHEREVER YOU ARE RUNNNING THIS
 
+# Run a rake DB migration
+
+rake db:migrate
+
+# Don't forget to pull Slickgrid as a git submodule:
+
+git submodule init
+git submodule update
