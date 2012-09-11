@@ -26,4 +26,5 @@ Steps:
 
 * Run a rake DB migration
 
-	rake db:migrate	
+	rake db:migrate
+	rake db:seed	
