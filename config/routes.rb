@@ -1,4 +1,4 @@
-AdapterDemo::Application.routes.draw do
+DiffaAdapterTutorial::Application.routes.draw do
   post "/users" => "users#create"
 
   resources :users do

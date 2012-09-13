@@ -1,4 +1,4 @@
-require 'demo_environment'
+require 'adapter_environment'
 require 'diffa/token_generator'
 
 class UsersController < ApplicationController
@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     token = request.query_parameters['authToken']
-    if not token.nil? and token == DemoEnvironment::AUTH_TOKEN
+    if not token.nil? and token == AdapterEnvironment::AUTH_TOKEN
       user_token = Diffa::TokenGenerator.generate
       user = User.new(auth_token: user_token)
 
