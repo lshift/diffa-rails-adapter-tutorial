@@ -136,10 +136,6 @@ Diffa.DateEditor = function(args) {
     this.column       = args.column;
     this.defaultValue = null;
     this.$input       = this.createTextInputElement();
-//     this.picker       = this.$input.glDatePicker({
-//         position: 'static', showAlways: true,
-//         onChange: this.whenChanged.bind(this)
-//     });
 }
 
 _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
@@ -358,8 +354,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             "<dt>Currency:</dt><dd><%= currency %></dd>" +
             "<dt>Option type:</dt><dd><%= option_type %></dd>" +
             "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
-            "<dt>Quote:</dt><dd><%= symbol %></dd>" +
-            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "<dt>Quote:</dt><dd><%= symbol %></dd>" +            
             "</dl>"
         )
     });
@@ -382,10 +377,8 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 7) + '\u2026' %></dd>" +
             "<hr/>" +
-            "<dt>Quote:</dt><dd><%= quote %></dd>" +
-            // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
-            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
-            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "<dt>Quote:</dt><dd><%= quote %></dd>" +            
+            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +            
             "</dl>"
         )
 
@@ -415,8 +408,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             "<dt>Premium price:</dt><dd><%= premium_price %></dd>" +
             "<dt>Excercise Right:</dt><dd><%= exercise_right %></dd>" +
             "<dt>Excercise Type:</dt><dd><%= exercise_type %></dd>" +
-            "<dt>Quote:</dt><dd><%= quote %></dd>" +
-            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "<dt>Quote:</dt><dd><%= quote %></dd>" +            
             "</dl>"
         )
 
