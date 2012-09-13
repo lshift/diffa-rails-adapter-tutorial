@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <link rel='diffa.data.trades' href="<%= user_trades_path @user %>" />
+  <link rel='diffa.data.options' href="<%= user_options_path @user %>" />
+  <link rel='diffa.data.futures' href="<%= user_futures_path @user %>" />
+  <link rel='diffa.data.base' href="<%= user_path @user %>" />
+
+  <meta name='diffa.authToken' content='<%= @user.auth_token %>' />
+</head>
+<style>
+.slick-cell.active input { width: 100%; }
+</style>
+<body>
+<h1>Trading Application</h1>
+
+<h3>Trade Entry</h3>
+<div class="component trades">
+</div>
+<hr/>
+
+<h3>Futures risk system</h3>
+<div class="component futures">
+</div>
+<hr/>
+
+<h3>Options risk system</h3>
+<div class="component options">
+</div>
+<hr/>
+
+<script> 
+$.fn.effect = $.fn.effect || function () { };
+
+$(function() { 
+	var baseUrl = $('link[rel="diffa.data.base"]').attr('href');
+	Diffa.BootstrapGrids(baseUrl, $(document));
+});
+</script>
+
+</body>
+</html>
