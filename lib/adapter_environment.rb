@@ -1,4 +1,4 @@
-module DemoEnvironment
-  AUTH_TOKEN = ENV["DEMO_API_AUTH_TOKEN"]
+module AdapterEnvironment
+  AUTH_TOKEN = ENV["ADAPTER_TUTORIAL_AUTH_TOKEN"]
 end
 

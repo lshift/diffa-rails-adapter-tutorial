@@ -1,14 +1,13 @@
-Development environment preparation
------------------------------------
+# Diffa Adapter Tutoial
 
-Dependencies:
+## Dependencies:
 
 * git
 * rvm ― https://rvm.io/
 * bundler -- http://gembundler.com/ or `gem install bundler` in the rvm
   environment.
 
-Steps:
+## Steps:
 
 * After clone the git repo, make sure you initialize the submodules:
 
@@ -19,12 +18,11 @@ Steps:
 
 	bundle install
 
-* Set the following environment variables:
-
-	export DEMO_API_AUTH_TOKEN=23j4w9s9dc9sdf23rnwkjre
-	export DEMO_API_LOCATION=WHEREVER YOU ARE RUNNNING THIS
-
 * Run a rake DB migration
 
 	rake db:migrate
 	rake db:seed	
+
+* (If you want to add users via the API, set the following environment variable to some random token):
+
+	export ADAPTER_TUTORIAL_AUTH_TOKEN=eb3ab1d26bcc7c2bb434ece420b1e58d	
