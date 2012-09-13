@@ -1,4 +1,4 @@
-# Diffa Adapter Tutoial
+# Diffa Rails Adapter Tutorial
 
 This is a simple Rails app that implements the Diffa scanning protocol.
 
