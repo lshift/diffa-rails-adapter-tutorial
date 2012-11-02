@@ -9,14 +9,8 @@ gem 'rails', '3.2.1'
 gem 'therubyracer', '0.10.1'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'foreigner'
+gem 'mysql2'
 
-group :test, :development do
-  gem 'sqlite3'
-end
-
-group :production do
-  gem 'mysql2'
-end
 
 # Gems used only for assets and not required
 # in production environments by default.

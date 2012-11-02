@@ -19,7 +19,6 @@ var DOWNSTREAM_VERSION_SYNC_NOTIFICATION = {
 Diffa.Instrument = Backbone.Model.extend({
     validate: function validate(attributes) {
         if (attributes.price < 0) { return "invalid price: " + attributes.price; };
-        console.log("validate", attributes);
     },
     
     parse: function(json) {
@@ -91,11 +90,9 @@ Diffa.Trade = Diffa.Instrument.extend({
     },
 
     isFutureChanged: function isFutureChanged (model, value, opts) {
-        console.log("Trade#isFutureChanged", model.attributes, value);
         if (value) model.set({is_put: null, is_call: null });
     },
-    isCallChanged: function isCallChanged (model, value, opts) {
-        console.log("Trade#isCallChanged", model.attributes, value);
+    isCallChanged: function isCallChanged (model, value, opts) {        
         if (value) model.set({is_future: false, is_put: false });
     },
     pushDownstream: function () {
@@ -112,8 +109,7 @@ Diffa.MonthlyContractedInstrument = {
         if (attributes.month < 1 || attributes.month > 12) {
             return "Specified month: " + attributes.month + " isn't a valid month";
         }
-        var contract_period = new Date(attributes.year, attributes.month - 1, 1);
-        console.log("yy", attributes.year, "mm", attributes.month, "date", contract_period, "entry", attributes.entry_date);
+        var contract_period = new Date(attributes.year, attributes.month - 1, 1);        
         if (contract_period < attributes.entry_date) { 
             return "Expiry date " + Diffa.dateToString(contract_period) + 
                     " must be after entry date " + Diffa.dateToString(attributes.entry_date);
@@ -140,10 +136,6 @@ Diffa.DateEditor = function(args) {
     this.column       = args.column;
     this.defaultValue = null;
     this.$input       = this.createTextInputElement();
-//     this.picker       = this.$input.glDatePicker({
-//         position: 'static', showAlways: true,
-//         onChange: this.whenChanged.bind(this)
-//     });
 }
 
 _.extend(Diffa.DateEditor.prototype, Slickback.EditorMixin, {
@@ -362,8 +354,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             "<dt>Currency:</dt><dd><%= currency %></dd>" +
             "<dt>Option type:</dt><dd><%= option_type %></dd>" +
             "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
-            "<dt>Quote:</dt><dd><%= symbol %></dd>" +
-            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "<dt>Quote:</dt><dd><%= symbol %></dd>" +            
             "</dl>"
         )
     });
@@ -386,10 +377,8 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             "<dt>Trade Id:</dt><dd><%= trade_id %></dd>" +
             "<dt>Version:</dt><dd><%= version.substr(0, 7) + '\u2026' %></dd>" +
             "<hr/>" +
-            "<dt>Quote:</dt><dd><%= quote %></dd>" +
-            // "<dt>Trade type:</dt><dd><%= ttype == 'O' ? 'Option' : (ttype == 'F' ? 'Future' : 'Unknown') %></dd>" +
-            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +
-            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "<dt>Quote:</dt><dd><%= quote %></dd>" +            
+            "<dt>Entry Date:</dt><dd><%= [entry_date.getFullYear(), entry_date.getMonth(), entry_date.getDay()].join('-') %></dd>" +            
             "</dl>"
         )
 
@@ -419,8 +408,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
             "<dt>Premium price:</dt><dd><%= premium_price %></dd>" +
             "<dt>Excercise Right:</dt><dd><%= exercise_right %></dd>" +
             "<dt>Excercise Type:</dt><dd><%= exercise_type %></dd>" +
-            "<dt>Quote:</dt><dd><%= quote %></dd>" +
-            // "<dt>Other:</dt><dd><pre><%= JSON.stringify(obj, null, 2) %></pre></dd>" +
+            "<dt>Quote:</dt><dd><%= quote %></dd>" +            
             "</dl>"
         )
 
@@ -515,8 +503,7 @@ Diffa.GridView.CheckmarkFormatter = function CheckmarkFormatter(row, cell, value
 
         function notifyUserAboutVersionSyncRequirement () {
             // Using cookies isn't the best way to do this, but it's the easiest and commonly avaliable.
-            var cookieName = 'userNotifiedAboutVersionSyncRequirement';
-            console.log(cookieName);
+            var cookieName = 'userNotifiedAboutVersionSyncRequirement';            
             if ($.cookie(cookieName)) return;
             
             noty(DOWNSTREAM_VERSION_SYNC_NOTIFICATION);

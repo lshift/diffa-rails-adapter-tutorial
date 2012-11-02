@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-AdapterDemo::Application.load_tasks
+DiffaAdapterTutorial::Application.load_tasks
