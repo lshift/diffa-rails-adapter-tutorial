@@ -119,19 +119,19 @@ ActiveRecord::Schema.define(:version => 20120911101858) do
 
   create_table "trades_entry_date_daily", :id => false, :force => true do |t|
     t.integer "user",                     :null => false
-    t.string  "entry_date", :limit => 10
+    t.date    "entry_date"
     t.string  "version",    :limit => 32
   end
 
   create_table "trades_entry_date_monthly", :id => false, :force => true do |t|
     t.integer "user",                     :null => false
-    t.string  "entry_date", :limit => 7
+    t.date    "entry_date"
     t.string  "version",    :limit => 32
   end
 
   create_table "trades_entry_date_yearly", :id => false, :force => true do |t|
     t.integer "user",                     :null => false
-    t.string  "entry_date", :limit => 4
+    t.date    "entry_date"
     t.string  "version",    :limit => 32
   end
 

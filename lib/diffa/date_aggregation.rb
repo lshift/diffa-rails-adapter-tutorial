@@ -18,23 +18,32 @@ module Diffa
       }
     end
 
+    def has_id?
+      response_format = @response_formats[@granularity.to_sym]
+      response_format.member?(:id)
+    end
+
     class FixedWidthIdFormat < SimpleDelegator
-      def id_formatted; 
-        "%08d%s" % [id, type_code]; 
+      def id_formatted;
+        "%08d%s" % [id, type_code];
       end
 
-      def as_json options={}
-        super(options).merge('id' => id_formatted)
+      def as_json(options)
+        if options[:only].member?(:id)
+          super(options).merge('id' => id_formatted)
+        else
+          super(options)
+        end
       end
-
     end
 
     def scan
       g = @granularity.to_sym
+      response_format = @response_formats[g]
       where_text = @constraints[:text]
       where_vars = @constraints[:vars]
-      entities= @aggregate_views[g].where(where_text, *where_vars)
-      entities.map { |e| FixedWidthIdFormat.new(e) }.to_json(only: @response_formats[g])
+      entities = @aggregate_views[g].where(where_text, *where_vars)
+      entities.map { |e| FixedWidthIdFormat.new(e) }.to_json(only: response_format)
     end
 
     def add_constraints(attr_name, params, constraints)

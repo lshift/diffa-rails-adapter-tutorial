@@ -143,9 +143,9 @@ class InitialSchema < ActiveRecord::Migration
     execute "create view risks_trade_date_monthly (user, trade_date, version) as (select user, date_format(trade_date, '%Y-%m'), md5(group_concat(version order by id asc separator '')) from risks_view group by user, date_format(trade_date, '%Y-%m'))"
     execute "create view risks_trade_date_daily (user, trade_date, version) as (select user, date_format(trade_date, '%Y-%m-%d'), md5(group_concat(version order by id asc separator '')) from risks_view group by user, date_format(trade_date, '%Y-%m-%d'))"
 
-    execute "create view trades_entry_date_yearly (user, entry_date, version) as (select user, date_format(entry_date, '%Y'), md5(group_concat(version order by id asc separator '')) from trades_view group by user, date_format(entry_date, '%Y'))"
-    execute "create view trades_entry_date_monthly (user, entry_date, version) as (select user, date_format(entry_date, '%Y-%m'), md5(group_concat(version order by id asc separator '')) from trades_view group by user, date_format(entry_date, '%Y-%m'))"
-    execute "create view trades_entry_date_daily (user, entry_date, version) as (select user, date_format(entry_date, '%Y-%m-%d'), md5(group_concat(version order by id asc separator '')) from trades_view group by user, date_format(entry_date, '%Y-%m-%d'))"
+    execute "create view trades_entry_date_yearly (user, entry_date, version) as (select user, date(date_format(entry_date, '%Y-01-01')), md5(group_concat(version order by id asc separator '')) from trades_view group by user, date(date_format(entry_date, '%Y-01-01')))"
+    execute "create view trades_entry_date_monthly (user, entry_date, version) as (select user, date(date_format(entry_date, '%Y-%m-01')), md5(group_concat(version order by id asc separator '')) from trades_view group by user, date(date_format(entry_date, '%Y-%m-01')))"
+    execute "create view trades_entry_date_daily (user, entry_date, version) as (select user, date(date_format(entry_date, '%Y-%m-%d')), md5(group_concat(version order by id asc separator '')) from trades_view group by user, date(date_format(entry_date, '%Y-%m-%d')))"
 
   end
 
